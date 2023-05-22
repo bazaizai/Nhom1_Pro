@@ -20,17 +20,46 @@ namespace AppAPI.Controllers
             AllRepo<Color> all = new AllRepo<Color>(dbContextModel, Colors);
             allRepo = all;
         }
-        [HttpGet("Name")]
+        [HttpGet("GetAllColor")]
+        public IEnumerable<Color> Get()
+        {
+            return allRepo.GetAll();
+        }
+        [HttpGet("GetColorByName")]
         public IEnumerable<Color> Get(string name)
         {
-            return allRepo.GetAll().Where(c=>c.Ten == name).ToList();
+            return allRepo.GetAll().Where(c => c.Ten.Contains(name));
         }
-        [HttpPost("create")]
-        public bool createColor(string ma, string ten, int trangthai)
+        [HttpPost("createColor")]
+        public bool createColor(string ten)
         {
+            string ma;
+            if (allRepo.GetAll().Count() == 0)
+            {
+                ma = "Color1";
+            }
+            else ma = "Color" + allRepo.GetAll().Max(c => Convert.ToInt32(c.Ma.Substring(5, c.Ma.Length - 5)) + 1);
+
             var color = new Color();
-            color.Ten = ten;color.Id = Guid.NewGuid(); color.Ma = ma;color.TrangThai = trangthai;
+            color.Ten = ten; color.Id = Guid.NewGuid();
+            color.Ma = ma;
+            color.TrangThai = 0;
             return allRepo.AddItem(color);
         }
+        [HttpDelete("DeleteColor")]
+        public bool deleteColor(Guid id)
+        {
+            var idColor = allRepo.GetAll().First(c => c.Id == id);
+            return allRepo.RemoveItem(idColor);
+        }
+        [HttpPut("EditColor")]
+        public bool editColor(Guid id, string ten, int trangthai)
+        {
+            var idColor = allRepo.GetAll().First(c => c.Id == id);
+            idColor.Ten = ten;
+            idColor.TrangThai = trangthai;
+            return allRepo.EditItem(idColor);
+        }
+
     }
 }
