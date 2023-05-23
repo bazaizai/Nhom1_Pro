@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nhom1_Pro.Models;
 
@@ -11,9 +12,10 @@ using Nhom1_Pro.Models;
 namespace Nhom1_Pro.Migrations
 {
     [DbContext(typeof(DBContextModel))]
-    partial class DBContextModelModelSnapshot : ModelSnapshot
+    [Migration("20230523131413_updateBill")]
+    partial class updateBill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
