@@ -26,7 +26,7 @@ namespace Nhom1_Pro.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=BAZAIZAI\SQLEXPRESS;Initial Catalog=ProductNewShop;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=LAPTOP-OF-KHAI\SQLEXPRESS;Initial Catalog=NhomProC#5;Persist Security Info=True;User ID=khainq03;Password=123456");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
