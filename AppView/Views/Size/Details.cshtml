@@ -1,0 +1,48 @@
+﻿@model Nhom1_Pro.Models.Size
+
+@{
+    ViewData["Title"] = "DetailsAsync";
+}
+
+<h1>DetailsAsync</h1>
+
+<div>
+    <h4>Size</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ma)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ma)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Size1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Size1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cm)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cm)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TrangThai)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    <a asp-action="GetAllSize">Back to List</a>
+</div>

@@ -17,11 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Material\" />
-    <Folder Include="Views\Size\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Nhom1_Pro\AppData.csproj" />
   </ItemGroup>
 

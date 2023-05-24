@@ -74,7 +74,7 @@ namespace AppView.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(string ten, string al)
+        public async Task<IActionResult> CreateAsync(string ten)
         {
             var httpClient = new HttpClient();
             string apiUrl = $"https://localhost:7280/api/Color/createColor?ten={ten}";
