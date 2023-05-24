@@ -28,10 +28,10 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> GetAllRole(string sreach)
         {
-            string ạpiUrl = "https://localhost:7280/api/Role";
-            var httpClient = new HttpClient(); // tạo ra để callApi
-            var response = await httpClient.GetAsync(ạpiUrl);
-            // Lấy dữ liệu Json trả về từ Api được call dạng string
+            string apiUrl = "https://localhost:7280/api/Role";
+            var httpClient = new HttpClient(); // tao ra để callApi
+            var response = await httpClient.GetAsync(apiUrl);
+            // Lấy dữ liệu Json trả về từ Api được call dang string
             string apiData = await response.Content.ReadAsStringAsync();
             // Đọc từ string Json vừa thu được sang List<T>
             var roles = JsonConvert.DeserializeObject<List<Role>>(apiData);

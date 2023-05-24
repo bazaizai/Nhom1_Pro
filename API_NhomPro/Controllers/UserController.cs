@@ -1,6 +1,8 @@
 ﻿using AppData.IRepositories;
+using AppData.Models;
 using AppData.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Nhom1_Pro.Models;
@@ -14,13 +16,23 @@ namespace AppAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IAllRepo<User> repos;
+        private readonly IAllRepo<Cart> Cartrepos;
+        private readonly IAllRepo<Role> Rolerepos;
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<User> Users;
+        DbSet<Role> Roles;
+        DbSet<Cart> Carts;
         public UserController()
         {
             Users = dbContextModel.Users;
+            Carts = dbContextModel.Carts;
+            Roles = dbContextModel.Roles;
             AllRepo<User> all = new AllRepo<User>(dbContextModel, Users);
+            AllRepo<Cart> allCart = new AllRepo<Cart>(dbContextModel, Carts);
+            AllRepo<Role> allRole = new AllRepo<Role>(dbContextModel, Roles);
             repos = all;
+            Cartrepos = allCart;
+            Rolerepos = allRole;
         }
         // GET: api/<UserController>
         [HttpGet]
@@ -28,7 +40,15 @@ namespace AppAPI.Controllers
         {
             return repos.GetAll();
         }
-
+        //[HttpGet("code")]
+        //public ActionResult GetAllBienThe()
+        //{
+        //    var selectList = new
+        //    {
+        //        roles = new SelectList(Rolerepos.GetAll().Where(cl => cl.TrangThai == 0).ToList(), "Id", "Ten"),
+        //    };
+        //    return Ok(selectList);
+        //}
         // GET api/<UserController>/5
         [HttpGet("name")]
         public IEnumerable<User> Get(string name)
@@ -38,7 +58,7 @@ namespace AppAPI.Controllers
 
         // POST api/<UserController>
         [HttpPost("Create-User")]
-        public bool CreateUser(Guid idRole, string ten, int GioiTinh, DateTime NgaySinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai)
+        public bool CreateUser(Guid idRole, string ten, int gioitinh, DateTime ngaysinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai, string mota)
         {
             string ma;
             if (repos.GetAll().Count() == 0)
@@ -50,8 +70,8 @@ namespace AppAPI.Controllers
             user.Id = Guid.NewGuid();
             user.Ten = ten;
             user.Ma = ma;
-            user.GioiTinh = GioiTinh;
-            user.NgaySinh = NgaySinh;
+            user.GioiTinh = gioitinh;
+            user.NgaySinh = ngaysinh;
             user.DiaChi = diachi;
             user.Sdt = sdt;
             user.Email = email;
@@ -59,7 +79,11 @@ namespace AppAPI.Controllers
             user.TaiKhoan = taikhoan;
             user.TrangThai = trangthai;
             user.IdRole = idRole;
-            return repos.AddItem(user);
+            repos.AddItem(user);
+            Cart cart = new Cart();
+            cart.UserID = user.Id;
+            cart.Mota = mota;
+            return Cartrepos.AddItem(cart);
         }
 
         // PUT api/<UserController>/5

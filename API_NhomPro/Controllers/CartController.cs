@@ -41,13 +41,12 @@ namespace AppAPI.Controllers
 
         // POST api/<CartController>
         [HttpPost("Create-Cart")]
-        public bool CreateCart(Guid Userid, string mota, int trangthai)
+        public bool CreateCart(Guid Userid, string mota)
         {
             Cart cart = new Cart();
-            User user = new User();
-            cart.UserID = user.Id;
+            cart.UserID = Userid;
             cart.Mota = mota;
-            cart.TrangThai = trangthai;
+            cart.TrangThai = 0;
             return repos.AddItem(cart);
         }
 
