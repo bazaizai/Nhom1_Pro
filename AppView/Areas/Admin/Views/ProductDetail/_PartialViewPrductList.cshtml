@@ -1,0 +1,75 @@
+﻿@model IEnumerable<AppData.Models.ProductDetailDTO>
+
+<table class="table table-hover e-commerce-table dataTable no-footer">
+    <thead>
+        <tr role="row">
+            <th class="sorting" tabindex="0" style="width: 35.325px;">
+                <div class="checkbox">
+                    <input id="checkAll" type="checkbox">
+                    <label for="checkAll" class="m-b-0"></label>
+                </div>
+            </th>
+            <th class="sorting">STT</th>
+            <th class="sorting">Product</th>
+            <th class="sorting">Type Product</th>
+            <th class="sorting">Giá Nhập</th>
+            <th class="sorting">Giá Bán</th>
+            <th class="sorting">Số lượng</th>
+            <th class="sorting">Bảo hành</th>
+            <th class="sorting">Trạng thái</th>
+            <th class="sorting"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int Stt = 1;
+        }
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="">
+                        <div class="checkbox">
+                            <input type="checkbox">
+                            <label></label>
+                        </div>
+                    </td>
+                    <td>
+                        @Stt
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <a asp-action="Details" asp-route-id="@item.Id"><img class="img-fluid rounded" src="~/assets/images/others/" style="max-width: 60px" alt=""></a>
+                            <h6 class="m-b-0 m-l-10">@item.Name</h6>
+                        </div>
+                    </td>
+                    <td>@item.TypeProduct</td>
+                    <td>@item.GiaNhap</td>
+                    <td>@item.GiaBan</td>
+                    <td>@item.SoLuongTon</td>
+                    <td>@item.BaoHanh</td>
+                    <td class="sorting_1">
+                        <div class="d-flex align-items-center">
+                            <div class="badge badge-success badge-dot m-r-10"></div>
+                            @{
+                                string action;
+                                action = @item.TrangThai == 0 ? "No Active" : "Active";
+                            }
+                            <div>@action</div>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <a class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="anticon anticon-edit"></i>
+                        </a>
+                        <a class="btn btn-icon btn-hover btn-sm btn-rounded" asp-action="Delete" asp-route-id="@item.Id">
+                            <i class="anticon anticon-delete"></i>
+                        </a>
+                    </td>
+                </tr>
+                Stt++;
+            }
+        }
+    </tbody>
+</table>

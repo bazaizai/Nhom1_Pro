@@ -1,0 +1,42 @@
+﻿@model IEnumerable<AppData.Models.ProductDetailDTO>
+
+@{
+    ViewData["Title"] = "GetAllProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h4>DANH SÁCH SẢN PHẨM</h4>
+        <p>
+            <a class="btn btn-icon btn-hover btn-sm btn-rounded" asp-action="Create">
+                <i class="anticon anticon-plus"></i>
+            </a>Creat Product
+        </p>
+        <div class="m-t-25">
+            <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="col-sm-12">
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-3">
+                            <select class="custom-select" asp-items="ViewBag.Category">
+                                <option value="" disabled selected>Chose Category</option>
+                                <option>View All</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <select class="custom-select">
+                                <option value="" disabled selected>Chose Status</option>
+                                <option value="Active">Active</option>
+                                <option value="No Active">No Active</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="productList">
+                        @await Html.PartialAsync("_PartialViewPrductList", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

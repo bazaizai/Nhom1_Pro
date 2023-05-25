@@ -1,0 +1,322 @@
+﻿@model AppData.Models.ProductDetailViewModel;
+
+@{
+    ViewData["Title"] = "GetAllProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex">
+            <h5>QUẢN LÝ SẢN PHẨM</h5>
+            <button onclick="generate()" class="btn btn-warning" style="margin-left: 81%">Tạo thực thể</button>
+        </div>
+        <div class="m-b-15" style="margin-bottom: 30px">
+            <div class="row">
+                <div class="col-4" style="margin-top: 10px">
+                    <label for="formGroupExampleInput">NameProduct</label>
+                    <select id="IdProduct" class="select2" name="IdProduct" asp-for="IdProduct">
+                        @foreach (var item in ViewBag.Product)
+                        {
+                            <option value="@item.value">@item.text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-4" style="margin-top: 10px">
+                    <label for="formGroupExampleInput">TypeProduct</label>
+                    <select id="IdTypeProduct" class="select2" name="IdTypeProduct" asp-for="IdTypeProduct">
+                        @foreach (var item in ViewBag.TypeProduct)
+                        {
+                            <option value="@item.value">@item.text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-4" style="margin-top: 10px">
+                    <label for="formGroupExampleInput">Material</label>
+                    <select class="select2" id="IdMaterial" name="IdMaterial" asp-for="IdMaterial">
+                        @foreach (var item in ViewBag.Material)
+                        {
+                            <option value="@item.value">@item.text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6" style="margin-top: 10px">
+                    <label for="formGroupExampleInput">Color</label>
+                    <div class="row">
+                        <div class="col-12">
+                            <select id="IdColor" class="select2 listColor" name="IdColor"
+                                    multiple="multiple" asp-for="IdColor">
+                                @foreach (var item in ViewBag.Color)
+                                {
+                                    <option value="@item.value">@item.text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6" style="margin-top: 10px">
+                    <label for="formGroupExampleInput">Size</label>
+                    <div class="row">
+                        <div class="col-12">
+                            <select id="IdSize" class="select2 listSize" name="IdSize"
+                                    multiple="multiple" asp-for="IdSize">
+                                @foreach (var item in ViewBag.Size)
+                                {
+                                    <option value="@item.value">@item.text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion borderless" id="accordion-borderless">
+</div>
+
+<div id="confirm" style="display: none; margin-top: 5px">
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-warning mr-2">Hủy</button>
+        <button class="btn btn-warning">Cập nhật</button>
+    </div>
+</div>
+
+
+
+<script>
+    function generate() {
+        var container = document.querySelector('#accordion-borderless');
+        var valuesColors = Array.from($('#IdColor option:checked')).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+
+        var valuesSizes = Array.from($('#IdSize option:checked')).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+        const template = `<div class="card item-accordion" data-update="{{isUpdate}}" data-idproduct="{{idProduct}}">
+    <div class="card-header d-flex" style="background-color: {{color}}; margin-bottom: 15px">
+        <h5 class="card-title">
+            <a data-toggle="collapse" data-idcolor="{{idcolor}}" data-idsize="{{idsize}}" href="#collapseOneBorderless{{index}}">
+                <span>{{Title}}</span>
+            </a>
+        </h5>
+        <button class="btn btn-icon btn-primary btn-rounded btn-tone btnn-close"
+                style="margin-top: 5px; margin-right: 5px;">
+            <i class="anticon anticon-close"></i>
+        </button>
+    </div>
+    <div id="collapseOneBorderless{{index}}" class="collapse"
+         data-parent="#accordion-borderless">
+        <div class="card-body">
+            <div class="d-flex">
+                <div class="container-file" style="margin-left: 10px; width: 180px;">
+                    <div class="wrapper-file">
+                        <div class="image">
+                            <img class="file-image" src="{{image}}" alt=""
+                                 style="display: {{display}};">
+                        </div>
+                        <div class="content">
+                            <div class="icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="text">
+                                No file chosen, yet!
+                            </div>
+                        </div>
+                        <div class="cancel-btn">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <button onclick="defaultBtnActive(this)" class="custom-btn">
+                        Choose a
+                        file
+                    </button>
+                    <input class="default-btn 1" onchange="onFileSelected(this)"
+                           type="file" hidden>
+                </div>
+                <div class="row" style="width: 90%;">
+                    <div class="form-group col-4">
+                        <label for="formGroupExampleInput">Giá Nhập</label>
+                        <input type="text" class="form-control" value="{{giaNhap}}"
+                               placeholder="">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="formGroupExampleInput">Giá Bán</label>
+                        <input type="text" class="form-control priceTemplate" value="{{giaBan}}"
+                               placeholder="">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="formGroupExampleInput">Số lượng</label>
+                        <input type="text" class="form-control soLuong" value="{{soLuong}}"
+                               placeholder="">
+                    </div>
+
+                    <div class="form-group col-6">
+                        <div class="m-b-5" style="margin-top: 10px;">
+                            <label for="formGroupExampleInput" style="display: block; margin-bottom: 5px;">Bảo hành</label>
+                            <textarea rows="4" cols="230" style="display: block; width: 100%;" placeholder="">{{baoHanh}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <div class="m-b-5" style="margin-top: 10px;">
+                            <label for="formGroupExampleInput" style="display: block; margin-bottom: 5px;">Ghi chú</label>
+                            <textarea rows="4" cols="230" style="display: block; width: 100%;" placeholder="Nhập mô tả của bạn">{{moTa}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`;
+        let index = 0;
+        const ajaxPromises = [];
+        for (var i = 0; i < valuesColors.length; i++) {
+            for (var j = 0; j < valuesSizes.length; j++) {
+                const promise = new Promise((resolve, reject) => {
+                    (function (i, j) {
+                        var data = {
+                            IdProduct: $('#IdProduct option:selected').val(),
+                            IdTypeProduct: $('#IdTypeProduct option:selected').val(),
+                            IdMaterial: $('#IdMaterial option:selected').val(),
+                            IdSize: valuesSizes[j].value,
+                            IdColor: valuesColors[i].value
+                        };
+
+                        var jsonData = JSON.stringify(data);
+
+                        $.ajax({
+                            url: 'https://localhost:7280/api/SanPhamCT/GetProductDetail',
+                            timeout: 15000,
+                            type: 'POST',
+                            data: jsonData,
+                            contentType: 'application/json',
+                            success: function (result) {
+                                if (!result.success) {
+                                    let item = template
+                                        .replace(/{{Title}}/g, valuesColors[i].text + ' - ' + valuesSizes[j].text)
+                                        .replace(/{{index}}/g, index.toString())
+                                        .replace(/{{giaNhap}}/g, "")
+                                        .replace(/{{color}}/g, "green")
+                                        .replace(/{{giaBan}}/g, "")
+                                        .replace(/{{idsize}}/g, valuesSizes[j].value)
+                                        .replace(/{{idcolor}}/g, valuesColors[i].value)
+                                        .replace(/{{display}}/g, "none")
+                                        .replace(/{{soLuong}}/g, "")
+                                        .replace(/{{idProduct}}/g, "")
+                                        .replace(/{{image}}/g, '')
+                                        .replace(/{{moTa}}/g, '')
+                                        .replace(/{{baoHanh}}/g, '')
+                                        .replace(/{{isUpdate}}/g, 'false');
+                                    index = index + 1;
+                                    container.innerHTML += item;
+
+                                } else {
+                                    let item = template
+                                        .replace(/{{Title}}/g, valuesColors[i].text + ' - ' + valuesSizes[j].text)
+                                        .replace(/{{index}}/g, index.toString())
+                                        .replace(/{{giaNhap}}/g, result.data.giaNhap)
+                                        .replace(/{{giaBan}}/g, result.data.giaBan)
+                                        .replace(/{{baoHanh}}/g, result.data.baoHanh)
+                                        .replace(/{{display}}/g, "block")
+                                        .replace(/{{color}}/g, "blue")
+                                        .replace(/{{idsize}}/g, valuesSizes[j].value)
+                                        .replace(/{{idcolor}}/g, valuesColors[i].value)
+                                        .replace(/{{soLuong}}/g, result.data.soLuongTon)
+                                        .replace(/{{idProduct}}/g, result.data.id)
+                                        .replace(/{{image}}/g, '/assets/images/others/')
+                                        .replace(/{{moTa}}/g, result.moTa == null ? "" : result.data.moTa)
+                                        .replace(/{{isUpdate}}/g, 'true');
+                                    index = index + 1;
+                                    container.innerHTML += item;
+                                }
+                                resolve(result);
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('Đã xảy ra lỗi. Mã lỗi: ' + xhr.status);
+                                console.log('Lỗi: ' + error);
+                            }
+                        });
+                    })(i, j);
+                });
+                ajaxPromises.push(promise);
+            }
+        }
+
+        Promise.all(ajaxPromises)
+            .then((results) => {
+                var closeButtons = document.querySelectorAll('#accordion-borderless .card-header button');
+                console.log(closeButtons.length)
+                for (let i = 0; i < closeButtons.length; i++) {
+                    closeButtons[i].addEventListener('click', function () {
+                        const card = this.closest('.card');
+                        card.remove();
+                        closeButtons = document.querySelectorAll('#accordion-borderless .card-header button');
+                        if (closeButtons.length == 0) {
+                            $('#confirm').css('display', 'none');
+                        }
+
+                    });
+                }
+                $('#confirm').css('display', 'block');
+            })
+            .catch((error) => {
+                alert("Error")
+            });
+    }
+</script>
+
+<script>
+    let regExp = /[0-9a-zA-Z\^\&\'\@@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+    function defaultBtnActive(element) {
+        let wrapper = element.parentElement.closest('.container-file');
+        let defaultBtn = wrapper.querySelector(".default-btn");
+        defaultBtn.click();
+    }
+    function onFileSelected(element) {
+        let wrapperMain = element.closest('.container-file');
+        let wrapper = wrapperMain.querySelector('.wrapper-file');
+        let cancelBtn = wrapper.querySelector(".cancel-btn i");
+        let fileName = wrapper.querySelector(".file-name");
+        let img = wrapper.querySelector(".file-image");
+
+        const clearInput = function () {
+            element.value = ""; // Xóa giá trị của phần tử <input> để cho phép chọn tệp mới
+        };
+
+        const handleFile = function (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const result = reader.result;
+                img.src = result;
+                wrapper.classList.add("active");
+            };
+            cancelBtn.addEventListener("click", function () {
+                img.src = "";
+                wrapper.classList.remove("active");
+                img.setAttribute("style", "display: none");
+                clearInput(); // Xóa giá trị của phần tử <input> sau khi hủy tệp
+            });
+            reader.readAsDataURL(file);
+            if (element.value) {
+                //let valueStore = element.value.match(regExp);
+                //fileName.textContent = valueStore;
+                img.setAttribute("style", "display: block");
+            }
+        };
+
+        if (element.files.length > 0) {
+            handleFile(element.files[0]);
+        } else {
+            clearInput(); // Xóa giá trị của phần tử <input> nếu không có tệp được chọn
+        }
+    };
+</script>
