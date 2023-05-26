@@ -85,6 +85,14 @@ namespace AppView.Controllers
         // GET: UserController/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
+            string apiUrl = "https://localhost:7280/api/Role";
+            var httpClient = new HttpClient(); // tạo ra để callApi
+            var response = await httpClient.GetAsync(apiUrl);
+            // Lấy dữ liệu Json trả về từ Api được call dạng string
+            string apiData = await response.Content.ReadAsStringAsync();
+            // Đọc từ string Json vừa thu được sang List<T>
+            var roles = JsonConvert.DeserializeObject<List<Role>>(apiData);
+            ViewBag.Role = new SelectList(roles, "Id", "Ten");
             var user = repos.GetAll().FirstOrDefault(c => c.Id == id);
             return View(user);
         }
