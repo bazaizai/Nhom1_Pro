@@ -93,7 +93,7 @@ namespace AppAPI.Controllers
                 materials = new SelectList(_reposMaterial.GetAll().Where(ma => ma.TrangThai == 1).ToList(), "Id", "Ten"),
                 typeProducts = new SelectList(_reposTypeProduct.GetAll().Where(ty => ty.TrangThai == 1).ToList(), "Id", "Ten")
             };
-            return Ok(selectList);
+            return new OkObjectResult(selectList);
         }
 
         [HttpGet("list-SanPham")]
@@ -211,7 +211,7 @@ namespace AppAPI.Controllers
         }
 
         [HttpPost("Create-ProductDetail")]
-        public bool Create([FromBody] ProductDetailViewModel pro)
+        public IActionResult CreateProductDetail([FromBody] ProductDetailViewModel pro)
         {
             pro.TrangThai = 1;
             var configuration = new MapperConfiguration(cfg =>
@@ -221,11 +221,11 @@ namespace AppAPI.Controllers
 
             IMapper mapper = configuration.CreateMapper();
             ProductDetail productDetail = mapper.Map<ProductDetail>(pro);
-            return _reposCTSP.AddItem(productDetail);
+            return new OkObjectResult(new { success = _reposCTSP.AddItem(productDetail), id = productDetail.Id });
         }
 
         [HttpPost("Create-Image")]
-        public async Task<bool> CreateImage(Guid idProductDetail,IFormFile  fileImage)
+        public async Task<bool> CreateImage(Guid idProductDetail, IFormFile  fileImage)
         {
             var image = new Image()
             {
@@ -233,7 +233,7 @@ namespace AppAPI.Controllers
                 IdProductDetail = idProductDetail,
                 TrangThai = 1
             };
-            string destinationPath = @"C:\Users\hoang\OneDrive\Máy tính\Net105 - Copy\AppView\wwwroot\assets\images\others\";
+            string destinationPath = @"C:\Users\hoang\OneDrive\Máy tính\CShap5\AppView\wwwroot\assets\images\others\";
             string fileName = Path.GetFileName(fileImage.FileName);
             string destinationFilePath = Path.Combine(destinationPath, fileName);
             using (var stream = new FileStream(destinationFilePath, FileMode.Create))
@@ -249,7 +249,8 @@ namespace AppAPI.Controllers
         [HttpDelete("{id}")]
         public bool DeleteSP(Guid id)
         {
-            return _reposCTSP.RemoveItem(_reposCTSP.GetAll().FirstOrDefault(x => x.Id == id));
+            var pro = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == id);
+            return _reposCTSP.RemoveItem(pro);
         }
 
         [HttpDelete("image/{id}")]

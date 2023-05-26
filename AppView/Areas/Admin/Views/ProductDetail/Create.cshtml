@@ -7,9 +7,9 @@
 
 <div class="card">
     <div class="card-body">
-        <div class="d-flex">
-            <h5>QUẢN LÝ SẢN PHẨM</h5>
-            <button onclick="generate()" class="btn btn-warning" style="margin-left: 81%">Tạo thực thể</button>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h5 style="margin: 0;">QUẢN LÝ SẢN PHẨM</h5>
+            <button onclick="generate()" class="btn btn-warning">Tạo thực thể</button>
         </div>
         <div class="m-b-15" style="margin-bottom: 30px">
             <div class="row">
@@ -84,7 +84,7 @@
 <div id="confirm" style="display: none; margin-top: 5px">
     <div class="d-flex justify-content-end">
         <button class="btn btn-warning mr-2">Hủy</button>
-        <button class="btn btn-warning">Cập nhật</button>
+        <button onclick="CapNhat()" class="btn btn-warning">Cập nhật</button>
     </div>
 </div>
 
@@ -146,30 +146,29 @@
                 <div class="row" style="width: 90%;">
                     <div class="form-group col-4">
                         <label for="formGroupExampleInput">Giá Nhập</label>
-                        <input type="text" class="form-control" value="{{giaNhap}}"
+                        <input type="text" class="form-control giaNhap" value="{{giaNhap}}"
                                placeholder="">
                     </div>
                     <div class="form-group col-4">
                         <label for="formGroupExampleInput">Giá Bán</label>
-                        <input type="text" class="form-control priceTemplate" value="{{giaBan}}"
+                        <input type="text" class="form-control giaBan" value="{{giaBan}}"
                                placeholder="">
                     </div>
                     <div class="form-group col-4">
                         <label for="formGroupExampleInput">Số lượng</label>
-                        <input type="text" class="form-control soLuong" value="{{soLuong}}"
-                               placeholder="">
+                        <input type="text" class="form-control soLuong" value="{{soLuong}}">
                     </div>
 
                     <div class="form-group col-6">
                         <div class="m-b-5" style="margin-top: 10px;">
                             <label for="formGroupExampleInput" style="display: block; margin-bottom: 5px;">Bảo hành</label>
-                            <textarea rows="4" cols="230" style="display: block; width: 100%;" placeholder="">{{baoHanh}}</textarea>
+                            <textarea class="baoHanh" rows="4" cols="230" style="display: block; width: 100%;" placeholder="">{{baoHanh}}</textarea>
                         </div>
                     </div>
                     <div class="form-group col-6">
                         <div class="m-b-5" style="margin-top: 10px;">
                             <label for="formGroupExampleInput" style="display: block; margin-bottom: 5px;">Ghi chú</label>
-                            <textarea rows="4" cols="230" style="display: block; width: 100%;" placeholder="Nhập mô tả của bạn">{{moTa}}</textarea>
+                            <textarea class="moTa" rows="4" cols="230" style="display: block; width: 100%;" placeholder="Nhập mô tả của bạn">{{moTa}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -274,6 +273,10 @@
     }
 </script>
 
+
+
+
+
 <script>
     let regExp = /[0-9a-zA-Z\^\&\'\@@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
     function defaultBtnActive(element) {
@@ -319,4 +322,125 @@
             clearInput(); // Xóa giá trị của phần tử <input> nếu không có tệp được chọn
         }
     };
+</script>
+
+<script>
+    function CapNhat() {
+        var items = $('.item-accordion');
+        var currentIndex = 0;
+        var IdTypeProduct = $('#IdTypeProduct').val();
+        var IdMaterial = $('#IdMaterial').val();
+        var IdProduct = $('#IdProduct').val();
+       
+        function processNextItem() {
+            if (currentIndex >= items.length)
+            {
+                location.reload(); // Load lại trang
+                return;
+            }
+            var currentItem = items.eq(currentIndex);
+            var soLuong = currentItem.find('.soLuong').val();
+            var isUpdate = currentItem.attr('data-update');
+            var idProduct = currentItem.data('idproduct');
+            var giaBan = currentItem.find('.giaBan').val();
+            var giaNhap = currentItem.find('.giaNhap').val();
+            var baoHanh = currentItem.find('.baoHanh').val();
+            var moTa = currentItem.find('.moTa').val();
+            var imageInput = currentItem.find('input.default-btn');
+            var file = imageInput[0].files[0];
+            var ColorId = currentItem.find('a').data('idcolor');
+            var SizeId = currentItem.find('a').data('idsize');
+            var accordionItem = currentItem.closest('.item-accordion');
+
+            if (isUpdate === 'true') {
+
+                var data = {
+                    key: 'value',
+                };
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (result) {
+
+                    },
+                    error: function () {
+                        // Xử lý lỗi
+                    }
+                });
+                var formData = new FormData();
+                formData.append('Id', idProduct);
+                formData.append('Price', price);
+                formData.append('AvailableQuality', soLuong);
+                formData.append('file', file);
+                $.ajax({
+                    url: '/Admin/Products/UpdateProduct',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        accordionItem.remove();
+                        currentIndex++;
+                        processNextItem();
+                    },
+                    error: function () {
+                        currentIndex++;
+                        processNextItem();
+                    }
+                });
+            } else {
+
+                var data = {
+                    IdColor: ColorId,
+                    IdSize: SizeId,
+                    IdProduct: IdProduct,
+                    IdTypeProduct: IdTypeProduct,
+                    IdMaterial: IdMaterial,
+                    BaoHanh: baoHanh,
+                    GiaBan: giaBan,
+                    GiaNhap: giaNhap,
+                    Mota: moTa,
+                    SoLuongTon: soLuong
+                };
+                $.ajax({
+                    url: 'https://localhost:7280/api/SanPhamCT/Create-ProductDetail',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result.success) {
+                            var formData = new FormData();
+                            formData.append('idProductDetail', result.id);
+                            formData.append('fileImage', file);
+                            $.ajax({
+                                url: 'https://localhost:7280/api/SanPhamCT/Create-Image?idProductDetail=' + result.id,
+                                type: 'POST',
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (result) {
+                                    accordionItem.remove();
+                                    currentIndex++;
+                                    processNextItem();
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log(xhr.responseText);
+                                    console.log(status);
+                                    console.log(error);
+                                    console.log(xhr);
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        // Xử lý lỗi
+                    }
+                });
+            }
+        }
+
+        processNextItem();
+    }
 </script>
