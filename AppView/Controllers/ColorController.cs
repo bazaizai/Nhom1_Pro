@@ -37,6 +37,24 @@ namespace AppView.Controllers
             }
 
         }
+        public async Task<IActionResult> ViewTest(string search)
+        {
+            string apiUrl = "https://localhost:7280/api/Color/GetAllColor";
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(apiUrl);
+            string apiData = await response.Content.ReadAsStringAsync();
+            var Color = JsonConvert.DeserializeObject<List<Color>>(apiData);
+            if (search == null)
+            {
+                return View(Color);
+            }
+            else
+            {
+                var colors = Color.Where(c => c.Ten.ToUpper().Contains(search.ToUpper())).ToList();
+                return View(colors);
+            }
+
+        }
         [HttpGet]
         public IActionResult DetailsAsync(Guid id)
         {
