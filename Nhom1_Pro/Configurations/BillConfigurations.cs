@@ -9,7 +9,7 @@ namespace Nhom1_Pro.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.User).WithMany(x => x.Bills).HasForeignKey(x => x.IdUser);
-            builder.HasOne(x => x.Voucher).WithMany(x => x.Bills).HasForeignKey(x => x.IdUser);
+            builder.HasOne(x => x.Voucher).WithMany(x => x.Bills).HasForeignKey(x => x.IdVoucher);
             builder.Property(x => x.Ma).HasColumnType("nvarchar(1000)");
             builder.Property(x => x.NgayTao).HasColumnType("DateTime");
             builder.Property(x => x.NgayThanhToan).HasColumnType("DateTime");
