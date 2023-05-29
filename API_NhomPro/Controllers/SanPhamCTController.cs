@@ -36,7 +36,6 @@ namespace AppAPI.Controllers
             _reposImage = new AllRepo<Image>();
         }
 
-        // GET: api/<SanPhamCTController>
         [HttpGet("list-SanPhamCT")]
         public IEnumerable<ProductDetailDTO> GetAllProductDetail()
         {
@@ -56,9 +55,21 @@ namespace AppAPI.Controllers
                 MoTa = pd.MoTa,
                 SoLuongTon = pd.SoLuongTon,
                 TrangThai = pd.TrangThai,
-                ListImage = _reposImage.GetAll().Where(im => im.IdProductDetail == pd.Id).Select(x => x.TenAnh).ToList()
-            }); ;
+                LinkImage = _reposImage.GetAll().Any(x => x.IdProductDetail == pd.Id) ? _reposImage.GetAll().Where(pro => pro.IdProductDetail == pd.Id).FirstOrDefault().TenAnh : null,
+            });
             return productDetailDTOs;
+        }
+
+        [HttpGet("search")]
+        public IEnumerable<ProductDetailDTO> SearchProductByName(string name)
+        {
+            return GetAllProductDetail().Where(x => x.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        [HttpGet("GetADetail")]
+        public ProductDetailDTO GetProductDetail(Guid id)
+        {
+            return GetAllProductDetail().FirstOrDefault(x => x.Id == id);
         }
 
         [HttpPost("GetProductDetail")]
@@ -76,6 +87,7 @@ namespace AppAPI.Controllers
 
                 // Copy the product object
                 var initialProduct = mapper.Map<ProductDetail, ProductDetailPutViewModel>(product);
+                initialProduct.LinkImage = _reposImage.GetAll().Any(x => x.IdProductDetail == initialProduct.Id) ? _reposImage.GetAll().Where(pro => pro.IdProductDetail == initialProduct.Id).FirstOrDefault().TenAnh : null;
                 return Ok(new { success = productExists, data = initialProduct });
             }
 
@@ -125,6 +137,7 @@ namespace AppAPI.Controllers
 
             IMapper mapper = configuration.CreateMapper();
             var productDetailPut = mapper.Map<ProductDetailPutViewModel>(productDetail);
+            productDetailPut.LinkImage = _reposImage.GetAll().Any(x => x.IdProductDetail == productDetailPut.Id) ? _reposImage.GetAll().Where(pro => pro.IdProductDetail == productDetailPut.Id).FirstOrDefault().TenAnh : null;
             return productDetailPut;
         }
 
@@ -213,7 +226,7 @@ namespace AppAPI.Controllers
         [HttpPost("Create-ProductDetail")]
         public IActionResult CreateProductDetail([FromBody] ProductDetailViewModel pro)
         {
-            pro.TrangThai = 1;
+            pro.TrangThai = 0;
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProductDetailViewModel, ProductDetail>();
@@ -225,7 +238,7 @@ namespace AppAPI.Controllers
         }
 
         [HttpPost("Create-Image")]
-        public async Task<bool> CreateImage(Guid idProductDetail, IFormFile  fileImage)
+        public async Task<bool> CreateImage(Guid idProductDetail, IFormFile fileImage)
         {
             var image = new Image()
             {
@@ -233,9 +246,13 @@ namespace AppAPI.Controllers
                 IdProductDetail = idProductDetail,
                 TrangThai = 1
             };
-            string destinationPath = @"C:\Users\hoang\OneDrive\Máy tính\CShap5\AppView\wwwroot\assets\images\others\";
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string rootPath = Directory.GetParent(currentDirectory).FullName;
+            string destinationPath = Path.Combine(rootPath, "AppView", "wwwroot", "assets", "images", "others");
             string fileName = Path.GetFileName(fileImage.FileName);
             string destinationFilePath = Path.Combine(destinationPath, fileName);
+
             using (var stream = new FileStream(destinationFilePath, FileMode.Create))
             {
                 await fileImage.CopyToAsync(stream);
@@ -249,8 +266,8 @@ namespace AppAPI.Controllers
         [HttpDelete("{id}")]
         public bool DeleteSP(Guid id)
         {
-            var pro = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == id);
-            return _reposCTSP.RemoveItem(pro);
+            _reposImage.GetAll().Where(x => x.IdProductDetail == id).ToList().ForEach(item => _reposImage.RemoveItem(item));
+            return _reposCTSP.RemoveItem(_reposCTSP.GetAll().FirstOrDefault(x => x.Id == id));
         }
 
         [HttpDelete("image/{id}")]
@@ -260,9 +277,9 @@ namespace AppAPI.Controllers
         }
 
         [HttpPut("Update-ProductDetail")]
-        public bool UpdateProductDetail([FromBody] ProductDetailPutViewModel pro)
+        public async Task<bool> UpdateProductDetail([FromBody] ProductDetailPutViewModel pro)
         {
-            pro.TrangThai = 1;
+            pro.TrangThai = 0;
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
@@ -275,19 +292,26 @@ namespace AppAPI.Controllers
         }
 
         [HttpPut("Update-Image")]
-        public async Task<bool> UpdateImage(Guid id, int trangthai,IFormFile fileImage)
+        public async Task<bool> UpdateImage(Guid idProduct,[FromForm] IFormFile? fileImage)
         {
-            var image = _reposImage.GetAll().FirstOrDefault(x => x.Id == id);
-            image.TenAnh = fileImage.FileName;
-            image.TrangThai = trangthai;
-            string destinationPath = @"C:\Users\hoang\OneDrive\Máy tính\Net105 - Copy\AppView\wwwroot\assets\images\others\";
-            string fileName = Path.GetFileName(fileImage.FileName);
-            string destinationFilePath = Path.Combine(destinationPath, fileName);
-            using (var stream = new FileStream(destinationFilePath, FileMode.Create))
+            Image image = new Image();
+            if(fileImage != null && _reposImage.GetAll().Any(x=>x.IdProductDetail == idProduct)!=null)
             {
-                await fileImage.CopyToAsync(stream);
+                    image = _reposImage.GetAll().Where(x => x.IdProductDetail == idProduct).FirstOrDefault();
+                    image.TenAnh = fileImage.FileName;
+                    string currentDirectory = Directory.GetCurrentDirectory();
+                    string rootPath = Directory.GetParent(currentDirectory).FullName;
+                    string destinationPath = Path.Combine(rootPath, "AppView", "wwwroot", "assets", "images", "others");
+                    string fileName = Path.GetFileName(fileImage.FileName);
+                    string destinationFilePath = Path.Combine(destinationPath, fileName);
+                    using (var stream = new FileStream(destinationFilePath, FileMode.Create))
+                    {
+                        await fileImage.CopyToAsync(stream);
+                    }
+                return _reposImage.EditItem(image);
             }
-            return _reposImage.EditItem(image);
+
+            return false;
         }
     }
 }

@@ -5,6 +5,17 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="modal-dialog" id="modalCapNhat" style="display:none">
+    <div class="modal-content">
+        <div class="modal-header" style=" background: #a37acb;">
+            <h5 class="modal-title" style=" color: #ccff00; font-size: 20px;">Thông báo</h5>
+        </div>
+        <div class="modal-body">
+            <p>Cập nhật sản phẩm thành công!</p>
+        </div>
+    </div>
+</div>
+<div id="preloader"></div>
 <div class="card">
     <div class="card-body">
         <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -18,7 +29,7 @@
                     <select id="IdProduct" class="select2" name="IdProduct" asp-for="IdProduct">
                         @foreach (var item in ViewBag.Product)
                         {
-                            <option value="@item.value">@item.text</option>
+                            <option value="@item.Value">@item.Text</option>
                         }
                     </select>
                 </div>
@@ -28,7 +39,7 @@
                     <select id="IdTypeProduct" class="select2" name="IdTypeProduct" asp-for="IdTypeProduct">
                         @foreach (var item in ViewBag.TypeProduct)
                         {
-                            <option value="@item.value">@item.text</option>
+                            <option value="@item.Value">@item.Text</option>
                         }
                     </select>
                 </div>
@@ -38,7 +49,7 @@
                     <select class="select2" id="IdMaterial" name="IdMaterial" asp-for="IdMaterial">
                         @foreach (var item in ViewBag.Material)
                         {
-                            <option value="@item.value">@item.text</option>
+                            <option value="@item.Value">@item.Text</option>
                         }
                     </select>
                 </div>
@@ -53,7 +64,7 @@
                                     multiple="multiple" asp-for="IdColor">
                                 @foreach (var item in ViewBag.Color)
                                 {
-                                    <option value="@item.value">@item.text</option>
+                                    <option value="@item.Value">@item.Text</option>
                                 }
                             </select>
                         </div>
@@ -68,7 +79,7 @@
                                     multiple="multiple" asp-for="IdSize">
                                 @foreach (var item in ViewBag.Size)
                                 {
-                                    <option value="@item.value">@item.text</option>
+                                    <option value="@item.Value">@item.Text</option>
                                 }
                             </select>
                         </div>
@@ -88,7 +99,12 @@
     </div>
 </div>
 
-
+<script>
+    var load = $('#preloader');
+    window.addEventListener("load", function () {
+        load.css('display', 'none');
+    })
+</script>
 
 <script>
     function generate() {
@@ -222,17 +238,17 @@
                                     let item = template
                                         .replace(/{{Title}}/g, valuesColors[i].text + ' - ' + valuesSizes[j].text)
                                         .replace(/{{index}}/g, index.toString())
-                                        .replace(/{{giaNhap}}/g, result.data.giaNhap)
-                                        .replace(/{{giaBan}}/g, result.data.giaBan)
-                                        .replace(/{{baoHanh}}/g, result.data.baoHanh)
+                                        .replace(/{{giaNhap}}/g, result.data.GiaNhap)
+                                        .replace(/{{giaBan}}/g, result.data.GiaBan)
+                                        .replace(/{{baoHanh}}/g, result.data.BaoHanh)
                                         .replace(/{{display}}/g, "block")
                                         .replace(/{{color}}/g, "blue")
                                         .replace(/{{idsize}}/g, valuesSizes[j].value)
                                         .replace(/{{idcolor}}/g, valuesColors[i].value)
-                                        .replace(/{{soLuong}}/g, result.data.soLuongTon)
+                                        .replace(/{{soLuong}}/g, result.data.SoLuongTon)
                                         .replace(/{{idProduct}}/g, result.data.id)
-                                        .replace(/{{image}}/g, '/assets/images/others/')
-                                        .replace(/{{moTa}}/g, result.moTa == null ? "" : result.data.moTa)
+                                        .replace(/{{image}}/g, '/assets/images/others/' + result.data.LinkImage)
+                                        .replace(/{{moTa}}/g, result.data.MoTa)
                                         .replace(/{{isUpdate}}/g, 'true');
                                     index = index + 1;
                                     container.innerHTML += item;
@@ -331,17 +347,23 @@
         var IdTypeProduct = $('#IdTypeProduct').val();
         var IdMaterial = $('#IdMaterial').val();
         var IdProduct = $('#IdProduct').val();
-       
+
+        $('#preloader').show();
+
         function processNextItem() {
-            if (currentIndex >= items.length)
-            {
-                location.reload(); // Load lại trang
+            if (currentIndex >= items.length) {
+                $('#preloader').hide();
+                $('#modalCapNhat').modal('show');
+                setTimeout(function () {
+                    location.reload(); // Load lại trang
+                }, 1000);
                 return;
             }
             var currentItem = items.eq(currentIndex);
             var soLuong = currentItem.find('.soLuong').val();
             var isUpdate = currentItem.attr('data-update');
-            var idProduct = currentItem.data('idproduct');
+            var idProductDetail = currentItem.data('idproduct');
+            console.log(idProductDetail);
             var giaBan = currentItem.find('.giaBan').val();
             var giaNhap = currentItem.find('.giaNhap').val();
             var baoHanh = currentItem.find('.baoHanh').val();
@@ -351,45 +373,43 @@
             var ColorId = currentItem.find('a').data('idcolor');
             var SizeId = currentItem.find('a').data('idsize');
             var accordionItem = currentItem.closest('.item-accordion');
-
             if (isUpdate === 'true') {
 
-                var data = {
-                    key: 'value',
+                var dataUpdate = {
+                    Id: idProductDetail,
+                    IdColor: ColorId,
+                    IdSize: SizeId,
+                    IdProduct: IdProduct,
+                    IdTypeProduct: IdTypeProduct,
+                    IdMaterial: IdMaterial,
+                    BaoHanh: baoHanh,
+                    GiaBan: giaBan,
+                    GiaNhap: giaNhap,
+                    Mota: moTa,
+                    SoLuongTon: soLuong,
                 };
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    success: function (result) {
-
-                    },
-                    error: function () {
-                        // Xử lý lỗi
-                    }
-                });
-                var formData = new FormData();
-                formData.append('Id', idProduct);
-                formData.append('Price', price);
-                formData.append('AvailableQuality', soLuong);
-                formData.append('file', file);
-                $.ajax({
-                    url: '/Admin/Products/UpdateProduct',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (result) {
-                        accordionItem.remove();
-                        currentIndex++;
-                        processNextItem();
-                    },
-                    error: function () {
-                        currentIndex++;
-                        processNextItem();
-                    }
-                });
+                axios.put('https://localhost:7280/api/SanPhamCT/Update-ProductDetail', dataUpdate)
+                    .then(function (response) {
+                        var formDataImage = new FormData();
+                        formDataImage.append('idProduct', idProductDetail);
+                        formDataImage.append('fileImage', file);
+                        axios.put('https://localhost:7280/api/SanPhamCT/Update-Image?idProduct=' + idProductDetail, formDataImage)
+                            .then(function (response) {
+                                if (response) {
+                                    accordionItem.remove();
+                                    currentIndex++;
+                                    processNextItem();
+                                }
+                            })
+                            .catch(function (error) {
+                                // Xử lý lỗi (nếu có)
+                                console.error(error);
+                            });
+                    })
+                    .catch(function (error) {
+                        // Xử lý lỗi (nếu có)
+                        console.error(error);
+                    });
             } else {
 
                 var data = {

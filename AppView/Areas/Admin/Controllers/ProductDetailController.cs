@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace AppView.Areas.Admin.Controllers
@@ -104,6 +106,40 @@ namespace AppView.Areas.Admin.Controllers
             }
         }
 
+
+        public async Task<ActionResult> Details(Guid id)
+        {
+            using HttpClient client = new HttpClient();
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(new Uri($"https://localhost:7280/api/SanPhamCT/GetADetail?id={id}"));
+                response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsAsync<ProductDetailDTO>();
+                return View(responseContent);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+        }
+
+        public async Task<ActionResult> SearchProduct([FromQuery] string name)
+        {
+            using HttpClient client = new HttpClient();
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(new Uri($"https://localhost:7280/api/SanPhamCT/search?name={name}"));
+                response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsAsync<List<ProductDetailDTO>>();
+                return PartialView("_PartialViewPrductList", responseContent);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+        }
+
+
         public async Task<ActionResult> CreatePro(ProductDetailViewModel obj)
         {
             using (HttpClient client = new HttpClient())
@@ -115,7 +151,6 @@ namespace AppView.Areas.Admin.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Xử lý phản hồi thành công từ API
                     var result = await response.Content.ReadAsAsync<bool>();
                     if (result)
                     {
@@ -161,34 +196,5 @@ namespace AppView.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> UpdateProductDetail(ProductDetailPutViewModel obj)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                var apiUrl = "https://localhost:7280/api/SanPhamCT/Update-ProductDetail";
-                var content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PutAsync(apiUrl, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsStringAsync();
-                    bool success = JsonConvert.DeserializeObject<bool>(result);
-                    if (success)
-                    {
-                        return RedirectToAction("GetAllProduct");
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-        }
     }
 }
