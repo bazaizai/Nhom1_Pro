@@ -13,16 +13,10 @@ namespace AppView.Controllers
 {
     public class SizeController : Controller
     {
-        private readonly IAllRepo<Size> allRepo;
-        DBContextModel dbContextModel = new DBContextModel();
-        DbSet<Size> Sizes;
         private readonly ISizeServices sizeServices;
         public SizeController()
         {
-            Sizes = dbContextModel.Sizes;
-            AllRepo<Size> all = new AllRepo<Size>(dbContextModel, Sizes);
             sizeServices = new SizeServices();
-            allRepo = all;
         }
         public async Task<IActionResult> GetAllSizeAsync(string search)
         {
@@ -39,15 +33,15 @@ namespace AppView.Controllers
 
         }
         [HttpGet]
-        public IActionResult DetailsAsync(Guid id)
+        public async Task<IActionResult> DetailsAsync(Guid id)
         {
-            var Size = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Size = (await sizeServices.GetAllSize()).FirstOrDefault(c => c.Id == id);
             return View(Size);
         }
         [HttpGet]
-        public IActionResult EditAsync(Guid id)
+        public async Task<IActionResult> EditAsync(Guid id)
         {
-            var Size = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Size = (await sizeServices.GetAllSize()).FirstOrDefault(c => c.Id == id);
             return View(Size);
         }
         public async Task<IActionResult> EditAsync(Guid id, string ten, int trangthai, decimal cm)
@@ -59,9 +53,9 @@ namespace AppView.Controllers
             else return BadRequest();
         }
         [HttpGet]
-        public IActionResult DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var Size = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Size = (await sizeServices.GetAllSize()).FirstOrDefault(c => c.Id == id);
             return View(Size);
         }
         public async Task<IActionResult> DeleteAsync(Size Size)

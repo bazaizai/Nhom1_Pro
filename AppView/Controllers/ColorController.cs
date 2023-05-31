@@ -12,16 +12,11 @@ namespace AppView.Controllers
 {
     public class ColorController : Controller
     {
-        private readonly IAllRepo<Color> allRepo;
+
         private readonly IColorServices colorServices;
-        DBContextModel dbContextModel = new DBContextModel();
-        DbSet<Color> Colors;
         public ColorController()
         {
-            Colors = dbContextModel.Colors;
-            colorServices= new ColorServices();
-            AllRepo<Color> all = new AllRepo<Color>(dbContextModel, Colors);
-            allRepo = all;
+            colorServices = new ColorServices();
         }
         public async Task<IActionResult> GetAllColorAsync(string search)
         {
@@ -38,30 +33,31 @@ namespace AppView.Controllers
 
         }
         [HttpGet]
-        public IActionResult DetailsAsync(Guid id)
+        public async Task<IActionResult> DetailsAsync(Guid id)
         {
-            var Color = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Color = (await colorServices.GetAllColor()).FirstOrDefault(c => c.Id == id);
+
             return View(Color);
         }
         [HttpGet]
-        public IActionResult EditAsync(Guid id)
+        public async Task<IActionResult> EditAsync(Guid id)
         {
-            var Color = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Color = (await colorServices.GetAllColor()).FirstOrDefault(c => c.Id == id);
             return View(Color);
         }
         public async Task<IActionResult> EditAsync(Guid id, string ten, int trangthai)
         {
-            if (await colorServices.EditColor(id,ten,trangthai) == true)
+            if (await colorServices.EditColor(id, ten, trangthai) == true)
             {
                 return RedirectToAction("GetAllColor");
             }
             else return BadRequest();
-          
+
         }
         [HttpGet]
-        public IActionResult DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var Color = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Color = (await colorServices.GetAllColor()).FirstOrDefault(c => c.Id == id);
             return View(Color);
         }
         public async Task<IActionResult> DeleteAsync(Color color)

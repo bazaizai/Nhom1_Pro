@@ -12,16 +12,11 @@ namespace AppView.Controllers
 {
     public class MaterialController : Controller
     {
-        private readonly IAllRepo<Material> allRepo;
+
         private readonly IMaterialServices MaterialServices;
-        DBContextModel dbContextModel = new DBContextModel();
-        DbSet<Material> Materials;
         public MaterialController()
         {
-            Materials = dbContextModel.Materials;
             MaterialServices = new MaterialServices();
-            AllRepo<Material> all = new AllRepo<Material>(dbContextModel, Materials);
-            allRepo = all;
         }
         public async Task<IActionResult> GetAllMaterialAsync(string search)
         {
@@ -38,15 +33,16 @@ namespace AppView.Controllers
 
         }
         [HttpGet]
-        public IActionResult DetailsAsync(Guid id)
+        public async Task<IActionResult> DetailsAsync(Guid id)
         {
-            var Material = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Material = (await MaterialServices.GetAllMaterial()).FirstOrDefault(c => c.Id == id);
+
             return View(Material);
         }
         [HttpGet]
-        public IActionResult EditAsync(Guid id)
+        public async Task<IActionResult> EditAsync(Guid id)
         {
-            var Material = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Material = (await MaterialServices.GetAllMaterial()).FirstOrDefault(c => c.Id == id);
             return View(Material);
         }
         public async Task<IActionResult> EditAsync(Guid id, string ten, int trangthai)
@@ -59,9 +55,9 @@ namespace AppView.Controllers
 
         }
         [HttpGet]
-        public IActionResult DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var Material = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            var Material = (await MaterialServices.GetAllMaterial()).FirstOrDefault(c => c.Id == id);
             return View(Material);
         }
         public async Task<IActionResult> DeleteAsync(Material Material)
