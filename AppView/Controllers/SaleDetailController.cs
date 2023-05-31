@@ -1,5 +1,7 @@
 ﻿using AppData.IRepositories;
 using AppData.Repositories;
+using AppView.IServices;
+using AppView.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,20 +17,18 @@ namespace AppView.Controllers
         private readonly IAllRepo<Product> repoproduct;
         DBContextModel context = new DBContextModel();
         DbSet<SaleDetail> saleDetail;
+        ISaleDetailService SaleDetailService;
         public SaleDetailController()
         {
             saleDetail = context.DetailSales;
             AllRepo<SaleDetail> all = new AllRepo<SaleDetail>(context, saleDetail);
             repos = all;
+            SaleDetailService = new SaleDetailService();
         }
 
         public async Task<IActionResult> GetAllSaleDetail()
         {
-            string apiUrl = "https://localhost:7280/api/SaleDetail";
-            var httpClient = new HttpClient(); // tạo ra để callApi
-            var response = await httpClient.GetAsync(apiUrl);
-            string apiData = await response.Content.ReadAsStringAsync();
-            var SaleDetails = JsonConvert.DeserializeObject<List<SaleDetail>>(apiData);
+            var SaleDetails = await SaleDetailService.GetAllDetaiSale();
             return View(SaleDetails);
         }
         public IActionResult DetailSaleDetail(Guid id)
@@ -54,37 +54,25 @@ namespace AppView.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSaleDetail(Guid IdSale,Guid IdChiTietSp, string mota, int trangthai)
+        public async Task<IActionResult> CreateSaleDetail(SaleDetail p)
         {
-            
-   
-            string apiUrl = $"https://localhost:7280/api/SaleDetail?mota={mota}&trangthai={trangthai}&IdSale={IdSale}&IdChiTietSp={IdChiTietSp}";
-            var httpClient = new HttpClient();
-
-            var response = await httpClient.PostAsync(apiUrl, null);
-
-
-            if (response.IsSuccessStatusCode)
+            if (await SaleDetailService.CreateDetaiSale(p))
             {
                 return RedirectToAction("GetAllSaleDetail");
             }
-            return View();
+            else return BadRequest();
+
+
         }
 
 
         public async Task<IActionResult> DeleteSaleDetail(Guid id)
         {
-            string apiUrl = $"https://localhost:7280/api/SaleDetail/{id}";
-            var httpClient = new HttpClient();
-
-            var response = await httpClient.DeleteAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            if (await SaleDetailService.DeleteDetaiSale(id))
             {
                 return RedirectToAction("GetAllSaleDetail");
             }
-
-            return View();
+            else return BadRequest();
         }
         public IActionResult EditSaleDetail(Guid id)
         {
@@ -105,21 +93,13 @@ namespace AppView.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditSaleDetail(Guid id, Guid IdSale, Guid IdChiTietSp, string mota, int trangthai)
+        public async Task<IActionResult> EditSaleDetail(SaleDetail p)
         {
-            string apiUrl = $"https://localhost:7280/api/SaleDetail/{id}?mota={mota}&trangthai={trangthai}&IdSale={IdSale}&IdChiTietSp={IdChiTietSp}";
-            var httpClient = new HttpClient();
-
-            var content = new StringContent(string.Empty);
-
-            var response = await httpClient.PutAsync(apiUrl, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await SaleDetailService.EditDetaiSale(p))
             {
                 return RedirectToAction("GetAllSaleDetail");
             }
-
-            return BadRequest();
+            else return BadRequest();
         }
     }
 }
