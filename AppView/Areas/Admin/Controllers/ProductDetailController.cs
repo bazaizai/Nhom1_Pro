@@ -12,6 +12,11 @@ namespace AppView.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductDetailController : Controller
     {
+
+        public ActionResult Call()
+        {
+            return View();
+        }
         public async Task<ActionResult> GetAllProduct(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -19,17 +24,12 @@ namespace AppView.Areas.Admin.Controllers
                 using (HttpClient client = new HttpClient())
                 {
                     HttpResponseMessage response = await client.GetAsync("https://localhost:7280/api/SanPhamCT/list-SanPhamCT");
-
                     if (response.IsSuccessStatusCode)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        var data = JsonConvert.DeserializeObject<List<ProductDetailDTO>>(responseContent);
-                        return View(data);
+                        var responseContent = await response.Content.ReadAsAsync<List<ProductDetailDTO>>();
+                        return View(responseContent);
                     }
-                    else
-                    {
-                        return BadRequest();
-                    }
+                    return BadRequest();
                 }
             }
             else
@@ -37,17 +37,12 @@ namespace AppView.Areas.Admin.Controllers
                 using (HttpClient client = new HttpClient())
                 {
                     HttpResponseMessage response = await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Get-ProductDetailSearch?name={name}");
-
                     if (response.IsSuccessStatusCode)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        var data = JsonConvert.DeserializeObject<List<ProductDetailDTO>>(responseContent);
-                        return View(data);
+                        var responseContent = await response.Content.ReadAsAsync<List<ProductDetailDTO>>();
+                        return View(responseContent);
                     }
-                    else
-                    {
-                        return BadRequest();
-                    }
+                    return BadRequest();
                 }
             }
         }
@@ -59,27 +54,21 @@ namespace AppView.Areas.Admin.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsAsync<bool>();
+                    bool responseContent = await response.Content.ReadAsAsync<bool>();
                     if (responseContent)
                     {
                         return RedirectToAction("GetAllProduct");
                     }
-                    else
-                    {
-                        return NotFound();
-                    }
+                    return NotFound();
                 }
                 else if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    return BadRequest();
-                }
             }
-        }
 
+            return BadRequest();
+        }
 
         [HttpGet]
         public async Task<ActionResult> Create()
@@ -156,10 +145,7 @@ namespace AppView.Areas.Admin.Controllers
                     {
                         return RedirectToAction("GetAllProduct");
                     }
-                    else
-                    {
-                        return NotFound();
-                    }
+                    return NotFound();
                 }
                 else
                 {
@@ -172,11 +158,10 @@ namespace AppView.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> ViewEdit(Guid id)
         {
-            using (HttpClient client1 = new HttpClient())
-            using (HttpClient client2 = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
-                var response1 = await client1.GetAsync("https://localhost:7280/api/SanPhamCT/list-BienThe");
-                var response2 = await client2.GetAsync($"https://localhost:7280/api/SanPhamCT/Get-ProductDetailPut?id={id}");
+                var response1 = await client.GetAsync("https://localhost:7280/api/SanPhamCT/list-BienThe");
+                var response2 = await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Get-ProductDetailPut?id={id}");
 
                 if (response1.IsSuccessStatusCode && response2.IsSuccessStatusCode)
                 {
@@ -189,10 +174,7 @@ namespace AppView.Areas.Admin.Controllers
                     ViewBag.TypeProduct = dataViewBag.typeProducts;
                     return View(dataModel);
                 }
-                else
-                {
-                    return BadRequest();
-                }
+                return BadRequest();
             }
         }
 

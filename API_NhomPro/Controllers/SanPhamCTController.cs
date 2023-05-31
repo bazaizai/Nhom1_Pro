@@ -108,24 +108,6 @@ namespace AppAPI.Controllers
             return new OkObjectResult(selectList);
         }
 
-        [HttpGet("list-SanPham")]
-        public IEnumerable<Product> GetAllProduct()
-        {
-            return _reposSP.GetAll();
-        }
-
-        [HttpGet("list-Image")]
-        public IEnumerable<Image> GetAllImage()
-        {
-            return _reposImage.GetAll();
-        }
-
-        [HttpGet("list-Size")]
-        public IEnumerable<Size> GetAllSize()
-        {
-            return _reposSize.GetAll();
-        }
-
         [HttpGet("Get-ProductDetailPut")]
         public ProductDetailPutViewModel GetProductDTO(Guid id)
         {
@@ -139,88 +121,6 @@ namespace AppAPI.Controllers
             var productDetailPut = mapper.Map<ProductDetailPutViewModel>(productDetail);
             productDetailPut.LinkImage = _reposImage.GetAll().Any(x => x.IdProductDetail == productDetailPut.Id) ? _reposImage.GetAll().Where(pro => pro.IdProductDetail == productDetailPut.Id).FirstOrDefault().TenAnh : null;
             return productDetailPut;
-        }
-
-        [HttpGet("Get-ProductDetailSearch")]
-        public IEnumerable<ProductDetailDTO> GetProductSearch(string name)
-        {
-            return GetAllProductDetail().Where(p => p.Name.ToLower().Contains(name.ToLower())).ToList();
-        }
-
-        [HttpGet("list-TypeProduct")]
-        public IEnumerable<TypeProduct> GetAllTypeProduct()
-        {
-            return _reposTypeProduct.GetAll();
-        }
-
-        [HttpGet("list-Material")]
-        public IEnumerable<Material> GetAllMaterial()
-        {
-            return _reposMaterial.GetAll();
-        }
-
-        [HttpGet("list-Color")]
-        public IEnumerable<Color> GetAllColor()
-        {
-            return _reposColor.GetAll();
-        }
-
-        [HttpPost("Create-Product")]
-        public bool Create([FromBody] ProductViewModel pro)
-        {
-            Product product = new Product()
-            {
-                Ma = _reposSP.MaTS(),
-                Ten = pro.Ten,
-                TrangThai = pro.TrangThai
-            };
-            return _reposSP.AddItem(product);
-        }
-
-        [HttpPost("Create-Size")]
-        public bool Create([FromBody] SizeViewModel size)
-        {
-            return _reposSize.AddItem(new Size()
-            {
-                Ma = _reposSize.MaTS(),
-                Cm = size.Cm,
-                Size1 = size.Size1,
-                TrangThai = size.TrangThai
-            });
-        }
-
-        [HttpPost("Create-Color")]
-        public bool Create([FromBody] ColorViewModel color)
-        {
-            return _reposColor.AddItem(new Color()
-            {
-                Ma = _reposColor.MaTS(),
-                Ten = color.Ten,
-                TrangThai = color.TrangThai
-            });
-        }
-
-        [HttpPost("Create-TypeProduct")]
-        public bool Create([FromBody] TypeProductViewModel type)
-        {
-            return _reposTypeProduct.AddItem(new TypeProduct()
-            {
-                Ma = _reposTypeProduct.MaTS(),
-                Ten = type.Ten,
-                TrangThai = type.TrangThai
-            });
-        }
-
-
-        [HttpPost("Create-Material")]
-        public bool Create([FromBody] MaterialViewModel material)
-        {
-            return _reposMaterial.AddItem(new Material()
-            {
-                TrangThai = material.TrangThai,
-                Ten = material.Ten,
-                Ma = _reposMaterial.MaTS(),
-            });
         }
 
         [HttpPost("Create-ProductDetail")]
