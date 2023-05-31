@@ -1,5 +1,7 @@
 ﻿using AppData.IRepositories;
 using AppData.Repositories;
+using AppView.IServices;
+using AppView.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -14,19 +16,17 @@ namespace AppView.Controllers
         private readonly IAllRepo<Size> allRepo;
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<Size> Sizes;
+        private readonly ISizeServices sizeServices;
         public SizeController()
         {
             Sizes = dbContextModel.Sizes;
             AllRepo<Size> all = new AllRepo<Size>(dbContextModel, Sizes);
+            sizeServices = new SizeServices();
             allRepo = all;
         }
         public async Task<IActionResult> GetAllSizeAsync(string search)
         {
-            string apiUrl = "https://localhost:7280/api/Size/GetAllSize";
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(apiUrl);
-            string apiData = await response.Content.ReadAsStringAsync();
-            var Size = JsonConvert.DeserializeObject<List<Size>>(apiData);
+            var Size = await sizeServices.GetAllSize();
             if (search == null)
             {
                 return View(Size);
@@ -52,10 +52,11 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> EditAsync(Guid id, string ten, int trangthai, decimal cm)
         {
-            string apiUrl = $"https://localhost:7280/api/Size/EditSize?id={id}&ten={ten}&CM={cm}&trangthai={trangthai}";
-            var httpClient = new HttpClient();
-            var response = await httpClient.PutAsync(apiUrl, null);
-            return RedirectToAction("GetAllSize");
+            if (await sizeServices.EditSize(id, ten, trangthai,cm) == true)
+            {
+                return RedirectToAction("GetAllSize");
+            }
+            else return BadRequest();
         }
         [HttpGet]
         public IActionResult DeleteAsync(Guid id)
@@ -65,10 +66,11 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> DeleteAsync(Size Size)
         {
-            var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/Size/DeleteSize?id={Size.Id}";
-            var response = await httpClient.DeleteAsync(apiUrl);
-            return RedirectToAction("GetAllSize");
+           if (await sizeServices.DeleteSize(Size.Id) == true)
+            {
+                return RedirectToAction("GetAllSize");
+            }
+            else return BadRequest();
         }
         public IActionResult CreateAsync()
         {
@@ -77,10 +79,11 @@ namespace AppView.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(string ten, decimal cm)
         {
-            var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/Size/createSize?tenSize={ten}&CM={cm}";
-            var response = await httpClient.PostAsync(apiUrl, null);
-            return RedirectToAction("GetAllSize");
+            if (await sizeServices.AddSize(ten,cm) == true)
+            {
+                return RedirectToAction("GetAllsize");
+            }
+            else return BadRequest();
         }
 
     }
