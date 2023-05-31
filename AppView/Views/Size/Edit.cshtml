@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Cm" class="control-label"></label>
-                <input asp-for="Cm" name="cm"  class="form-control" />
+                <input asp-for="Cm" name="cm" value="@Convert.ToInt32(Model.Cm)" class="form-control" />
                 <span asp-validation-for="Cm" class="text-danger"></span>
             </div>
             <div class="form-group">
