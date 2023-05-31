@@ -81,8 +81,11 @@ namespace AppAPI.Controllers
             user.IdRole = idRole;
             repos.AddItem(user);
             Cart cart = new Cart();
-            cart.UserID = user.Id;
-            cart.Mota = mota;
+            if (repos.AddItem(user))
+            {
+                cart.UserID = user.Id;
+                cart.Mota = mota;
+            }
             return Cartrepos.AddItem(cart);
         }
 

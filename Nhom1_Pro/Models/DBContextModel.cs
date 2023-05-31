@@ -26,7 +26,6 @@ namespace Nhom1_Pro.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-8RSAFN0\HKLADOI;Initial Catalog=ProductNewShop;Integrated Security=True");
         }
 

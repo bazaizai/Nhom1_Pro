@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,6 +16,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Material\" />
+    <Folder Include="Views\Size\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nhom1_Pro\AppData.csproj" />
   </ItemGroup>

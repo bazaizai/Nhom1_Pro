@@ -114,7 +114,7 @@ namespace AppView.Controllers
             var httpClient = new HttpClient();
             string apiUrl = $"https://localhost:7280/api/User/Delete-User?id={id}";
             var response = await httpClient.DeleteAsync(apiUrl);
-            return RedirectToAction("GetAllRole");
+            return RedirectToAction("GetAllUser");
         }
 
         // POST: UserController/Delete/5
