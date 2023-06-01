@@ -40,16 +40,27 @@ namespace AppView.Controllers
 
         public IActionResult CreateSaleDetail()
         {
-            var listsp = context.ProductDetails.Include("Product").ToList();
-            IEnumerable<SelectListItem> salesList = new SelectList(context.Sales, "Id", "Ten");
-            ViewBag.SaleList = salesList;
-            IEnumerable<SelectListItem> productDetailsList = listsp.Select(pd => new SelectListItem
-            {
-                Value = pd.Id.ToString(),
-                Text = pd.Product.Ten // Truy cập thuộc tính navigation để lấy tên sản phẩm
-            });
+            //var listsp = context.ProductDetails.Include("Product").ToList();
+            //IEnumerable<SelectListItem> salesList = new SelectList(context.Sales, "Id", "Ten");
+            //ViewBag.SaleList = salesList;
+            //IEnumerable<SelectListItem> productDetailsList = listsp.Select(pd => new SelectListItem
+            //{
+            //    Value = pd.Id.ToString(),
+            //    Text = pd.Product.Ten // Truy cập thuộc tính navigation để lấy tên sản phẩm
+            //});
 
-            ViewBag.ProductDetailsList = productDetailsList;
+            //ViewBag.ProductDetailsList = productDetailsList;
+
+            //return View();
+            ViewData["IdSale"] = new SelectList(context.Sales, "Id", "Ten");
+            // Tạo SelectList cho sale
+            SelectList salesList = new SelectList(context.Sales, "Id", "Ten");
+            ViewBag.SaleList = salesList;
+            //ViewData["IdChiTietSp"] = new SelectList(context.ProductDetails, "Id", "Id");
+            //// Tạo SelectList cho CtSanPham
+            //SelectList productDetailsList = new SelectList(context.ProductDetails, "Id", "Id");
+            //ViewBag.ProductDetailsList = productDetailsList;
+
             return View();
         }
 
