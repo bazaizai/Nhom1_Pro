@@ -26,7 +26,11 @@ namespace AppAPI.Controllers
         {
             return allRepo.GetAll().First(x => x.Id == id);
         }
-
+        [HttpGet]
+        public IEnumerable<TypeProduct> Get()
+        {
+            return allRepo.GetAll();
+        }
 
         [HttpPost]
         public bool CreateBill(string ten,string ma, int trangThai)

@@ -1,0 +1,118 @@
+﻿@model AppData.Models.ProductDetailDTO
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <font><a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i></a> <span class="breadcrumb-item active">PRODUCT</span> <a class="breadcrumb-item" asp-action="Index">Product</a><a class="breadcrumb-item" href="#">Detail Product</a></font>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h4>Detail Product</h4>
+        <div class="m-t-25">
+            <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="col-sm-12">
+                    <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+                        <div class="media align-items-center m-b-15">
+                            <div class="avatar avatar-image rounded" style="height: 70px; width: 70px">
+                                <img src="~/assets/images/others/@Model.LinkImage" alt="">
+                            </div>
+                            <div class="m-l-15">
+                                <h4 class="m-b-0">@Model.Name</h4>
+                                <p class="text-muted m-b-0">Code: #@Model.Id</p>
+                            </div>
+                        </div>
+                        <div class="m-b-15">
+                            <a class="btn btn-primary" asp-action="ViewEdit" asp-route-id="@Model.Id">
+                                <i class="anticon anticon-edit"></i>
+                                <span>Edit</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Basic Info</h4>
+                        <div class="table-responsive">
+                            <table class="product-info-table m-t-20">
+                                <tbody>
+                                    <tr>
+                                        <td>Giá nhập:</td>
+                                        <td class="text-dark font-weight-semibold"> @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", Model.GiaNhap).Replace(",00", "")</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Giá bán:</td>
+                                        <td class="text-dark font-weight-semibold"> @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", Model.GiaBan).Replace(",00", "")</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chất liệu:</td>
+                                        <td>@Model.Material</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Loại:</td>
+                                        <td>@Model.TypeProduct</td>
+                                    </tr>
+                                    @{
+                                        var action = @Model.TrangThai == 0 ? "Active" : "No Active";
+                                    }
+
+                                    <tr>
+                                        <td>Trạng thái:</td>
+                                        <td>
+                                            <span class="badge badge-pill badge-cyan">@action</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Option Info</h4>
+                        <div class="table-responsive">
+                            <table class="product-info-table m-t-20">
+                                <tbody>
+                                    <tr>
+                                        <td>Size:</td>
+                                        <td>@Model.Size</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Màu sắc:</td>
+                                        <td class="d-flex">
+                                            <span class="d-flex align-items-center m-r-20">
+                                                <span style="padding-right:10px"><i class="anticon anticon-highlight"></i></span>
+                                                <span>@Model.Color</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Quanlity:</td>
+                                        <td>@Model.SoLuongTon</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bảo hành:</td>
+                                        <td>@Model.BaoHanh</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Product Description</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>@Model.MoTa</p>
+                        </div>
+                    </div>
+                    <div>
+                        <a asp-action="GetAllProduct">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

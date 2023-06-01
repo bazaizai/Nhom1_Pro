@@ -8,18 +8,6 @@ namespace Nhom1_Pro.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductDetail> builder)
         {
-        //public Guid Id { get; set; }
-        //public Guid? IdProduct { get; set; }
-        //public Guid? IdColor { get; set; }
-        //public Guid? IdSize { get; set; }
-        //public Guid? IdTypeProduct { get; set; }
-        //public Guid? IdMaterial { get; set; }
-        //public string? BaoHanh { get; set; }
-        //public string? MoTa { get; set; }
-        //public int? SoLuongTon { get; set; }
-        //public decimal? GiaNhap { get; set; }
-        //public decimal? GiaBan { get; set; }
-        //public int? TrangThai { get; set; }
         builder.HasKey(x => x.Id);
             builder.Property(x => x.BaoHanh).HasColumnType("nvarchar(250)").IsRequired(false);
             builder.Property(x => x.MoTa).HasColumnType("nvarchar(1000)").IsRequired(false);

@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewData["Title"] = "call";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<label for="formGroupExampleInput">Chọn tỉnh/ thành phố</label>
+<select id="tinh" class="select2">
+</select>
+<label for="formGroupExampleInput">Chọn quận/ huyện</label>
+<select id="quanHuyen" class="select2">
+</select>
+<label for="formGroupExampleInput">Chọn phường/ xã</label>
+<select id="phuongXa" class="select2">
+</select>
+<script>
+    $(document).ready(function () {
+        const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province';
+        const token = '5ee6d47f-ff27-11ed-a967-deea53ba3605';
+
+        axios.get(apiUrl, {
+            headers: {
+                'Token': token
+            }
+        })
+            .then(response => {
+                var selectElement = $('#tinh');
+                selectElement.empty();
+                $.each(response.data.data, function (index, item) {
+                    selectElement.append($('<option>').val(item.ProvinceID).text(item.ProvinceName));
+                });
+                selectElement.val(selectElement.val()).trigger('change');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#tinh').on('change', function () {
+            const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district';
+            const token = '5ee6d47f-ff27-11ed-a967-deea53ba3605';
+            axios.get(apiUrl, {
+                headers: {
+                    'Token': token
+                },
+                params: {
+                    province_id: $('#tinh').val()
+                }
+            })
+                .then(response => {
+                    var selectElement = $('#quanHuyen');
+                    selectElement.empty();
+                    selectElement.select2('val', null);
+                    selectElement.trigger('change');
+                    var phuongXa = $('#phuongXa');
+                    phuongXa.empty();
+                    phuongXa.select2('val', null);
+                    phuongXa.trigger('change');
+                    $.each(response.data.data, function (index, item) {
+                        selectElement.append($('<option>').val(item.DistrictID).text(item.DistrictName));
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#quanHuyen').on('change', function () {
+            if ($('#quanHuyen').val() != null) {
+                const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward';
+                const token = '5ee6d47f-ff27-11ed-a967-deea53ba3605';
+                axios.get(apiUrl, {
+                    headers: {
+                        'Token': token
+                    },
+                    params: {
+                        district_id: $('#quanHuyen').val()
+                    }
+                })
+                    .then(response => {
+                        var selectElement = $('#phuongXa');
+                        selectElement.empty();
+                        selectElement.select2('val', null);
+                        selectElement.trigger('change');
+                        $.each(response.data.data, function (index, item) {
+                            selectElement.append($('<option>').val(item.WardCode).text(item.WardName));
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        });
+    });
+</script>
