@@ -1,0 +1,280 @@
+﻿@model AppData.Models.ProductDetailPutViewModel
+
+@{
+    ViewData["Title"] = "GetAllProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div id="preloader"></div>
+<div class="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card" style="position: relative">
+                <div class="card-body">
+                    <h5>Create Product</h5>
+                    <input hidden asp-for="Id" value="@Model.Id" id="Id" />
+                    <div class="m-b-15">
+                        <div class="row">
+                            <div class="col-10">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">NameProduct</label>
+                                    <select id="IdProduct" class="select2" name="IdProduct" asp-for="IdProduct">
+                                        @foreach (var item in ViewBag.Product)
+                                        {
+                                            @if (item.Value == Model.IdProduct)
+                                            {
+                                                <option value="@item.Value" selected>@item.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">TypeProduct</label>
+                                    <select id="IdTypeProduct" class="select2" name="IdTypeProduct" asp-for="IdTypeProduct">
+                                        @foreach (var item in ViewBag.TypeProduct)
+                                        {
+                                            @if (item.value == Model.IdTypeProduct)
+                                            {
+                                                <option value="@item.Value" selected>@item.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Material</label>
+                                    <select class="select2" id="IdMaterial" name="IdMaterial" asp-for="IdMaterial">
+                                        @foreach (var item in ViewBag.Material)
+                                        {
+                                            @if (item.value == Model.IdMaterial)
+                                            {
+                                                <option value="@item.Value" selected>@item.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="container-file" style="margin-left: 30px; width: 180px;margin-top: 30px">
+                                    <div class="wrapper-file">
+                                        <div class="image">
+                                            <img class="file-image" src="/assets/images/others/@Model.LinkImage" alt="">
+                                        </div>
+                                        <div class="content">
+                                            <div class="icon">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                            </div>
+                                            <div class="text">
+                                                No file chosen, yet!
+                                            </div>
+                                        </div>
+                                        <div class="cancel-btn">
+                                            <i class="fas fa-times"></i>
+                                        </div>
+                                    </div>
+                                    <a onclick="defaultBtnActive(this)" class="custom-btn d-flex justify-content-center text-center" style="line-height:30px">
+                                        Choose a
+                                        file
+                                    </a>
+                                    <input id="file" class="default-btn 1" onchange="onFileSelected(this)"
+                                           type="file" hidden>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Size</label>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <select id="IdSize" class="select2 listSize" name="IdSize" asp-for="IdSize">
+                                                @foreach (var item in ViewBag.Size)
+                                                {
+                                                    @if (item.value == Model.IdSize)
+                                                    {
+                                                        <option value="@item.Value" selected>@item.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-5">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Color</label>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <select id="IdColor" class="select2 listColor" name="IdColor" asp-for="IdColor">
+                                                @foreach (var item in ViewBag.Color)
+                                                {
+                                                    @if (item.value == Model.IdColor)
+                                                    {
+                                                        <option value="@item.Value" selected>@item.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-5">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Giá bán</label>
+                                    <input id="GiaBan" type="text" class="form-control" placeholder="" asp-for="GiaBan">
+                                </div>
+                            </div>
+
+                            <div class="col-5">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Giá Nhập</label>
+                                    <input id="GiaNhap" type="text" class="form-control" placeholder="" asp-for="GiaNhap">
+                                </div>
+                            </div>
+
+                            <div class="col-5">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Số lượng</label>
+                                    <input id="SoLuongTon" type="text" class="form-control" placeholder="" asp-for="SoLuongTon">
+                                </div>
+                            </div>
+
+                            <div class="col-5">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Bảo hành</label>
+                                    <textarea rows="1" id="BaoHanh" type="text" class="form-control" placeholder="" asp-for="BaoHanh"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-10">
+                                <div style="margin-top: 10px">
+                                    <label for="formGroupExampleInput">Mô tả </label>
+                                    <textarea rows="4" id="MoTa" type="text" class="form-control" placeholder="" asp-for="MoTa"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="Update()" class="btn btn-warning" style="position: absolute; bottom: 20px; right: 20px; margin-top: 10px;">Lưu thay đổi</button>
+            </div>
+            <div class="accordion borderless" id="accordion-borderless">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var load = $('#preloader');
+    window.addEventListener("load", function () {
+        load.css('display', 'none');
+    })
+</script>
+<script>
+    let regExp = /[0-9a-zA-Z\^\&\'\@@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+    function defaultBtnActive(element) {
+        let wrapper = element.parentElement.closest('.container-file');
+        let defaultBtn = wrapper.querySelector(".default-btn");
+        defaultBtn.click();
+    }
+    function onFileSelected(element) {
+        let wrapperMain = element.closest('.container-file');
+        let wrapper = wrapperMain.querySelector('.wrapper-file');
+        let cancelBtn = wrapper.querySelector(".cancel-btn i");
+        let fileName = wrapper.querySelector(".file-name");
+        let img = wrapper.querySelector(".file-image");
+
+        const clearInput = function () {
+            element.value = ""; // Xóa giá trị của phần tử <input> để cho phép chọn tệp mới
+        };
+
+        const handleFile = function (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const result = reader.result;
+                img.src = result;
+                wrapper.classList.add("active");
+            };
+            cancelBtn.addEventListener("click", function () {
+                img.src = "";
+                wrapper.classList.remove("active");
+                img.setAttribute("style", "display: none");
+                clearInput(); // Xóa giá trị của phần tử <input> sau khi hủy tệp
+            });
+            reader.readAsDataURL(file);
+            if (element.value) {
+                //let valueStore = element.value.match(regExp);
+                //fileName.textContent = valueStore;
+                img.setAttribute("style", "display: block");
+            }
+        };
+
+        if (element.files.length > 0) {
+            handleFile(element.files[0]);
+        } else {
+            clearInput(); // Xóa giá trị của phần tử <input> nếu không có tệp được chọn
+        }
+    };
+</script>
+<script>
+    function Update() {
+        var file = $('#file')[0].files[0];
+        var id = $('#Id').val();
+        var data = {};
+        $("input, select, textarea").each(function () {
+            var fieldType = $(this).attr("type");
+            var fieldName = $(this).attr("name");
+            var fieldValue;
+
+            if (fieldType === "checkbox" || fieldType === "radio") {
+                fieldValue = $(this).is(":checked");
+            } else {
+                fieldValue = $(this).val();
+            }
+
+            data[fieldName] = fieldValue;
+        });
+        axios.put('https://localhost:7280/api/SanPhamCT/Update-ProductDetail', data)
+            .then(function (response) {
+                if (response) {
+                    var formDataImage = new FormData();
+                    formDataImage.append('idProduct', id);
+                    formDataImage.append('fileImage', file);
+                    axios.put('https://localhost:7280/api/SanPhamCT/Update-Image?idProduct=' + id, formDataImage)
+                        .then(function (response) {
+                            if (response) {
+                                window.location.href = '/Admin/ProductDetail/GetAllProduct';
+                            }
+                        })
+                        .catch(function (error) {
+                            // Xử lý lỗi (nếu có)
+                            console.error(error);
+                        });
+                }
+            })
+            .catch(function (error) {
+                // Xử lý lỗi (nếu có)
+                console.error(error);
+            });
+    }
+</script>

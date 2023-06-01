@@ -12,6 +12,7 @@ namespace AppData.IRepositories
         public bool AddItem(T item);
         public bool RemoveItem(T item);
         public bool EditItem(T item);
+        public string MaTS();
 
     }
 }

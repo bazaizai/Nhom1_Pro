@@ -1,0 +1,73 @@
+﻿@model IEnumerable<AppData.Models.ProductDetailDTO>
+
+@{
+    ViewData["Title"] = "GetAllProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div id="preloader"></div>
+<div class="card">
+    <div class="card-body">
+        <h4>DANH SÁCH SẢN PHẨM</h4>
+        <a class="btn btn-primary" asp-action="Create" style="float : right; margin-left:20px">
+            <i class="anticon anticon-plus"></i>
+            <span>Tạo Sản Phẩm</span>
+        </a>
+        <div style="clear: both"></div>
+        <div class="m-t-25">
+            <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="col-sm-12">
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-3">
+                            <select class="custom-select" asp-items="ViewBag.Category">
+                                <option value="" disabled selected>Chose Category</option>
+                                <option>View All</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <select class="custom-select">
+                                <option value="" disabled selected>Chose Status</option>
+                                <option value="Active">Active</option>
+                                <option value="No Active">No Active</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <label class="form-inline">
+                                Search:
+                                <input type="search" class="form-control form-control-sm" placeholder="Nhập tên sản phẩm muốn tìm..." onchange="Search(this.value)">
+                            </label>
+                        </div>
+                    </div>
+                    <div id="productList">
+                        @await Html.PartialAsync("_PartialViewPrductList", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var load = $('#preloader');
+    window.addEventListener("load", function () {
+        load.css('display', 'none');
+    })
+</script>
+
+<script>
+    function Search(name) {
+        $.ajax({
+            url: '/Admin/ProductDetail/SearchProduct',
+            type: 'GET',
+            data: {
+                name: name,
+                },
+            success: function (result) {
+                $('#productList').html(result);
+            },
+            error: function () {
+                // Xử lý lỗi
+            }
+        });
+    }
+</script>
