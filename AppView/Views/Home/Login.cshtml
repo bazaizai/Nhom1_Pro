@@ -1,0 +1,35 @@
+﻿@{ Html.RenderPartial("Create");}
+@{ Html.RenderPartial("QuenMatKhau");}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">ACCOUNT</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body canvas-cus">
+    <p>
+      Free shipping on <b>all orders</b> for members only. Sign in or join
+      us:
+    </p>
+    <br />
+    <h5><b>LOGIN TO YOUR '47 ACCOUNT</b></h5>
+    <br />
+    <form method="post">
+    <input class="form-control" style="width: 350px; " id="exampleFormControlInput1" name="Username"
+      placeholder="Username" /><br />
+    <input type="password" class="form-control" style="width: 350px; " id="exampleFormControlInput1" name="Password"
+      placeholder="Password" /><br />
+    <button type="submit" style="width: 350px" class="btn btn-dark" asp-action="Login" asp-controller="Home">
+      SIGN IN</button><br /><br />
+    <a href="#" id="QuenMatKhau"
+      style="font-weight: bold; text-decoration: none; font-size: 12px; color: black">Forgot your
+      password?</a><br /><br />
+    <hr />
+    <br />
+    <h5><b>DON'T HAVE A '47 ACCOUNT?</b></h5>
+    <br />
+    <button class="sign-in" type="button" style="width: 350px" id="Create">
+      CREATE ACCOUNT
+    </button>
+    </form>
+  </div>
+</div>

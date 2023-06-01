@@ -1,0 +1,43 @@
+﻿<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <div class="container text-center">
+      <div class="row align-items-start">
+        <div class="col-1">
+          <a href="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+            aria-controls="offcanvasScrolling"><img src="~/image/chevron_left.png" alt="" width="20px"></a>
+        </div>
+        <div class="col">
+          <h5 class="offcanvas-title" id="offcanvasRightLabel">CREATE ACCOUNT</h5>
+        </div>
+        <div class="col-1">
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="offcanvas-body canvas-cus">
+      <form method="post">
+    <input type="text" class="form-control" style="margin-bottom: 20px; width: 350px; " id="exampleFormControlInput1"
+      placeholder="First name" />
+    <input type="text" class="form-control" style="margin-bottom: 20px; width: 350px; " id="exampleFormControlInput1"
+      placeholder="Last name" />
+    <input type="text" class="form-control" style="margin-bottom: 20px; width: 350px; " name="Username" id="exampleFormControlInput1"
+      placeholder="Username" />
+    <input type="password" class="form-control" style="margin-bottom: 20px; width: 350px; " name="Password"
+      id="exampleFormControlInput1" placeholder="Password" />
+    <input type="tel" class="form-control" style="margin-bottom: 20px; width: 350px; " id="exampleFormControlInput1"
+      placeholder="Phone number" />
+    <div class="input-group mb-3" style="font-size: 12px;">
+      <div class="input-group-text">
+        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+      </div>
+      <p style="margin-top: 13px;"> <span>I agree to the ’47 Family</span> <a href="" style="padding-left:5px;">Terms &
+          Conditions</a></p>
+
+    </div>
+    <button type="submit" style="width: 350px" class="btn btn-dark" asp-action="Create" asp-controller="Home">
+      SIGN UP</button>
+  </form>
+  </div>
+</div>
+
