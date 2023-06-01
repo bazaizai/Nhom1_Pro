@@ -15,12 +15,14 @@ namespace AppAPI.Controllers
         private readonly IAllRepo<CartDetail> allRepo;
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<CartDetail> CartDetails;
-
+        private readonly IAllRepo<ProductDetail> ProductRepo;
+        DbSet<ProductDetail> ProductDetails;
         public CartDetailsController()
         {
             CartDetails = dbContextModel.CartDetails;
-            AllRepo<CartDetail> all = new AllRepo<CartDetail>(dbContextModel, CartDetails);
-            allRepo = all;
+            ProductDetails = dbContextModel.ProductDetails;
+            allRepo = new AllRepo<CartDetail>(dbContextModel, CartDetails);
+            ProductRepo = new AllRepo<ProductDetail>(dbContextModel, ProductDetails);
         }
         // GET: api/<CartDetailsController>
         [HttpGet]
@@ -38,18 +40,34 @@ namespace AppAPI.Controllers
 
         // POST api/<CartDetailsController>
         [HttpPost]
-        public bool Post(Guid idUser, Guid idProduct, int sl, int dongia, int trangthai)
+        public string Post(Guid idUser, Guid idProduct, int sl, int trangthai)
         {
-            var a = new CartDetail() {  Id = Guid.NewGuid(), UserID = idUser, DetailProductID = idProduct, Dongia = dongia, Soluong = sl, TrangThai = trangthai };
-            return allRepo.AddItem(a);
+            var b = allRepo.GetAll().FirstOrDefault(c => c.UserID == idUser && c.DetailProductID == idProduct);
+            var c = ProductRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
+            if (b != null)
+            {
+                b.Soluong = b.Soluong + sl;
+                if (b.Soluong > c.SoLuongTon)
+                {
+                    return "khum du so luong";
+                }
+                if (allRepo.EditItem(b))
+                    return "san pham nay da co tron bill va da duoc cap nhap";
+                return "khong thanh cong";
+
+            }
+            var a = new CartDetail() {  Id = Guid.NewGuid(), UserID = idUser, DetailProductID = idProduct, Dongia = (decimal)c.GiaBan, Soluong = sl, TrangThai = trangthai };
+            if (allRepo.AddItem(a)) return "Them thanh cong";
+            return "them khong thanh cong";
         }
 
         // PUT api/<CartDetailsController>/5
         [HttpPut("{id}")]
-        public bool Put(Guid id, Guid idUser, Guid idProduct, int sl, int dongia, int trangthai)
+        public bool Put(Guid id, Guid idUser, Guid idProduct, int sl, int trangthai)
         {
-            var a = new CartDetail() { Id = id, UserID = idUser, DetailProductID = idProduct, Dongia = dongia, Soluong = sl, TrangThai = trangthai };
-            return allRepo.AddItem(a);
+            var c = ProductRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
+            var a = new CartDetail() { Id = id, UserID = idUser, DetailProductID = idProduct, Dongia = (decimal)c.GiaBan, Soluong = sl, TrangThai = trangthai };
+            return allRepo.EditItem(a);
         }
 
         // DELETE api/<CartDetailsController>/5
