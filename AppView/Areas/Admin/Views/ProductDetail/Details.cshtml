@@ -42,11 +42,11 @@
                                 <tbody>
                                     <tr>
                                         <td>Giá nhập:</td>
-                                        <td class="text-dark font-weight-semibold"> @Model.GiaNhap</td>
+                                        <td class="text-dark font-weight-semibold"> @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", Model.GiaNhap).Replace(",00", "")</td>
                                     </tr>
                                     <tr>
                                         <td>Giá bán:</td>
-                                        <td class="text-dark font-weight-semibold"> @Model.GiaBan</td>
+                                        <td class="text-dark font-weight-semibold"> @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", Model.GiaBan).Replace(",00", "")</td>
                                     </tr>
                                     <tr>
                                         <td>Chất liệu:</td>

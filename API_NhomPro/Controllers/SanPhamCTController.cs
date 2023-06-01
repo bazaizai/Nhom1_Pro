@@ -60,18 +60,6 @@ namespace AppAPI.Controllers
             return productDetailDTOs;
         }
 
-        [HttpGet("search")]
-        public IEnumerable<ProductDetailDTO> SearchProductByName(string name)
-        {
-            return GetAllProductDetail().Where(x => x.Name.ToLower().Contains(name.ToLower()));
-        }
-
-        [HttpGet("GetADetail")]
-        public ProductDetailDTO GetProductDetail(Guid id)
-        {
-            return GetAllProductDetail().FirstOrDefault(x => x.Id == id);
-        }
-
         [HttpPost("GetProductDetail")]
         public IActionResult GetProductDetail([FromBody] ProductDetailPutViewModel obj)
         {
@@ -210,7 +198,6 @@ namespace AppAPI.Controllers
                     }
                 return _reposImage.EditItem(image);
             }
-
             return false;
         }
     }

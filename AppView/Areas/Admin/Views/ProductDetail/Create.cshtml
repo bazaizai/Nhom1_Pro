@@ -246,7 +246,7 @@
                                         .replace(/{{idsize}}/g, valuesSizes[j].value)
                                         .replace(/{{idcolor}}/g, valuesColors[i].value)
                                         .replace(/{{soLuong}}/g, result.data.SoLuongTon)
-                                        .replace(/{{idProduct}}/g, result.data.id)
+                                        .replace(/{{idProduct}}/g, result.data.Id)
                                         .replace(/{{image}}/g, '/assets/images/others/' + result.data.LinkImage)
                                         .replace(/{{moTa}}/g, result.data.MoTa)
                                         .replace(/{{isUpdate}}/g, 'true');
@@ -388,7 +388,7 @@
                     Mota: moTa,
                     SoLuongTon: soLuong,
                 };
-                axios.put('https://localhost:7280/api/SanPhamCT/Update-ProductDetail', dataUpdate)
+                axios.put('/Admin/ProductDetail/CreatePro', dataUpdate)
                     .then(function (response) {
                         var formDataImage = new FormData();
                         formDataImage.append('idProduct', idProductDetail);

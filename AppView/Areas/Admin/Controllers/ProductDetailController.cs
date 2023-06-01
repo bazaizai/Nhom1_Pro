@@ -1,7 +1,10 @@
 ﻿using AppData.Models;
+using AppView.IServices;
+using AppView.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Nhom1_Pro.Models;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,6 +15,11 @@ namespace AppView.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductDetailController : Controller
     {
+        private readonly IProductDetailService _productDetailService;
+        public ProductDetailController()
+        {
+            _productDetailService = new ProductDetailService();
+        }
 
         public ActionResult Call()
         {
@@ -19,92 +27,54 @@ namespace AppView.Areas.Admin.Controllers
         }
         public async Task<ActionResult> GetAllProduct(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:7280/api/SanPhamCT/list-SanPhamCT");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsAsync<List<ProductDetailDTO>>();
-                        return View(responseContent);
-                    }
-                    return BadRequest();
-                }
+                var getAllProduct = await _productDetailService.GetAll();
+                return String.IsNullOrEmpty(name) ? View(getAllProduct) : View(_productDetailService.GetByName(name));
             }
-            else
+            catch (Exception)
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Get-ProductDetailSearch?name={name}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsAsync<List<ProductDetailDTO>>();
-                        return View(responseContent);
-                    }
-                    return BadRequest();
-                }
+                return BadRequest();
             }
+
         }
         public async Task<ActionResult> Delete(Guid id)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:7280/api/SanPhamCT/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    bool responseContent = await response.Content.ReadAsAsync<bool>();
-                    if (responseContent)
-                    {
-                        return RedirectToAction("GetAllProduct");
-                    }
-                    return NotFound();
-                }
-                else if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return NotFound();
-                }
+                return await _productDetailService.RemoveItem(id) ? RedirectToAction("GetAllProduct") : Content("Hệ thống đang nâng cấp");
             }
-
-            return BadRequest();
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                HttpResponseMessage response = await client.GetAsync("https://localhost:7280/api/SanPhamCT/list-BienThe");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                    ViewBag.Product = data.sanphams;
-                    ViewBag.Color = data.colors;
-                    ViewBag.Size = data.sizes;
-                    ViewBag.Material = data.materials;
-                    ViewBag.TypeProduct = data.typeProducts;
-                    return View();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                var data = await _productDetailService.GetAllBienThe() as dynamic;
+                ViewBag.Product = data.sanphams;
+                ViewBag.Color = data.colors;
+                ViewBag.Size = data.sizes;
+                ViewBag.Material = data.materials;
+                ViewBag.TypeProduct = data.typeProducts;
+                return View();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
 
 
         public async Task<ActionResult> Details(Guid id)
         {
-            using HttpClient client = new HttpClient();
             try
             {
-                HttpResponseMessage response = await client.GetAsync(new Uri($"https://localhost:7280/api/SanPhamCT/GetADetail?id={id}"));
-                response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsAsync<ProductDetailDTO>();
-                return View(responseContent);
+                return View(await _productDetailService.GetById(id));
             }
             catch (HttpRequestException)
             {
@@ -114,13 +84,9 @@ namespace AppView.Areas.Admin.Controllers
 
         public async Task<ActionResult> SearchProduct([FromQuery] string name)
         {
-            using HttpClient client = new HttpClient();
             try
             {
-                HttpResponseMessage response = await client.GetAsync(new Uri($"https://localhost:7280/api/SanPhamCT/search?name={name}"));
-                response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsAsync<List<ProductDetailDTO>>();
-                return PartialView("_PartialViewPrductList", responseContent);
+                return PartialView("_PartialViewPrductList", await _productDetailService.GetByName(name));
             }
             catch (HttpRequestException)
             {
@@ -128,29 +94,16 @@ namespace AppView.Areas.Admin.Controllers
             }
         }
 
-
-        public async Task<ActionResult> CreatePro(ProductDetailViewModel obj)
+        [HttpPost]
+        public async Task<ActionResult> CreatePro([FromBody] ProductDetailViewModel obj)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                var apiUrl = "https://localhost:7280/api/SanPhamCT/Create-ProductDetail";
-                var content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsAsync<bool>();
-                    if (result)
-                    {
-                        return RedirectToAction("GetAllProduct");
-                    }
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                return await _productDetailService.AddItem(obj) ? Ok() : Content("Hệ thống đang nâng cấp");
+            }
+            catch (Exception)
+            {
+                return BadRequest();                
             }
         }
 
@@ -158,22 +111,18 @@ namespace AppView.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> ViewEdit(Guid id)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                var response1 = await client.GetAsync("https://localhost:7280/api/SanPhamCT/list-BienThe");
-                var response2 = await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Get-ProductDetailPut?id={id}");
-
-                if (response1.IsSuccessStatusCode && response2.IsSuccessStatusCode)
-                {
-                    var dataViewBag = await response1.Content.ReadAsAsync<dynamic>();
-                    var dataModel = await response2.Content.ReadAsAsync<ProductDetailPutViewModel>();
-                    ViewBag.Product = dataViewBag.sanphams;
-                    ViewBag.Color = dataViewBag.colors;
-                    ViewBag.Size = dataViewBag.sizes;
-                    ViewBag.Material = dataViewBag.materials;
-                    ViewBag.TypeProduct = dataViewBag.typeProducts;
-                    return View(dataModel);
-                }
+                var data = await _productDetailService.GetAllBienThe() as dynamic;
+                ViewBag.Product = data.sanphams;
+                ViewBag.Color = data.colors;
+                ViewBag.Size = data.sizes;
+                ViewBag.Material = data.materials;
+                ViewBag.TypeProduct = data.typeProducts;
+                return View(await _productDetailService.GetProductUpdate(id));
+            }
+            catch (Exception)
+            {
                 return BadRequest();
             }
         }
