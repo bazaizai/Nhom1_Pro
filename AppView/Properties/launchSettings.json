@@ -3,7 +3,6 @@
     "AppView": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:7260/Admin/ProductDetail/Create",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -1,0 +1,98 @@
+﻿@*@model IEnumerable<Ass.ViewModel.CartDetailView>
+@using Ass.Services;
+@{
+    ViewData["Title"] = "ThanhToan";
+    int stt = 1;
+      var user = SessionServices.GetObjFromUser(Context.Session, "user");
+}*@
+ <div class="container">
+      <div class="row">
+        <div class="cart-text">
+          <nav
+            style="--bs-breadcrumb-divider: '>'; font-size: 30px"
+            aria-label="breadcrumb"
+          >
+            <ul>
+              <li class="breadcrumb-item"><a href="#">SHOPPING CART</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-9">
+          <table class="table table-light">
+            <thead>
+              <tr class="text-center">
+                <th scope="col">STT</th>
+                <th scope="col">Sản phẩm</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Tạm tính</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @* @foreach (var item in Model) {
+                   *@
+              <tr class="table-active text-center">
+                <td style="line-height: 70px"></td>
+                            <td>@*@{
+                                    if (item.DuongDan.Count()>0) {*@
+                                        <img
+                                        class="card-img-top"
+                    src=""
+                    alt=""
+                    style="width: 50px"
+                  />@*}
+                  else{*@
+                                        <img
+                                        class="card-img-top"
+                    src="https://cdn.shopify.com/s/files/1/0817/3919/products/F-CARGW09GWS-CM-HR-F.jpg?v=1622125697"
+                    alt=""
+                    style="width: 50px"
+                  />}}
+                  <a class="cart-name" href="#"></a>
+                </td>
+                <td style="line-height: 70px"></td>
+                <td class="vertical--align--middle">
+                  <div class="quantity">
+                    <div class="pro-qty">
+                      <input
+                        title="input"
+                        type="text"
+                        min="0"
+                        disabled
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </td>
+                <td style="line-height: 70px">₫</td>
+                <td class="vertical--align--middle" style="line-height: 70px">
+                  <i class="fa-solid fa-xmark" ng-click="removeCart(cr.id)"></i>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+          <button class="btn btn-success thanh-toan" ng-click="updateCart()">
+            Update cart
+          </button>
+        </div>
+        <div class="col-lg-3">
+          <div class="sum">
+            <h5>Cộng giỏ hàng</h5>
+            <ul class="p-0">
+              <li>Tạm tính <span>$</span></li>
+              <li>Tổng <span></span></li>
+            </ul>
+                @*@if (user != null)
+                {*@
+                    <form method="post">
+                        <input hidden name="UserId" value="">
+            <button class="btn btn-success thanh-toan" asp-action="AddBill" asp-controller="Home"> Thanh toán </button>
+            </form>}
+          </div>
+        </div>
+      </div>
+    </div>
