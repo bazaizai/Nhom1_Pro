@@ -8,7 +8,8 @@ namespace Nhom1_Pro.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey(x => x.Id);
+            //builder.HasKey(x => x.Id);
+            builder.Property(e => e.Id).HasDefaultValueSql("(newid())");
             builder.Property(x => x.Ma).HasColumnType("nvarchar(250)");
             builder.Property(x => x.Ten).HasColumnType("nvarchar(250)");
         }
