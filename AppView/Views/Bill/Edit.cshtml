@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Edit";
+    string a = @Convert.ToString(Model.TongTien).Replace(".00","");
+    string b = @Convert.ToString(Model.SoTienGiam).Replace(".00", "");
+    string c = @Convert.ToString(Model.TienShip).Replace(".00", "");
 }
 
 <h1>Edit</h1>
@@ -69,17 +72,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="TongTien" class="control-label"></label>
-                <input asp-for="TongTien" class="form-control" />
+                <input asp-for="TongTien" class="form-control" value="@a"/>
                 <span asp-validation-for="TongTien" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SoTienGiam" class="control-label"></label>
-                <input asp-for="SoTienGiam" class="form-control" />
+                <input asp-for="SoTienGiam" class="form-control" value="@b" />
                 <span asp-validation-for="SoTienGiam" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TienShip" class="control-label"></label>
-                <input asp-for="TienShip" class="form-control" />
+                <input asp-for="TienShip" class="form-control" value="@c" />
                 <span asp-validation-for="TienShip" class="text-danger"></span>
             </div>
             <div class="form-group">
