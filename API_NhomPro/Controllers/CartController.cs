@@ -61,9 +61,11 @@ namespace AppAPI.Controllers
         }
 
         // DELETE api/<CartController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("Delete-Cart")]
+        public bool Delete(Guid id)
         {
+            var role = repos.GetAll().First(p => p.UserID == id);
+            return repos.RemoveItem(role);
         }
     }
 }

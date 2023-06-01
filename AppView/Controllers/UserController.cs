@@ -1,5 +1,6 @@
 ﻿using AppData.IRepositories;
 using AppData.Repositories;
+using AppView.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,6 +18,7 @@ namespace AppView.Controllers
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<User> Users;
         DbSet<Role> Roles;
+        UserServices usersService;
         public UserController()
         {
             Users = dbContextModel.Users;
@@ -25,6 +27,7 @@ namespace AppView.Controllers
             AllRepo<Role> allrole = new AllRepo<Role>(dbContextModel, Roles);
             repos = all;
             repo = allrole;
+            usersService = new UserServices();
         }
         // GET: UserController
         public ActionResult Index()
@@ -33,21 +36,15 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> GetAllUser(string sreach)
         {
-            string ạpiUrl = "https://localhost:7280/api/User";
-            var httpClient = new HttpClient(); // tạo ra để callApi
-            var response = await httpClient.GetAsync(ạpiUrl);
-            // Lấy dữ liệu Json trả về từ Api được call dạng string
-            string apiData = await response.Content.ReadAsStringAsync();
-            // Đọc từ string Json vừa thu được sang List<T>
-            var users = JsonConvert.DeserializeObject<List<User>>(apiData);
+            var a = await usersService.GetAllUser();
             if (sreach != null)
             {
-                var user = users.Where(c => c.Ten.ToUpper().Contains(sreach.ToUpper()));
+                var user = a.Where(c => c.Ten.ToUpper().Contains(sreach.ToUpper()));
                 return View(user);
             }
             else
             {
-                return View(users);
+                return View(a);
             }
         }
         // GET: UserController/Details/5
@@ -74,11 +71,9 @@ namespace AppView.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Guid id, Guid idRole, string ten, int gioitinh, DateTime ngaysinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai, string mota)
+        public async Task<IActionResult> Create(User user)
         {
-            var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/User/Create-User?idRole={idRole}&ten={ten}&GioiTinh={gioitinh}&NgaySinh={ngaysinh}&diachi={diachi}&sdt={sdt}&matkhau={matkhau}&email={email}&taikhoan={taikhoan}&trangthai={trangthai}";
-            var response = await httpClient.PostAsync(apiUrl, null);
+            await usersService.AddUser(user);
             return RedirectToAction("GetAllUser");
         }
 
@@ -102,18 +97,14 @@ namespace AppView.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(User user)
         {
-            var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/User/Create-User?idRole=e{user.IdRole}&ten={user.Ten}&GioiTinh={user.GioiTinh}&NgaySinh={user.NgaySinh}&diachi={user.DiaChi}&sdt={user.Sdt}&matkhau={user.MatKhau}&email={user.Email}&taikhoan={user.TaiKhoan}&trangthai={user.TrangThai}";
-            var response = await httpClient.PutAsync(apiUrl, null);
+            await usersService.Edit(user);
             return RedirectToAction("GetAllUser");
         }
 
         // GET: UserController/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/User/Delete-User?id={id}";
-            var response = await httpClient.DeleteAsync(apiUrl);
+            await usersService.DeleteUser(id);
             return RedirectToAction("GetAllUser");
         }
 

@@ -58,7 +58,7 @@ namespace AppAPI.Controllers
 
         // POST api/<UserController>
         [HttpPost("Create-User")]
-        public bool CreateUser(Guid idRole, string ten, int gioitinh, DateTime ngaysinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai, string mota)
+        public bool CreateUser(Guid idRole, string ten, int gioitinh, DateTime ngaysinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai)
         {
             string ma;
             if (repos.GetAll().Count() == 0)
@@ -79,14 +79,11 @@ namespace AppAPI.Controllers
             user.TaiKhoan = taikhoan;
             user.TrangThai = trangthai;
             user.IdRole = idRole;
-            repos.AddItem(user);
-            Cart cart = new Cart();
-            if (repos.AddItem(user))
-            {
-                cart.UserID = user.Id;
-                cart.Mota = mota;
-            }
-            return Cartrepos.AddItem(cart);
+            return repos.AddItem(user);
+            //Cart cart = new Cart();
+            //cart.UserID = user.Id;
+            ////cart.Mota = mota;
+            //return Cartrepos.AddItem(cart);
         }
 
         // PUT api/<UserController>/5
