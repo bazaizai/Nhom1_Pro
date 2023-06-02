@@ -1,0 +1,103 @@
+﻿.card-title {
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  margin-top:125px;
+  margin-bottom: 0px;
+  font-family: 'Times New Roman', Times, serif;
+
+}
+.card-text {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 0px;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sign-up {
+
+    margin-top: 10px;
+    width: 190px;
+    height: 48px;
+    background-color: black;
+    color: white;
+}
+.sign-in{
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 190px;
+    height: 48px;
+    background: rgba(0,0,0,0);
+    color: black;
+}
+.color{
+  color: black;
+}
+.seach{
+  border-color: black;
+}
+
+.bo button{
+ border-radius: 0px;
+border: 0px;
+}
+.bo{
+  border: 1px solid black;
+  box-shadow: 0 0 10px 0;
+  border-radius: 3px;
+}
+.bo2 button{
+  border-radius: 0px;
+ border: 0px;
+ }
+.bo2{
+  border: 1px solid white;
+  border-radius: 4px;
+}
+.indam strong{
+  font-size: 24px;
+}
+.imagetext{
+  padding-top: 70px;
+  padding-bottom: 20px;
+}
+.theaft a{
+  color: white;
+  font-size: 16px;
+  text-decoration: none;  
+}
+.canvas-cus input{
+  border: 1px solid gray;
+  border-radius: 3px;
+  color: black;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.canvas-cus a{
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+  margin-top: 20px;
+}
+.offcanvas-header h5{
+  font-weight: bold;
+}
+.nopadding
+{
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  
+}
+.con {
+  margin-left: 30px;
+}
+.breadcrumb-item a{
+  color: black;
+  font-size: 16px;
+  text-decoration: none;  
+ }
+ .checked {
+  color: white;
+}

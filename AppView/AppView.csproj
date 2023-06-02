@@ -24,6 +24,61 @@
     <Folder Include="Views\Material\" />
     <Folder Include="Views\Size\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\image\01.png" />
+    <None Include="wwwroot\image\02.png" />
+    <None Include="wwwroot\image\03.png" />
+    <None Include="wwwroot\image\03_DTC_SizesFeaturedTiles-1200x1500_2fb839df-fafc-40b0-ba3e-030db4c3125c.webp" />
+    <None Include="wwwroot\image\10poin1.png" />
+    <None Include="wwwroot\image\10poin2.png" />
+    <None Include="wwwroot\image\10poin3.png" />
+    <None Include="wwwroot\image\10poin4.png" />
+    <None Include="wwwroot\image\10poin5.png" />
+    <None Include="wwwroot\image\10poin6.png" />
+    <None Include="wwwroot\image\10poin7.png" />
+    <None Include="wwwroot\image\15poin8.png" />
+    <None Include="wwwroot\image\account.png" />
+    <None Include="wwwroot\image\adjust.png" />
+    <None Include="wwwroot\image\baner.jpg" />
+    <None Include="wwwroot\image\birthday_cake.png" />
+    <None Include="wwwroot\image\chat.png" />
+    <None Include="wwwroot\image\cheap_2.png" />
+    <None Include="wwwroot\image\chevron_left.png" />
+    <None Include="wwwroot\image\edit.png" />
+    <None Include="wwwroot\image\facebook.png" />
+    <None Include="wwwroot\image\heart_outline.png" />
+    <None Include="wwwroot\image\image.png" />
+    <None Include="wwwroot\image\instagram.png" />
+    <None Include="wwwroot\image\instagram_f.png" />
+    <None Include="wwwroot\image\JanuaryNewArrivals_DTC_Sizes-noE-D_480x.webp" />
+    <None Include="wwwroot\image\login.png" />
+    <None Include="wwwroot\image\logo.png" />
+    <None Include="wwwroot\image\minus.png" />
+    <None Include="wwwroot\image\mlb.avif" />
+    <None Include="wwwroot\image\NBA-CityEdition3_FeaturedTiles.webp" />
+    <None Include="wwwroot\image\nba.avif" />
+    <None Include="wwwroot\image\NBA_Celtics.svg" />
+    <None Include="wwwroot\image\ncaa.avif" />
+    <None Include="wwwroot\image\NCAA_Franchise_FeaturedTiles.webp" />
+    <None Include="wwwroot\image\nfl.avif" />
+    <None Include="wwwroot\image\nhl.avif" />
+    <None Include="wwwroot\image\paypal.png" />
+    <None Include="wwwroot\image\play_button.png" />
+    <None Include="wwwroot\image\plus.png" />
+    <None Include="wwwroot\image\return.png" />
+    <None Include="wwwroot\image\right.png" />
+    <None Include="wwwroot\image\search.png" />
+    <None Include="wwwroot\image\shopping_bag.png" />
+    <None Include="wwwroot\image\shopping_cart.png" />
+    <None Include="wwwroot\image\sp1.webp" />
+    <None Include="wwwroot\image\SPgiohang.png" />
+    <None Include="wwwroot\image\star.png" />
+    <None Include="wwwroot\image\starv.png" />
+    <None Include="wwwroot\image\trash.png" />
+    <None Include="wwwroot\image\twitter.png" />
+    <None Include="wwwroot\image\water.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nhom1_Pro\AppData.csproj" />
   </ItemGroup>

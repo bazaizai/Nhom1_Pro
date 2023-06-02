@@ -1,103 +1,320 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Html.RenderPartial("Cart");
+}
+@{
+    Html.RenderPartial("Login");
+}
+@{
+    //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
+    //    IRoleServices roleServices = new RoleServices();
+    //    ICartDetailServices cartDetailServices = new CartsDetailservices();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AppView</title>
+    <title>@ViewData["Title"] Ass</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AppView.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/image" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
 </head>
 <body>
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AppView</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        <div class="text-center" style="
+  background-color: black;
+  color: white;
+  height: 50px;
+  line-height: 50px;
+  font-size:  12px;
+">
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" style="text-decoration: none; color: white;">
+                <h6 style="line-height: 50px;">Join '47 Family For Free Shipping On All Orders</h6>
+            </a>
+        </div>
+        <div class="text-center">
+            <div class="row align-items-center">
+                <div class="container col-md-5" style="font-size:12px; font-weight: bolder; ">
+                    <ul class="nav">
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">MEN</strong></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">WOMEN</strong></a>
                         </li>
-                        <li class="nav-item">
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Color" asp-action="GetAllColor">Color</a>
-                        </li> 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Material" asp-action="GetAllMaterial">Material</a>
-=======
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="GetAllSale">GetAllSale</a>
+                        <li class="nav-item hod">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DanhSachSP"> <strong class="color">MLB</strong></a>
                         </li>
-                        
-                    
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="SaleDetail" asp-action="GetAllSaleDetail">GetAllSaleDetail</a>
-
-                        <li class="nav-item">
-                          <a class="nav-link text-dark" asp-area="" asp-controller="Color" asp-action="GetAllColor">Color</a>
->>>>>>> Tuaans-Anh
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">NFL</strong></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Size" asp-action="GetAllSize">Size</a>
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">NHL</strong></a>
                         </li>
-
-                        <li class="nav-item">
-=======
->>>>>>> Ducws-Anh
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="GetAllRole">Role</a>
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">NBA</strong></a>
                         </li>
-                        <li class="nav-item">
-<<<<<<< HEAD
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAllUser">User</a>
-=======
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="GetAllBill">Bill</a>
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">NCAA</strong></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="TypeProduct" asp-action="GetAllTypeProduct">TypeProduct</a>
->>>>>>> Khair
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">CLASSICS</strong></a>
                         </li>
-                        <li class="nav-item">
-<<<<<<< HEAD
-                            <a class="nav-link text-dark" asp-area="" asp-controller="VoucherView" asp-action="Index">Privacy</a>
-<<<<<<< HEAD
-=======
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="GetAllCart">Cart</a>
->>>>>>> Ducws-Anh
-=======
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Trang quản trị</a>
->>>>>>> Hoangf
-=======
-
-
->>>>>>> Tuaans-Anh
+                        <li class="nav-item hod">
+                            <a class="nav-link" href="#"> <strong class="color">COLLEGE VAULT</strong></a>
                         </li>
                     </ul>
                 </div>
+                <div class="col-md-2 text-center">
+                    <a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/image/logo.png" class="img-thumbnail" alt="..." style="border: 0px;"></a>
+                </div>
+                <div class="col-md-5 container">
+                    <nav class="navbar bg-body-tertiary">
+                        <div class="container-fluid">
+                            <div class="bo" style="margin:auto;">
+                                <form class="d-flex" role="search">
+                                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn" type="submit"><img src="~/image/search.png" class="img" alt="..." width="20px"></button>
+                                </form>
+                            </div>
+
+                            <ul class="nav">
+                                <li class="nav-item">
+                                     @* @{
+                                      if (login == null)
+                                      {*@
+                                      <img src="~/image/login.png" class="img" alt="..." width="20px">
+                                      <a class="nav-link" href="#" id="Login"> <strong class="color">LOGIN</strong></a>
+                                      @*}
+                                      else
+                                      {
+                                      <p>@login.Username</p>
+                                      <a type="submit" asp-action="Dss" asp-controller="Home">Đăng Xuất</a>
+                                      }
+                                      }*@
+                                </li>
+                                <li class="nav-item">
+                                  @*{
+                                        if (login != null && roleServices.GetRoleById(login.RoleID).RoleName == "QuanLy")
+                                        {
+                                            <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
+                                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="QuanLy"> <strong class="color">TEAMS</strong></a>
+                                        }
+                                        else
+                                        {*@
+                                            <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
+                                            <a class="nav-link" asp-area=""> <strong class="color">TEAMS</strong></a>
+                                      
+                                </li>
+                                <li class="nav-item">
+                                    <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
+                                    <a class="nav-link" href="#Cart" id="Cart"
+                                       aria-controls="offcanvasRight">
+                                      @*{
+                                            if (login == null)
+                                            {*@
+                                                <strong class="color">
+                                                    BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
+                                                        @{
+                                                            //var carts = SessionServices.GetObjFromCart(Context.Session, "ListCartSession");
+                                                        }
+                                                    </span>
+                                                </strong>
+                                         @*}
+                                            else
+                                            {
+                                                <strong class="color">
+                                                    BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
+                                                        @cartDetailServices.GetCartDetailById(login.Id).Count()
+                                                    </span>
+                                                </strong>
+                                            }*@
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </nav>
+                </div>
             </div>
-        </nav>
+        </div>
     </header>
-    <div class="container">
+    <div class="">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    <footer style="background-color: black; color: white;" class="theaft">
+        <div class="container" style="padding-top: 60px;">
+            <strong style="font-size: 30px;"> SIGN UP TO OUR NEWSLETTER AND RECEIVE THE LATEST NEWS, <br> PROMOTIONS, RELEASES AND MUCH MORE.</strong>
+        </div>
+        <div class="container" style="padding-top: 20px;padding-bottom: 60px;">
+            <div class="text-center">
+                <div class="row align-items-start">
+                    <div class="col-5 align-items-start">
+                        <nav class="navbar align-items-start">
+                            <div class="container align-items-start" style="padding-left: 0px;">
+                                <div class="bo2">
+                                    <form class="d-flex" role="search">
+                                        <input class="form-control" type="search" placeholder="Email address" aria-label="Search" style="border-radius: 10px; background-color: black; border: 0px; width: 500px; height: 50px;">
+                                        <button class="btn" type="submit" style="color: white; font-size:12px; font-weight: bold;">Submit</button>
+                                    </form>
+                                </div>
+                        </nav>
+                    </div>
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-light" style="border-radius: 100px; width: 50px; height: 50px;"><img src="~/image/twitter.png" class="img" alt="..." width="20px" height="20px"></button>
+                        <button type="button" class="btn btn-outline-light" style="border-radius: 100px; width: 50px; height: 50px;"><img src="~/image/facebook.png" class="img" alt="..." width="20px" height="20px"></button>
+                        <button type="button" class="btn btn-outline-light" style="border-radius: 100px; width: 50px; height: 50px;"><img src="~/image/play_button.png" class="img" alt="..." width="20px" height="20px"></button>
+                        <button type="button" class="btn btn-outline-light" style="border-radius: 100px; width: 50px; height: 50px;"><img src="~/image/instagram_f.png" class="img" alt="..." width="20px" height="20px"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="container">
+        <div class="container text-start" style="padding-bottom: 80px;">
+            <div class="row align-items-start" style="padding-top: 60px; font-size: 16px;">
+                <div class="col">
+                    <strong>SHOP BY</strong>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - AppView - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+                <div class="col">
+                    <strong>ABOUT '47</strong>
+
+                </div>
+                <div class="col">
+                    <strong>CUSTOMER SERVICE</strong>
+
+                </div>
+                <div class="col">
+                    <strong>TERMS & POLICIES</strong>
+
+                </div>
+            </div>
+            <div class="row align-items-start" style="padding-top: 20px;">
+                <div class="col-3">
+                    <a href="#">Headwear</a>
+
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Our Story</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Contact Us</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Terms & Conditions 47brand.com</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Apparel</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Careers</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"> Headwear Style Guide</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"> Terms & Conditions Wholesale</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Gift Cards</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Rewards</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Shipping</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"> Privacy Policy</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"> Best Sellers</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"></a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"> Returns & Exchanges</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">  Social Responsibility</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Sale</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"></a>
+                </div>
+                <div class="col-3">
+                    <a href="#">FAQs</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#">Map Policy</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"></a>
+                </div>
+                <div class="col-3">
+                    <a href="#"></a>
+                </div>
+                <div class="col-3">
+                    <a href="#">  Fit & Style Guide</a>
+
+                </div>
+                <div class="col-3">
+                    <a href="#"></a>
+                </div>
+            </div>
+        </div>
+        <HR class="container"></HR>
+        <div style="
+      background-color: black;
+      color: white;
+      height: 30px;
+      line-height: 30px;
+    ">
+            <h6 class="text-start container" style="line-height: 30px; font-size: 12PX;">BOSTON, MA | © 2023 '47 | ALL RIGHTS RESERVED</h6>
         </div>
     </footer>
+    @*  <footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2023 - Ass - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+    </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/bootstrap.bundle.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+
 </body>
 </html>
