@@ -10,16 +10,18 @@ namespace AppView.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
         private readonly IUserServices userServices;
         private readonly ICartServices cartServices;
         private readonly IRoleServices roleServices;
-
+        private readonly IProductDetailService _productDetail;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             userServices = new UserServices();
             cartServices = new CartServices();
             roleServices= new RoleServices();
+            _productDetail = new ProductDetailService();
         }
         //public IActionResult CreateUser()
         //{
@@ -79,13 +81,34 @@ namespace AppView.Controllers
                 }
                 return RedirectToAction("Index");
             }
-
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
+            return View(listSanPham);
         }
+
+
+        public async Task<IActionResult> SanPhamNguoiDung()
+        {
+            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name}).Select(item => item.First()).ToList();
+            return View(listSanPham);
+        }
+
+        public async Task<ActionResult> GetListProductNguoiDung()
+        {
+            try
+            {
+                var listSanPham =(await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
+                return PartialView("_PatialViewListSPNguoiDung", listSanPham);
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+        }
+
 
         public IActionResult Privacy()
         {

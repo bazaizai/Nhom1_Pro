@@ -14,7 +14,7 @@ $(document).ready(function () {
     });
 });
 $(document).ready(function () {
-    $('#Create').click(function () {
+    $('#SignUp').click(function () {
         $('#offcanvasRight').offcanvas('show');
         $('#offcanvasScrolling').offcanvas('hide');
     });

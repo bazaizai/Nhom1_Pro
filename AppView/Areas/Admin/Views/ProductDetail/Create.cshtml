@@ -374,7 +374,6 @@
             var SizeId = currentItem.find('a').data('idsize');
             var accordionItem = currentItem.closest('.item-accordion');
             if (isUpdate === 'true') {
-
                 var dataUpdate = {
                     Id: idProductDetail,
                     IdColor: ColorId,
@@ -425,11 +424,12 @@
                     SoLuongTon: soLuong
                 };
                 $.ajax({
-                    url: 'https://localhost:7280/api/SanPhamCT/Create-ProductDetail',
+                    url: '/Admin/ProductDetail/CreatePro',
                     type: 'POST',
                     data: JSON.stringify(data),
                     contentType: 'application/json',
                     success: function (result) {
+                        console.log(result.success);
                         if (result.success) {
                             var formData = new FormData();
                             formData.append('idProductDetail', result.id);

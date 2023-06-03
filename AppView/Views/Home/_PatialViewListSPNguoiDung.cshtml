@@ -1,0 +1,63 @@
+﻿@model IEnumerable<AppData.Models.ProductDetailDTO>
+
+@foreach (var item in Model)
+{
+    <div class="card  my-card-style">
+        <div class="card-image">
+            <img src="~/assets/images/others/@item.LinkImage" class="item-image">
+            <img src="https://lh3.googleusercontent.com/-WQdbBAEEKEM/YY2vNpTZK5I/AAAAAAAA0g0/M6LMcweuYNYn-KKW7seqA3MWwvk6XhrNgCNcBGAsYHQ/h240/12.png" style="position: absolute; width: 100%;height: 100%;">
+        </div>
+        <div class="card-content">
+            <div class="card-top">
+                <h3 class="card-title">@item.Name</h3>
+                <div style="margin-bottom:6px" class="uDeVr">
+                    <div class="full-rating">
+                        <div class="total">
+                            <span>4.8</span>
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" size="14" color="#fdd836" style="color:#fdd836" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="boder-doc"></div>
+                    <div class="da-ban">Đã bán 185</div>
+                </div>
+                <div class="price-discount">
+                    <div class="price-discount__price">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.GiaBan).Replace(",00", "")</div>
+                </div>
+                <div class="badge-under-rating">
+                    <div class="item">
+                        <span>@item.Material</span>
+                    </div>
+                    <div class="item">
+                        <span>@item.TypeProduct</span>
+                    </div>
+                    <div class="item">
+                        <span>Nhiều màu</span>
+                    </div>
+                    <div class="item">
+                        <span>Nhiều size</span>
+                    </div>
+                    <div class="item">
+                        <span>Khuyến mãi</span>
+                    </div>
+                </div>
+                <div class="card-user">
+
+                </div>
+            </div>
+            <div class="card-bottom">
+                <div class="d-flex justify-content-evenly">
+                    <button type="button" class="btn btn-info btn-rounded" style="background-color: black;color:white">Buy Now</button>
+                    <button type="button" class="btn btn-info btn-rounded" style="background-color: black;color:white">Add Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if(Model.Count() ==0){
+    <div>Hiện không có sản phẩm nào</div>
+}
