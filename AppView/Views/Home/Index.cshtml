@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Index";
 }
+@if (TempData["MessageForCreate"] != null)
+{
+    <script>
+        Swal.fire('@TempData["MessageForCreate"]')
+    </script>
+}
 <div class="col-md">
     <div class="card text-bg-dark" style="border: 0px white solid;" style="border: 0px white solid;">
       <img src="image\JanuaryNewArrivals_DTC_Sizes-noE-D_480x.webp" height="600" class="card-img" alt="..." style="border: 1px white solid;"/>

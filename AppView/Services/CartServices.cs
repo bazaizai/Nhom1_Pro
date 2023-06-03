@@ -11,8 +11,18 @@ namespace AppView.Services
         {
             var httpClient = new HttpClient();
             string apiUrl = $"https://localhost:7280/api/Cart/Create-Cart?Userid={idUser}&mota={mota}";
-            var response = await httpClient.PostAsync(apiUrl, null);
-            return true;
+
+            try
+            {
+                var response = await httpClient.PostAsync(apiUrl, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ ở đây
+                Console.WriteLine($"Lỗi khi thêm giỏ hàng: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteCart(Guid id)

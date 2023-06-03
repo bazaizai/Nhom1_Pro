@@ -1,0 +1,72 @@
+﻿@model Nhom1_Pro.Models.User
+@*
+Css*@
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col-1">
+                    <a href="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+                       aria-controls="offcanvasScrolling"><img src="~/image/chevron_left.png" alt="" width="20px"></a>
+                </div>
+                <div class="col">
+                    <h5 class="offcanvas-title" id="offcanvasRightLabel">CREATE ACCOUNT</h5>
+                </div>
+                <div class="col-1">
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas-body canvas-cus">
+        <form asp-action="CreateUser" asp-controller="Home" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input placeholder="Email" asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input placeholder="Mật khẩu" asp-for="MatKhau" class="form-control" />
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
+                <input placeholder="Ngày sinh" asp-for="NgaySinh" class="form-control" />
+                <span asp-validation-for="NgaySinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Ten" placeholder="Tên" class="form-control" />
+                <span asp-validation-for="Ten" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="TaiKhoan" placeholder="Tên đăng nhập" class="form-control" />
+                <span asp-validation-for="TaiKhoan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="GioiTinh" class="form-control" style="border-color:gray">
+                    <option value="">-- Chọn giới tính --</option>
+                    <option value="1">Nam</option>
+                    <option value="0">Nữ</option>
+                    <option value="2">Khác</option>
+                </select>
+                <span asp-validation-for="GioiTinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="DiaChi" placeholder="Địa chỉ" class="form-control" />
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Sdt" placeholder="Số điện thoại" class="form-control" />
+                <span asp-validation-for="Sdt" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" style="width: 350px" class="btn btn-dark" value="Create">
+                    SIGN UP
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

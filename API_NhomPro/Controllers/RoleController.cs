@@ -52,6 +52,22 @@ namespace AppAPI.Controllers
             role.TrangThai = trangthai;
             return repos.AddItem(role);
         }
+        [HttpPost("Create-Role-Guest")]
+        public bool CreateRoleGuest(Guid id,string ten, int trangthai)
+        {
+            string ma;
+            if (repos.GetAll().Count() == 0)
+            {
+                ma = "Role1";
+            }
+            else ma = "Role" + repos.GetAll().Max(c => Convert.ToInt32(c.Ma.Substring(4, c.Ma.Length - 4)) + 1);
+            Role role = new Role();
+            role.Id = id;
+            role.Ma = ma;
+            role.Ten = ten;
+            role.TrangThai = trangthai;
+            return repos.AddItem(role);
+        }
 
         // PUT api/<RoleController>/5
         [HttpPut("Edit-Role")]

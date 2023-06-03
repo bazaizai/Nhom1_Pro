@@ -20,6 +20,14 @@ namespace AppView.Services
             return true;
         }
 
+        public async Task<bool> AddRoleGuest(Guid id, string ten, int trangthai)
+        {
+            var httpClient = new HttpClient();
+            string apiUrl = $"https://localhost:7280/api/Role/Create-Role-Guest?id={id}&ten={ten}&trangthai={trangthai}";
+            var response = await httpClient.PostAsync(apiUrl, null);
+            return true;
+        }
+
         public async Task<bool> DeleteRole(Guid id)
         {
             var httpClient = new HttpClient();
