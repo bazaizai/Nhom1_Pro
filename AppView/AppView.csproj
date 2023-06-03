@@ -20,6 +20,10 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> develop
   <ItemGroup>
     <Folder Include="Views\Material\" />
     <Folder Include="Views\Size\" />

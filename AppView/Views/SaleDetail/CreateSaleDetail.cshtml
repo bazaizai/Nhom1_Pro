@@ -17,12 +17,22 @@
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group">
+           @* <div class="form-group">
                 <label asp-for="IdSale" class="control-label">Sale</label>
                 @Html.DropDownListFor(model => model.IdSale, (IEnumerable<SelectListItem>)ViewBag.SaleList, "Select Sale", new { @class = "form-control" })
                 <span asp-validation-for="IdSale" class="text-danger"></span>
             </div>
 
+            <div class="form-group">
+                <label asp-for="IdChiTietSp" class="control-label">Chi tiết sản phẩm</label>
+                @Html.DropDownListFor(model => model.IdChiTietSp, (IEnumerable<SelectListItem>)ViewBag.ProductDetailsList, "Select Product Detail", new { @class = "form-control" })
+                <span asp-validation-for="IdChiTietSp" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="IdSale" class="control-label">Sale</label>
+                @Html.DropDownListFor(model => model.IdSale, (IEnumerable<SelectListItem>)ViewBag.SaleList, "Select Sale", new { @class = "form-control" })
+                <span asp-validation-for="IdSale" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="IdChiTietSp" class="control-label">Chi tiết sản phẩm</label>
                 @Html.DropDownListFor(model => model.IdChiTietSp, (IEnumerable<SelectListItem>)ViewBag.ProductDetailsList, "Select Product Detail", new { @class = "form-control" })
