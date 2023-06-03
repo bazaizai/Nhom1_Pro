@@ -1,50 +1,4 @@
-﻿@*@model IEnumerable<Ass.ViewModel.ProductView>*@
-
-
-<div class="col-md">
-    <div class="card text-bg-dark" style="border: 0px white solid;" style="border: 0px white solid;">
-        <img src="image\JanuaryNewArrivals_DTC_Sizes-noE-D_480x.webp" height="600" class="card-img" alt="..." style="border: 1px white solid;" />
-    </div>
-</div>
-<div class="text-center"
-     style="font-size: 15px; padding-top: 20px; padding-bottom: 40px">
-    <strong>FIND YOUR TEAM</strong>
-</div>
-<div class="container text-center">
-    <div class="row align-items-center">
-
-        <div class="row row-cols-2 row-cols-lg-3 g-2 g-lg-3">
-            @*@foreach (var item in Model)
-            {
-                <div class="col ctsp">
-                    <div class="p-4 ">
-                        <div style="background-color: rgb(243, 246, 251);">
-                            @{
-                                if (item.DuongDan.Count() > 0)
-                                {
-                                    <img src="@item.DuongDan[0]" class="card-img-top" alt="/.image/sp1.webp" style="height:370px">
-                                }
-                                else
-                                {
-                                    <img src="https://cdn.shopify.com/s/files/1/0817/3919/products/F-CARGW09GWS-CM-HR-F.jpg?v=1622125697" class="card-img-top" alt="/.image/sp1.webp" style="height:370px">
-                                }
-                            }
-                        </div>
-                        <div class="card-body">
-                            <p><strong> @item.Name</strong></p>
-                            <p>$@item.GiaBan</p>
-                            <div>
-                                <img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px">(@item.SoLuongTon)
-                            </div>
-                            @Html.ActionLink("Chi tiet", "ChiTietSP", new { id = item.Id })
-                        </div>
-                    </div>
-                </div>
-            }*@
-        </div>
-    </div>
-</div>
-@model IEnumerable<AppData.Models.ProductDetailDTO>
+﻿@model IEnumerable<AppData.Models.ProductDetailDTO>
 
 @{
     ViewData["Title"] = "SanPhamNguoiDung";
@@ -418,27 +372,3 @@
 
     </div>
 </section>
-<div class="container" style="padding-top: 100px; padding-left: 40px; padding-right: 40px;">
-    <div class="row align-items-center">
-        <div class="col-4">
-            <img src="image\NCAA_Franchise_FeaturedTiles.webp" class="img" alt="..." width="100%">
-            <strong style="font-size: 20px;">
-                NCAA Classic '47 Franchise
-            </strong> <img src="image\right.png" class="img" alt="..." width="40px">
-        </div>
-        <div class="col-4">
-            <img src="image\03_DTC_SizesFeaturedTiles-1200x1500_2fb839df-fafc-40b0-ba3e-030db4c3125c.webp" class="img" alt="..." width="100%">
-            <strong style="font-size: 20px;">
-                NCAA Classic '47 Franchise
-            </strong><img src="image\right.png" class="img" alt="..." width="40px">
-        </div>
-        <div class="col-4">
-            <img src="image\NBA-CityEdition3_FeaturedTiles.webp" class="img" alt="..." width="100%">
-            <strong style="font-size: 20px;">
-                NCAA Classic '47 Franchise
-            </strong><img src="image\right.png" class="img" alt="..." width="40px">
-        </div>
-    </div>
-</div>
-
-

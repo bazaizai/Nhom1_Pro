@@ -15,18 +15,11 @@ namespace AppView.Services
         {
             client = new HttpClient();
         }
-        public async Task<bool> AddItem(ProductDetailViewModel obj)
+        public async Task<HttpResponseMessage> AddItem(ProductDetailViewModel obj)
         {
             var apiUrl = "https://localhost:7280/api/SanPhamCT/Create-ProductDetail";
             var content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await client.PostAsync(apiUrl, content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadAsAsync<bool>();
-            }
-            return false;
+            return await client.PostAsync(apiUrl, content);
         }
 
         public async Task<IEnumerable<ProductDetailDTO>> GetAll()
