@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace AppData.Models
         public string? Material { get; set; }
         public string? BaoHanh { get; set; }
         public string? MoTa { get; set; }
+        [Required(ErrorMessageResourceName = "Không được để trống trường này")]
         public int? SoLuongTon { get; set; }
         public decimal? GiaNhap { get; set; }
         public decimal? GiaBan { get; set; }
