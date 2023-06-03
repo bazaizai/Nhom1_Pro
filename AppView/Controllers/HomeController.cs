@@ -85,8 +85,8 @@ namespace AppView.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
-            return View(listSanPham);
+            //var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
+            return View();
         }
 
 
