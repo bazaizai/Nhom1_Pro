@@ -10,7 +10,7 @@ namespace AppView.IServices
         Task<List<ProductDetailDTO>> GetByName(string name);
         Task<bool> UpdateItem(ProductDetailPutViewModel item);
         Task<bool> RemoveItem(Guid id);
-        Task<bool> AddItem(ProductDetailViewModel obj);
+        Task<HttpResponseMessage> AddItem(ProductDetailViewModel obj);
         Task<object> GetAllBienThe();
         Task<ProductDetailPutViewModel> GetProductUpdate(Guid id);
     }

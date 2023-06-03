@@ -2,9 +2,9 @@
   text-align: center;
   font-size: 48px;
   font-weight: bold;
-  margin-top:125px;
+  margin-top:0px;
   margin-bottom: 0px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Roboto, sans-serif;
 
 }
 .card-text {
@@ -101,6 +101,7 @@ border: 0px;
  .checked {
   color: white;
 }
+
 .table tr {
     border-bottom: 2px solid black;
 }

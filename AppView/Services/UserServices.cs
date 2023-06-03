@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
 using System.Drawing;
+using System.Net;
 
 namespace AppView.Services
 {
@@ -11,9 +12,23 @@ namespace AppView.Services
         public async Task<bool> AddUser(User user)
         {
             var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/User/Create-User?idRole={user.IdRole}&ten={user.Ten}&gioitinh={user.GioiTinh}&ngaysinh={user.NgaySinh}&diachi={user.DiaChi}&sdt={user.Sdt}&matkhau={user.MatKhau}&email={user.Email}&taikhoan={user.TaiKhoan}&trangthai={user.TrangThai}";
-            var response = await httpClient.PostAsync(apiUrl, null);
-            return true;
+            string apiUrl = $"https://localhost:7280/api/User/Create-User?id={user.Id}&idRole={user.IdRole}&ten={user.Ten}&gioitinh={user.GioiTinh}&ngaysinh={user.NgaySinh}&diachi={user.DiaChi}&sdt={user.Sdt}&matkhau={user.MatKhau}&email={user.Email}&taikhoan={user.TaiKhoan}&trangthai={user.TrangThai}";
+            try
+            {
+                var response = await httpClient.PostAsync(apiUrl, null);
+                if(response.StatusCode == HttpStatusCode.OK)
+                {
+                    return true;
+                }    
+                return false;
+              
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ ở đây
+                Console.WriteLine($"Lỗi khi thêm người dùng: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteUser(Guid id)

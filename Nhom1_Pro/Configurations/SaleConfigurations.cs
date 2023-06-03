@@ -12,7 +12,8 @@ namespace Nhom1_Pro.Configurations
 
             builder.ToTable("Sale");
 
-            builder.HasKey(e => e.Id);
+            //builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).HasDefaultValueSql("(newid())");
             builder.Property(e => e.Ten).HasMaxLength(500);
             builder.Property(e => e.Ma).HasColumnType("nvarchar(20)");
             builder.Property(e => e.MucGiam).HasColumnType("decimal(18, 0)")

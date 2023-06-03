@@ -58,7 +58,7 @@ namespace AppAPI.Controllers
 
         // POST api/<UserController>
         [HttpPost("Create-User")]
-        public bool CreateUser(Guid idRole, string ten, int gioitinh, DateTime ngaysinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai)
+        public bool CreateUser(Guid id, Guid idRole, string ten, int gioitinh, DateTime ngaysinh, string diachi, string sdt, string matkhau, string email, string taikhoan, int trangthai)
         {
             string ma;
             if (repos.GetAll().Count() == 0)
@@ -67,7 +67,7 @@ namespace AppAPI.Controllers
             }
             else ma = "User" + repos.GetAll().Max(c => Convert.ToInt32(c.Ma.Substring(4, c.Ma.Length - 4)) + 1);
             User user = new User();
-            user.Id = Guid.NewGuid();
+            user.Id = id;
             user.Ten = ten;
             user.Ma = ma;
             user.GioiTinh = gioitinh;

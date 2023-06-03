@@ -69,7 +69,6 @@ namespace AppView.Areas.Admin.Controllers
             }
         }
 
-
         public async Task<ActionResult> Details(Guid id)
         {
             try
@@ -99,7 +98,17 @@ namespace AppView.Areas.Admin.Controllers
         {
             try
             {
-                return await _productDetailService.AddItem(obj) ? Ok() : Content("Hệ thống đang nâng cấp");
+                HttpResponseMessage response = await _productDetailService.AddItem(obj);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    return Content(responseData, "application/json");
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception)
             {
