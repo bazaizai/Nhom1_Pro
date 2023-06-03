@@ -5,6 +5,9 @@
     Html.RenderPartial("Login");
 }
 @{
+    Html.RenderPartial("Feature");
+}
+@{
     //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
     //    IRoleServices roleServices = new RoleServices();
     //    ICartDetailServices cartDetailServices = new CartsDetailservices();
@@ -77,7 +80,7 @@
                 <div class="col-md-5 container">
                     <nav class="navbar bg-body-tertiary">
                         <div class="container-fluid">
-                            <div class="bo" style="margin:auto;">
+                            <div class="bo" style="margin:auto;height:40px">
                                 <form class="d-flex" role="search">
                                     <input class="form-control" type="search" placeholder="Search" aria-label="Search">
                                     <button class="btn" type="submit"><img src="~/image/search.png" class="img" alt="..." width="20px"></button>
@@ -109,13 +112,13 @@
                                         else
                                         {*@
                                             <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
-                                            <a class="nav-link" asp-area=""> <strong class="color">TEAMS</strong></a>
+                                    <a class="nav-link" href="#" id="Feature"> <strong class="color">TEAMS</strong></a>
                                       
                                 </li>
                                 <li class="nav-item">
                                     <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
                                     <a class="nav-link" href="#Cart" id="Cart"
-                                       aria-controls="offcanvasRight">
+                                      >
                                       @*{
                                             if (login == null)
                                             {*@
@@ -160,11 +163,12 @@
                     <div class="col-5 align-items-start">
                         <nav class="navbar align-items-start">
                             <div class="container align-items-start" style="padding-left: 0px;">
-                                <div class="bo2">
+                                <div class="bo2" style="height:52px">
                                     <form class="d-flex" role="search">
                                         <input class="form-control" type="search" placeholder="Email address" aria-label="Search" style="border-radius: 10px; background-color: black; border: 0px; width: 500px; height: 50px;">
                                         <button class="btn" type="submit" style="color: white; font-size:12px; font-weight: bold;">Submit</button>
                                     </form>
+                                </div>
                                 </div>
                         </nav>
                     </div>
