@@ -1,4 +1,5 @@
 ﻿using AppData.IRepositories;
+using AppData.Models;
 using AppData.Repositories;
 using AppView.Services;
 using Microsoft.AspNetCore.Http;
@@ -15,12 +16,14 @@ namespace AppView.Controllers
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<Cart> Carts;
         CartServices cartServices;
+        CartDetailServices cartDetailServices;
         public CartController()
         {
             Carts = dbContextModel.Carts;
             AllRepo<Cart> all = new AllRepo<Cart>(dbContextModel, Carts);
             repos = all;
             cartServices = new CartServices();
+            cartDetailServices = new CartDetailServices();
         }
         // GET: CartController
         public async Task<ActionResult> GetAllCart()
@@ -74,19 +77,10 @@ namespace AppView.Controllers
             return RedirectToAction("GetAllCart");
         }
 
-        // POST: CartController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        public async Task<ActionResult> ShowCart()
+        {
+            var a = await cartDetailServices.GetAllAsync();
+            return View(a);
+        }
     }
 }

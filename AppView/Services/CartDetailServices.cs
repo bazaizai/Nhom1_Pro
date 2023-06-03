@@ -1,10 +1,11 @@
-﻿using AppView.IServices;
+﻿using AppData.Models;
+using AppView.IServices;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
 
 namespace AppView.Services
 {
-    public class CartDetailServices:ICartDetailServices
+    public class CartDetailServices : ICartDetailServices
     {
         public async Task<bool> AddItemAsync(CartDetail item)
         {
@@ -22,13 +23,13 @@ namespace AppView.Services
             return true;
         }
 
-        public async Task<List<CartDetail>> GetAllAsync()
+        public async Task<List<CartViewModel>> GetAllAsync()
         {
             string apiUrl = "https://localhost:7280/api/CartDetails";
             HttpClient client = new HttpClient();
             var response = await client.GetAsync(apiUrl);
             var apidata = await response.Content.ReadAsStringAsync();
-            List<CartDetail> lstBill = JsonConvert.DeserializeObject<List<CartDetail>>(apidata);
+            List<CartViewModel> lstBill = JsonConvert.DeserializeObject<List<CartViewModel>>(apidata);
             return lstBill;
         }
 
