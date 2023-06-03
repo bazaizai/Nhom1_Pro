@@ -9,6 +9,11 @@ $(document).ready(function () {
     });
 });
 $(document).ready(function () {
+    $('#Feature').click(function () {
+        $('#feature').offcanvas('show');
+    });
+});
+$(document).ready(function () {
     $('#Create').click(function () {
         $('#offcanvasRight').offcanvas('show');
         $('#offcanvasScrolling').offcanvas('hide');
