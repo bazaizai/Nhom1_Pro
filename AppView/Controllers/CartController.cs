@@ -17,6 +17,7 @@ namespace AppView.Controllers
         DbSet<Cart> Carts;
         CartServices cartServices;
         CartDetailServices cartDetailServices;
+        UserServices userServices;
         public CartController()
         {
             Carts = dbContextModel.Carts;
@@ -24,6 +25,7 @@ namespace AppView.Controllers
             repos = all;
             cartServices = new CartServices();
             cartDetailServices = new CartDetailServices();
+            userServices = new UserServices();
         }
         // GET: CartController
         public async Task<ActionResult> GetAllCart()
@@ -79,7 +81,9 @@ namespace AppView.Controllers
 
         public async Task<ActionResult> ShowCart()
         {
-            var a = await cartDetailServices.GetAllAsync();
+            var acc = HttpContext.Session.GetString("acc");
+            var idCart = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
+            var a = (await cartDetailServices.GetAllAsync()).Where(c => c.Id == idCart).ToList();
             return View(a);
         }
     }
