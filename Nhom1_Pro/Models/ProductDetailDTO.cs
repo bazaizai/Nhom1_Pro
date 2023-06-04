@@ -18,9 +18,11 @@ namespace AppData.Models
         public string? Material { get; set; }
         public string? BaoHanh { get; set; }
         public string? MoTa { get; set; }
-        [Required(ErrorMessageResourceName = "Không được để trống trường này")]
+        [Required(ErrorMessageResourceName = "Số lượng không được để trống.")]
         public int? SoLuongTon { get; set; }
+        [Required(ErrorMessage = "Giá nhập không được để trống.")]
         public decimal? GiaNhap { get; set; }
+        [Required(ErrorMessage ="Giá bán không được để trống")]
         public decimal? GiaBan { get; set; }
         public int? TrangThai { get; set; }
         public string? LinkImage { get; set; }

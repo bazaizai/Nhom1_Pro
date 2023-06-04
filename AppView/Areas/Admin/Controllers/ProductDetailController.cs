@@ -96,6 +96,11 @@ namespace AppView.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePro([FromBody] ProductDetailViewModel obj)
         {
+            if(!ModelState.IsValid)
+            {
+                var errors = new List<string> { "Số lượng không được để trống.", "Giá nhập không được để trống.", "Giá bán không được để trống." };
+                return Json(new { success = false, error = errors });
+            }
             try
             {
                 HttpResponseMessage response = await _productDetailService.AddItem(obj);

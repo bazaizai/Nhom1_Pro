@@ -17,7 +17,7 @@
 </div>
 <div id="preloader"></div>
 <div class="card">
-    <div class="card-body">
+    <div class="card-body" id="formGen">
         <div style="display: flex; align-items: center; justify-content: space-between;">
             <h5 style="margin: 0;">QUẢN LÝ SẢN PHẨM</h5>
             <button onclick="generate()" class="btn btn-warning">Tạo thực thể</button>
@@ -94,10 +94,19 @@
 
 <div id="confirm" style="display: none; margin-top: 5px">
     <div class="d-flex justify-content-end">
-        <button class="btn btn-warning mr-2">Hủy</button>
+        <button onclick="Huy()" class="btn btn-warning mr-2">Hủy</button>
         <button onclick="CapNhat()" class="btn btn-warning">Cập nhật</button>
     </div>
 </div>
+
+<script>
+    function Huy() {
+        var container = $('#accordion-borderless');
+        container.html('');
+        $('#formGen').find('*').prop("disabled", false);
+        $('#confirm').css({ 'display': 'none' });
+    }
+</script>
 
 <script>
     var load = $('#preloader');
@@ -107,8 +116,12 @@
 </script>
 
 <script>
+    var IdTypeProduct = "";
+    var IdMaterial = "";
+    var IdProduct = "";
     function generate() {
         var container = document.querySelector('#accordion-borderless');
+        container.innerHTML = '';
         var valuesColors = Array.from($('#IdColor option:checked')).map(option => ({
             value: option.value,
             text: option.text
@@ -162,17 +175,17 @@
                 <div class="row" style="width: 90%;">
                     <div class="form-group col-4">
                         <label for="formGroupExampleInput">Giá Nhập</label>
-                        <input type="text" class="form-control giaNhap" value="{{giaNhap}}"
+                        <input type="number" min="1" class="form-control giaNhap" value="{{giaNhap}}"
                                placeholder="">
                     </div>
                     <div class="form-group col-4">
                         <label for="formGroupExampleInput">Giá Bán</label>
-                        <input type="text" class="form-control giaBan" value="{{giaBan}}"
+                        <input type="number" min="1" class="form-control giaBan" value="{{giaBan}}"
                                placeholder="">
                     </div>
                     <div class="form-group col-4">
                         <label for="formGroupExampleInput">Số lượng</label>
-                        <input type="text" class="form-control soLuong" value="{{soLuong}}">
+                        <input type="number" min="1" class="form-control soLuong" value="{{soLuong}}">
                     </div>
 
                     <div class="form-group col-6">
@@ -269,7 +282,6 @@
         Promise.all(ajaxPromises)
             .then((results) => {
                 var closeButtons = document.querySelectorAll('#accordion-borderless .card-header button');
-                console.log(closeButtons.length)
                 for (let i = 0; i < closeButtons.length; i++) {
                     closeButtons[i].addEventListener('click', function () {
                         const card = this.closest('.card');
@@ -277,11 +289,21 @@
                         closeButtons = document.querySelectorAll('#accordion-borderless .card-header button');
                         if (closeButtons.length == 0) {
                             $('#confirm').css('display', 'none');
+                            $('#formGen').find('*').prop("disabled", false);
                         }
 
                     });
                 }
-                $('#confirm').css('display', 'block');
+                if (closeButtons.length > 0) {
+                    $('#confirm').css('display', 'block');
+                    IdTypeProduct = $('#IdTypeProduct').val();
+                    IdMaterial = $('#IdMaterial').val();
+                    IdProduct = $('#IdProduct').val();
+                    $('#formGen').find('*').prop("disabled", true);
+                } else {
+                    alert("Vui lòng chọn tất cả các trường thông tin để tiến hành tạo thực thể.");
+
+                }
             })
             .catch((error) => {
                 alert("Error")
@@ -344,9 +366,6 @@
     function CapNhat() {
         var items = $('.item-accordion');
         var currentIndex = 0;
-        var IdTypeProduct = $('#IdTypeProduct').val();
-        var IdMaterial = $('#IdMaterial').val();
-        var IdProduct = $('#IdProduct').val();
 
         $('#preloader').show();
 
@@ -387,7 +406,7 @@
                     Mota: moTa,
                     SoLuongTon: soLuong,
                 };
-                axios.put('/Admin/ProductDetail/CreatePro', dataUpdate)
+                axios.put('https://localhost:7280/api/SanPhamCT/Update-ProductDetail', dataUpdate)
                     .then(function (response) {
                         var formDataImage = new FormData();
                         formDataImage.append('idProduct', idProductDetail);
@@ -429,7 +448,6 @@
                     data: JSON.stringify(data),
                     contentType: 'application/json',
                     success: function (result) {
-                        console.log(result.success);
                         if (result.success) {
                             var formData = new FormData();
                             formData.append('idProductDetail', result.id);
@@ -452,6 +470,12 @@
                                     console.log(xhr);
                                 }
                             });
+                        }
+                        if (result.error)
+                        {
+                            $('#preloader').hide();
+                            alert(result.error.join("\n"));
+                            return;
                         }
                     },
                     error: function () {
