@@ -35,9 +35,15 @@ namespace AppAPI.Controllers
         }
         // GET api/<BillController>/5
         [HttpPost]
-        public bool CreateBill(Guid idUser, Guid idVoucher, string ma, DateTime ngayTao, DateTime ngayThanhToan, DateTime ngayShip, DateTime ngayNhan,
+        public bool CreateBill(Guid idUser, Guid idVoucher, DateTime ngayTao, DateTime ngayThanhToan, DateTime ngayShip, DateTime ngayNhan,
             string tenNguoiNhan, string diaChi, string sdt, int tongTien, int soTienGiam, int tienShip, string moTa, int trangThai)
         {
+            string ma;
+            if (allRepo.GetAll().Count() == 0)
+            {
+                ma = "Bill1";
+            }
+            else ma = "Bill" + allRepo.GetAll().Max(c => Convert.ToInt32(c.Ma.Substring(4, c.Ma.Length - 4)) + 1);
             Bill bill = new Bill()
             {
                 Id = Guid.NewGuid(),

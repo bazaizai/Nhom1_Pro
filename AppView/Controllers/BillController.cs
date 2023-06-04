@@ -22,7 +22,7 @@ namespace AppView.Controllers
             var a = await billService.GetAllBillsAsync();
             return View(a);
         }
-      
+
         public IActionResult Create()
         {
             return View();
@@ -35,8 +35,8 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> Details(Guid id)
         {
-            
-            var a = (await billService.GetAllBillsAsync()).FirstOrDefault(x=>x.Id==id);
+
+            var a = (await billService.GetAllBillsAsync()).FirstOrDefault(x => x.Id == id);
             return View(a);
         }
         [HttpGet]
@@ -52,11 +52,32 @@ namespace AppView.Controllers
             await billService.UpdateBillAsync(bill);
             return RedirectToAction("GetAllBill");
         }
-        
+
         public async Task<IActionResult> Delete(Guid id)
         {
             await billService.DeleteBillAsync(id);
             return RedirectToAction("GetAllBill");
+        }
+
+        public IActionResult Pay(string name, string phone, string address, string tongtien, string phiship)
+        {
+            var bill = new Bill()
+            {
+                Id = new Guid(),
+                NgayTao = DateTime.Now,
+                NgayShip = DateTime.Now.AddDays(2),
+                NgayNhan = DateTime.Now.AddDays(4),
+                NgayThanhToan = DateTime.Now.AddDays(4),
+                TenNguoiNhan = name,
+                DiaChi = address,
+                Sdt = phone,
+                TongTien = decimal.Parse(tongtien),
+                SoTienGiam = null,
+                TienShip = decimal.Parse(phiship),
+                MoTa = "",
+                TrangThai = 0
+            };
+            return RedirectToAction("ShowCart", "Cart");
         }
     }
 }
