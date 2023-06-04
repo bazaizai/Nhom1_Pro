@@ -4,8 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-
+builder.Services.AddSession(option => { option.IdleTimeout = TimeSpan.FromMinutes(30); });
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -19,7 +20,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseEndpoints(endpoints =>
