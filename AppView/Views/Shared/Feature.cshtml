@@ -1,6 +1,19 @@
-﻿<div class="offcanvas offcanvas-end" tabindex="-1" id="feature" aria-labelledby="offcanvasRightLabel">
+﻿@{
+
+    @using Microsoft.AspNetCore.Http
+    //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
+    //    IRoleServices roleServices = new RoleServices();
+    //    ICartDetailServices cartDetailServices = new CartsDetailservices();
+    var acc = Context.Session.GetString("acc");
+    // tính tổng số lượng sản phẩm trong giỏ hàng
+}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="feature" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Feature</h5>
+        @if(acc!=null)
+        {
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Xin chào @acc.ToString()</h5>
+        }
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body canvas-cus">
