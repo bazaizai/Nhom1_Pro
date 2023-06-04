@@ -86,5 +86,46 @@
         </div>
     </div>
 </div>
-
+    @if (TempData["MessageForCreate"] != null)
+    {
+            <script>
+            Swal.fire({
+                title: '@TempData["MessageForCreate"]',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        setTimeout(() => {
+            Swal.close();
+        }, 2000);
+    </script>
+    }
+    @if (TempData["MessageForLogin"] != null)
+    {
+    <script>
+        Swal.fire({
+            title: '@TempData["MessageForLogin"]',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+        setTimeout(() => {
+            Swal.close();
+        }, 2000);
+    </script>
+    }
+    @if (TempData["MessageForLogout"] != null)
+    {
+    <script>
+        Swal.fire({
+            title: '@TempData["MessageForLogout"]',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+        setTimeout(() => {
+            Swal.close();
+        }, 2000);
+    </script>
+    }
 

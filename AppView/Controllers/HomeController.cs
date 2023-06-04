@@ -31,6 +31,18 @@ namespace AppView.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
+            //Tu tao role admin neu khong co
+            Role RoleAdmin = (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == Guid.Parse("92917570-dd9d-445c-9373-40b4640c2ac0"));
+            if (RoleAdmin == null)
+            {
+                Role role = new Role()
+                {
+                    Id = Guid.Parse("92917570-dd9d-445c-9373-40b4640c2ac0"),
+                    Ten = "Admin",
+                    TrangThai = 0
+                };
+                roleServices.AddRoleGuest(role.Id, role.Ten, role.TrangThai);
+            }    
             var taikhoan = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == user.TaiKhoan);
             var Email = (await userServices.GetAllUser()).FirstOrDefault(c => c.Email == user.Email);
             var Sdt = (await userServices.GetAllUser()).FirstOrDefault(c => c.Sdt == user.Sdt);
@@ -58,6 +70,7 @@ namespace AppView.Controllers
             // If no duplicates were found, continue with creating the new user
             user.Id = Guid.NewGuid();
             user.TrangThai = 0;
+ 
             Role Role = (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == Guid.Parse("f79544bc-fdc7-47cf-9f92-41cc05fb381f"));
             if (Role == null)
             {
@@ -119,13 +132,16 @@ namespace AppView.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 var data = (await userServices.GetAllUser()).FirstOrDefault(s => s.TaiKhoan.Equals(username) && s.MatKhau.Equals(password));
+                var role = (await roleServices.GetAllRole()).FirstOrDefault(s => s.Id == data.IdRole).Ten;
                 //add Session
                 if(data !=null)
                 {
                     HttpContext.Session.SetString("acc", data.TaiKhoan);
+                    HttpContext.Session.SetString("role", role);
                     var acc = HttpContext.Session.GetString("acc");
-                    TempData["MessageForLogin"] = "Xin chào " + acc + " đã đến với 47 Brand";
+                    TempData["MessageForLogin"] = "Login successful";
                     return RedirectToAction("Index");
                 }    
                 else
