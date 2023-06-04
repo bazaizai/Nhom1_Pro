@@ -101,7 +101,12 @@ border: 0px;
  .checked {
   color: white;
 }
-
+p{
+    color: black;
+}
+strong{
+    color:black;
+}
 .table tr {
     border-bottom: 2px solid black;
 }
