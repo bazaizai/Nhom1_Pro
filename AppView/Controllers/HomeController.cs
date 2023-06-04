@@ -123,7 +123,7 @@ namespace AppView.Controllers
                 //add Session
                 if(data !=null)
                 {
-                    HttpContext.Session.SetString("acc", data.Ten);
+                    HttpContext.Session.SetString("acc", data.TaiKhoan);
                     var acc = HttpContext.Session.GetString("acc");
                     TempData["MessageForLogin"] = "Xin chào " + acc + " đã đến với 47 Brand";
                     return RedirectToAction("Index");
