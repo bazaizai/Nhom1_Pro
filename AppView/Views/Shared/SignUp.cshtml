@@ -1,6 +1,4 @@
-﻿@model Nhom1_Pro.Models.User
-@*
-Css*@
+﻿
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
@@ -23,42 +21,35 @@ Css*@
         <form asp-action="CreateUser" asp-controller="Home" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input placeholder="Email" asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <input placeholder="Email" name="Email" class="form-control" />
             </div>
             <div class="form-group">
-                <input placeholder="Mật khẩu" type="password" asp-for="MatKhau" class="form-control" />
-                <span asp-validation-for="MatKhau" class="text-danger"></span>
+                <input placeholder="Mật khẩu" type="password" name="MatKhau" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
-                <input placeholder="Ngày sinh" asp-for="NgaySinh" class="form-control" />
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                <label name="NgaySinh" class="control-label">Ngày sinh</label>
+                <input placeholder="Ngày sinh" name="NgaySinh" type="date" class="form-control" />
+          
             </div>
             <div class="form-group">
-                <input asp-for="Ten" placeholder="Tên" class="form-control" />
-                <span asp-validation-for="Ten" class="text-danger"></span>
+                <input name="Ten" placeholder="Tên" class="form-control" />
             </div>
             <div class="form-group">
-                <input asp-for="TaiKhoan" placeholder="Tên đăng nhập" class="form-control" />
-                <span asp-validation-for="TaiKhoan" class="text-danger"></span>
+                <input name="TaiKhoan" placeholder="Tên đăng nhập" class="form-control" />
             </div>
             <div class="form-group">
-                <select asp-for="GioiTinh" class="form-control" style="border-color:gray">
+                <select name="GioiTinh" class="form-control" style="border-color:gray">
                     <option value="">-- Chọn giới tính --</option>
                     <option value="1">Nam</option>
                     <option value="0">Nữ</option>
                     <option value="2">Khác</option>
                 </select>
-                <span asp-validation-for="GioiTinh" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="DiaChi" placeholder="Địa chỉ" class="form-control" />
-                <span asp-validation-for="DiaChi" class="text-danger"></span>
+                <input name="DiaChi" placeholder="Địa chỉ" class="form-control" />
             </div>
             <div class="form-group">
-                <input asp-for="Sdt" placeholder="Số điện thoại" class="form-control" />
-                <span asp-validation-for="Sdt" class="text-danger"></span>
+                <input name="Sdt" placeholder="Số điện thoại" class="form-control" />
             </div>
 
             <div class="form-group">
