@@ -32,6 +32,16 @@ namespace AppView.Services
             return voucherslst;
         }
 
+        public async Task<Voucher> GetAllAsync(string item)
+        {
+            string apiUrl = $"https://localhost:7280/api/Voucher/{item}";
+            var httpclient = new HttpClient();
+            var reponse = await httpclient.GetAsync(apiUrl);
+            string apidata = await reponse.Content.ReadAsStringAsync();
+            Voucher voucherslst = JsonConvert.DeserializeObject<Voucher>(apidata);
+            return voucherslst;
+        }
+
         public async Task<bool> RemoveItem(Voucher item)
         {
             var httpClient = new HttpClient();
