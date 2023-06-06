@@ -4,6 +4,7 @@ using AppView.Services;
 using Microsoft.AspNetCore.Mvc;
 using Nhom1_Pro.Models;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 
 namespace AppView.Controllers
 {
@@ -20,7 +21,7 @@ namespace AppView.Controllers
             _logger = logger;
             userServices = new UserServices();
             cartServices = new CartServices();
-            roleServices= new RoleServices();
+            roleServices = new RoleServices();
             _productDetail = new ProductDetailService();
         }
         //public IActionResult CreateUser()
@@ -30,6 +31,31 @@ namespace AppView.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
+            var taikhoan = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == user.TaiKhoan);
+            var Email = (await userServices.GetAllUser()).FirstOrDefault(c => c.Email == user.Email);
+            var Sdt = (await userServices.GetAllUser()).FirstOrDefault(c => c.Sdt == user.Sdt);
+            // Check if the TaiKhoan is already taken by another user
+            if (taikhoan != null)
+            {
+                TempData["MessageForCreate"] = "Tài khoản đã tồn tại";
+                return RedirectToAction("Index");
+            }
+
+            // Check if the Email is already taken by another user
+            if (Email != null)
+            {
+                TempData["MessageForCreate"] = "Email đã được sử dụng";
+                return RedirectToAction("Index");
+            }
+
+            // Check if the Sdt is already taken by another user
+            if (Sdt != null)
+            {
+                TempData["MessageForCreate"] = "Số điện thoại đã được sử dụng";
+                return RedirectToAction("Index");
+            }
+
+            // If no duplicates were found, continue with creating the new user
             user.Id = Guid.NewGuid();
             user.TrangThai = 0;
             Role Role = (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == Guid.Parse("f79544bc-fdc7-47cf-9f92-41cc05fb381f"));
@@ -79,8 +105,8 @@ namespace AppView.Controllers
                 {
                     TempData["MessageForCreate"] = "Đăng kí thất bại";
                 }
-                return RedirectToAction("Index");
             }
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Index()
@@ -89,10 +115,36 @@ namespace AppView.Controllers
             return View();
         }
 
-
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = (await userServices.GetAllUser()).FirstOrDefault(s => s.TaiKhoan.Equals(username) && s.MatKhau.Equals(password));
+                //add Session
+                if(data !=null)
+                {
+                    HttpContext.Session.SetString("acc", data.TaiKhoan);
+                    var acc = HttpContext.Session.GetString("acc");
+                    TempData["MessageForLogin"] = "Xin chào " + acc + " đã đến với 47 Brand";
+                    return RedirectToAction("Index");
+                }    
+                else
+                {
+                    TempData["MessageForLogin"] = "Login failed";
+                    return RedirectToAction("Index");
+                }
+            }
+            return View();
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("acc");
+            TempData["MessageForLogout"] = "Đăng xuất thành công";
+            return RedirectToAction("Index");
+        }
         public async Task<IActionResult> SanPhamNguoiDung()
         {
-            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name}).Select(item => item.First()).ToList();
+            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
             return View(listSanPham);
         }
 
@@ -100,7 +152,7 @@ namespace AppView.Controllers
         {
             try
             {
-                var listSanPham =(await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
+                var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
                 return PartialView("_PatialViewListSPNguoiDung", listSanPham);
             }
             catch (HttpRequestException)
