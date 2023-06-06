@@ -12,10 +12,20 @@ namespace AppView.Controllers
     {
         public IAllRepo<Bill> allRepo;
         public IBillService billService;
+        private UserServices userServices;
+        private BillService BillService;
+        private BillDetailServices BillDetailServices;
+        private CartDetailServices CartDetailServices;
+        private IProductDetailService ProductDetailServices;
         public BillController()
         {
             allRepo = new AllRepo<Bill>();
             billService = new BillService();
+            userServices = new UserServices();
+            billService = new BillService();
+            BillDetailServices = new BillDetailServices();
+            CartDetailServices = new CartDetailServices();
+            ProductDetailServices = new ProductDetailService();
         }
         public async Task<IActionResult> GetAllBill()
         {
@@ -59,11 +69,18 @@ namespace AppView.Controllers
             return RedirectToAction("GetAllBill");
         }
 
-        public IActionResult Pay(string name, string phone, string address, string tongtien, string phiship)
+        public async Task<IActionResult> Pay(string name, string phone, string address, string tongtien, string phiship, string voucher)
         {
+            decimal tien = Convert.ToDecimal(tongtien);
+            decimal ship = Convert.ToDecimal(phiship);
+            var acc = HttpContext.Session.GetString("acc");
+            var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
+            var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
             var bill = new Bill()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
+                IdUser = UserID,
+                IdVoucher = Guid.Parse("34610eea-54af-d4f3-522e-06103247c471"),
                 NgayTao = DateTime.Now,
                 NgayShip = DateTime.Now.AddDays(2),
                 NgayNhan = DateTime.Now.AddDays(4),
@@ -71,12 +88,29 @@ namespace AppView.Controllers
                 TenNguoiNhan = name,
                 DiaChi = address,
                 Sdt = phone,
-                TongTien = decimal.Parse(tongtien),
-                SoTienGiam = null,
-                TienShip = decimal.Parse(phiship),
-                MoTa = "",
+                TongTien = tien,
+                SoTienGiam = 6821,
+                TienShip = ship,
+                MoTa = "0",
                 TrangThai = 0
             };
+            await billService.CreateBillAsync(bill);
+            foreach (var item in listcart)
+            {
+                await BillDetailServices.AddItemAsync(new BillDetail()
+                {
+                    Id = new Guid(),
+                    IdBill = bill.Id,
+                    IdProductDetail = item.IdProduct,
+                    SoLuong = item.SoLuongCart,
+                    DonGia = item.GiaBan,
+                    TrangThai = 0
+                });
+                await CartDetailServices.RemoveItem(item.Id);
+                //var product = await ProductDetailServices.GetById(item.IdProduct);
+                //product.SoLuongTon -= item.SoLuongCart;
+                //await ProductDetailServices.UpdateItem(product);
+            }
             return RedirectToAction("ShowCart", "Cart");
         }
     }

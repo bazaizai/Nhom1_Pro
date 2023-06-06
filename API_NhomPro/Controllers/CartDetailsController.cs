@@ -48,6 +48,8 @@ namespace AppAPI.Controllers
             var cartDetails = cartdetail.Select(pd => new CartViewModel
             {
                 Id = pd.Id,
+                IdUser = pd.UserID,
+                IdProduct = pd.DetailProductID,
                 Name = _reposSP.GetAll().FirstOrDefault(x => x.Id == _reposCTSP.GetAll().FirstOrDefault(p => p.Id == pd.DetailProductID).IdProduct).Ten,
                 Size = _reposSize.GetAll().FirstOrDefault(s => s.Id == _reposCTSP.GetAll().FirstOrDefault(p => p.Id == pd.DetailProductID).IdSize)?.Size1,
                 Color = _reposColor.GetAll().FirstOrDefault(c => c.Id == _reposCTSP.GetAll().FirstOrDefault(p => p.Id == pd.DetailProductID).IdColor)?.Ten,

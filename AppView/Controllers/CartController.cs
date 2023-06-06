@@ -83,7 +83,8 @@ namespace AppView.Controllers
         {
             var acc = HttpContext.Session.GetString("acc");
             var idCart = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
-            var a = (await cartDetailServices.GetAllAsync()).Where(c => c.Id == idCart).ToList();
+            var b = await cartDetailServices.GetAllAsync();
+            var a = (await cartDetailServices.GetAllAsync()).Where(c => c.IdUser == idCart).ToList();
             return View(a);
         }
     }
