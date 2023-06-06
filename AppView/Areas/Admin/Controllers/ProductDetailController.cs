@@ -141,5 +141,18 @@ namespace AppView.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UpdateItem([FromBody] ProductDetailPutViewModel obj)
+        {
+            try
+            {
+                return await _productDetailService.UpdateItem(obj) ? Ok() : NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

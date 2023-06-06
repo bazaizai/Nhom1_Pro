@@ -13,5 +13,6 @@ namespace AppView.IServices
         Task<HttpResponseMessage> AddItem(ProductDetailViewModel obj);
         Task<object> GetAllBienThe();
         Task<ProductDetailPutViewModel> GetProductUpdate(Guid id);
+        Task UpdateSoLuong(Guid id, int soLuongCa);
     }
 }

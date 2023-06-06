@@ -406,8 +406,9 @@
                     Mota: moTa,
                     SoLuongTon: soLuong,
                 };
-                axios.put('https://localhost:7280/api/SanPhamCT/Update-ProductDetail', dataUpdate)
+                axios.post('/Admin/ProductDetail/UpdateItem', dataUpdate)
                     .then(function (response) {
+                        console.log(response);
                         var formDataImage = new FormData();
                         formDataImage.append('idProduct', idProductDetail);
                         formDataImage.append('fileImage', file);
