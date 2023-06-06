@@ -18,8 +18,7 @@ namespace AppView.Services
         public async Task<HttpResponseMessage> AddItem(ProductDetailViewModel obj)
         {
             var apiUrl = "https://localhost:7280/api/SanPhamCT/Create-ProductDetail";
-            var content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
-            return await client.PostAsync(apiUrl, content);
+            return await client.PostAsJsonAsync(apiUrl, obj);
         }
 
         public async Task<IEnumerable<ProductDetailDTO>> GetAll()
@@ -81,5 +80,11 @@ namespace AppView.Services
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<bool>();
         }
+
+        public async Task UpdateSoLuong(Guid id, int soLuongCart)
+        {
+             await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Update-soLuong?Id={id}&soLuongCart={soLuongCart}");
+        }
+
     }
 }

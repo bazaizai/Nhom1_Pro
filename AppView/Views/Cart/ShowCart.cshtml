@@ -9,7 +9,7 @@
     <div class="container ">
         <div class="row d-flex justify-content-center align-items-center ">
             <div class="col">
-                <div class="table-responsive">
+                <div class="table-responsive" style="margin-bottom:20px">
                     <table class="table">
                         <thead>
                             <tr>
@@ -81,8 +81,12 @@
                                     </td>
                                 </tr>
                             }
+                            
                         </tbody>
                     </table>
+                    <div style="text-align: right;">
+                        <input id="voucherinput" style="font-size: 15px;border-radius:10px;border-color:#0d6efd;" placeholder="Mã giảm giá" name="voucher">
+                    </div>
                 </div>
 
                 <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
@@ -182,7 +186,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div class="col-lg-4 col-xl-3">
+                                    
                                     <div class="d-flex justify-content-between" style="font-weight: 500;">
                                         <p class="mb-2" style="font-size: 15px;">Tạm tính</p>
                                         <p class="mb-2" style="font-size: 15px;" id="giahang">@string.Format("{0:N0}đ", Model.Sum(x => x.SoLuongCart * x.GiaBan))</p>
@@ -194,11 +200,14 @@
                                         <p class="mb-0" style="font-size: 15px;" id="divShippingFee">0đ</p>
                                     </div>
 
+                                    <div class="d-flex justify-content-between" style="font-weight: 500;" id="voucherDiv">
+                                        <p class="mb-0" style="font-size: 15px;">Voucher</p>
+                                        <p class="mb-0" style="font-size: 15px;" >0đ</p>
+                                    </div>
+
                                     <hr class="my-4">
 
-                                    <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                                        <input class="form-control" style="font-size: 15px;border:20px;border-radius:5px;border-color:black" placeholder="Mã giảm giá" name="voucher">
-                                    </div>
+                                    
                                     <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
                                         <p class="mb-2" style="font-size: 15px;">Tổng</p>
                                         <input class="mb-2" style="font-size: 15px;border:none" name="tongtien" id="totalAmount" hidden><p id="totalAmount1"></p>
@@ -437,5 +446,18 @@
         });
     </script>
     @*tiền ship*@
+    <script>
 
+        var inputElement = document.getElementById("voucherinput");
+        var voucherDiv = document.getElementById("voucherDiv");
+
+        inputElement.addEventListener("input", function () {
+            if (inputElement.value !== "") {
+                voucherDiv.style.display = "block";
+            } else {
+                voucherDiv.style.display = "none";
+            }
+        });
+
+    </script>
 }

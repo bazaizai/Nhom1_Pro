@@ -1,18 +1,46 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+@keyframes blink-border {
+    0% {
+        border-color: red;
+    }
+
+    50% {
+        border-color: blue;
+    }
+
+    100% {
+        border-color: red;
+    }
+}
+
+#voucherinput {
+    animation: blink-border 1s infinite;
+    transition: border-color 0.3s;
+}
+
+    #voucherinput:focus {
+        animation: none;
+        border-color: green;
+    }
+
+#Voucher {
+    display: none;
 }

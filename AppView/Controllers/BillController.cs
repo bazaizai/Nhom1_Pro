@@ -17,6 +17,7 @@ namespace AppView.Controllers
         private BillDetailServices BillDetailServices;
         private CartDetailServices CartDetailServices;
         private IProductDetailService ProductDetailServices;
+        private VoucherServices VoucherServices;
         public BillController()
         {
             allRepo = new AllRepo<Bill>();
@@ -26,6 +27,7 @@ namespace AppView.Controllers
             BillDetailServices = new BillDetailServices();
             CartDetailServices = new CartDetailServices();
             ProductDetailServices = new ProductDetailService();
+            VoucherServices = new VoucherServices();
         }
         public async Task<IActionResult> GetAllBill()
         {
@@ -76,11 +78,13 @@ namespace AppView.Controllers
             var acc = HttpContext.Session.GetString("acc");
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
+            var IDvoucher = (await VoucherServices.GetAllAsync(voucher));
+
             var bill = new Bill()
             {
                 Id = Guid.NewGuid(),
                 IdUser = UserID,
-                IdVoucher = Guid.Parse("34610eea-54af-d4f3-522e-06103247c471"),
+                IdVoucher = IDvoucher == null ? Guid.Parse("b55cb83a-e559-4e86-bb36-2e0b37d81db0") : IDvoucher.Id,
                 NgayTao = DateTime.Now,
                 NgayShip = DateTime.Now.AddDays(2),
                 NgayNhan = DateTime.Now.AddDays(4),
@@ -89,7 +93,7 @@ namespace AppView.Controllers
                 DiaChi = address,
                 Sdt = phone,
                 TongTien = tien,
-                SoTienGiam = 6821,
+                SoTienGiam = IDvoucher.MucUuDai,
                 TienShip = ship,
                 MoTa = "0",
                 TrangThai = 0

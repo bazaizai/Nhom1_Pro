@@ -26,6 +26,11 @@ namespace AppAPI.Controllers
         {
             return allRepo.GetAll();
         }
+        [HttpGet("{ma}")]
+        public Voucher GetAll(string ma)
+        {
+            return allRepo.GetAll().FirstOrDefault(c=>c.Ma == ma);
+        }
         [HttpPost("AddVoucher")]
         public bool AddVoucher(string ma, string loaihinhkm, decimal mucuudai, string phamvi, string dieukien, int soluongton, int solansudung, DateTime ngaybatdau, DateTime ngayketthuc, int trangthai)
         {
