@@ -92,5 +92,10 @@ namespace AppView.Controllers
             List<BillDetail> bills =(await billDetailServices.GetAllAsync()).Where(c => c.IdBill == id).ToList();
             return View(bills);
         }
+        public async Task<IActionResult> FilterBills(DateTime startDate, DateTime endDate)
+        {
+            ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate);
+            return PartialView("FilterBills");
+        }
     }
 }

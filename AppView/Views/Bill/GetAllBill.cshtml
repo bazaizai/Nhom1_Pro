@@ -21,6 +21,15 @@
         <input class="c-form__input" id="myInput" type="text" placeholder="Tìm kiếm mã hóa đơn"
                aria-label="Termes à rechercher" aria-describedby="c-topsearch__description"
                style="width: 100%;height: 44px;">
+        <form id="filter-form">
+            <label for="start-date">Từ ngày:</label>
+            <input type="date" id="start-date" name="startDate">
+
+            <label for="end-date">Đến ngày:</label>
+            <input type="date" id="end-date" name="endDate">
+
+            <button type="submit">Lọc</button>
+        </form>
         <div class="d-flex flex-row pt-4 pb-3 px-4" style="background: white;">
             <i class="fas fa-arrow-left"></i>
             <div class="d-flex flex-row flex-grow-1 justify-content-between">
@@ -173,6 +182,35 @@ $(document).ready(function() {
       success: function(response) {
         // Xử lý kết quả từ action (nếu cần)
         $('#result-container').html(response);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + textStatus + ', ' + errorThrown);
+      }
+    });
+  }
+});
+</script>
+<script>
+$(document).ready(function() {
+  $('#filter-form').on('submit', function(e) {
+    e.preventDefault(); // Ngăn chặn sự kiện submit mặc định
+
+    var startDate = $('#start-date').val();
+    var endDate = $('#end-date').val();
+
+    sendData(startDate, endDate);
+  });
+
+  function sendData(startDate, endDate) {
+    $.ajax({
+      url: '/Bill/FilterBills',
+      type: 'GET',
+      data: {
+        startDate: startDate,
+        endDate: endDate
+      },
+      success: function(response) {
+        $('#search-result-container').html(response);
       },
       error: function(jqXHR, textStatus, errorThrown) {
         console.log('Error: ' + textStatus + ', ' + errorThrown);

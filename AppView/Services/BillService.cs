@@ -1,5 +1,6 @@
 ﻿using AppView.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
 using System.Runtime.InteropServices;
@@ -8,6 +9,7 @@ namespace AppView.Services
 {
     public class BillService : IBillService
     {
+        
         public async Task<bool> CreateBillAsync(Bill obj)
         {
             try
@@ -78,6 +80,17 @@ namespace AppView.Services
 
                 return false;
             }
+        }
+        public async Task<List<Bill>> GetBillsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            // Thực hiện truy vấn vào nguồn dữ liệu để lấy danh sách hóa đơn trong khoảng thời gian đã chỉ định
+            // Đây là một ví dụ giả định sử dụng Entity Framework Core để truy vấn cơ sở dữ liệu
+
+            var bills = (await GetAllBillsAsync())
+                .Where(b => b.NgayTao >= startDate && b.NgayTao <= endDate)
+                .ToList();
+
+            return bills;
         }
     }
 }
