@@ -152,11 +152,16 @@
 <script>
     $(document).ready(function () {
         $('#myInput').on('input', function () {
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
             var searchText = $(this).val();
             $.ajax({
                 url: '/Bill/SearchBill',
                 type: 'GET',
-                data: { ma: searchText },
+                data: { 
+                    startDate: startDate,
+                    endDate: endDate,
+                    ma: searchText },
                 success: function (response) {
                     $('#search-result-container').html(response);
                 },
@@ -197,17 +202,18 @@ $(document).ready(function() {
 
     var startDate = $('#start-date').val();
     var endDate = $('#end-date').val();
-
-    sendData(startDate, endDate);
+    var ma = $('#myInput').val();
+    sendData(startDate, endDate,ma);
   });
 
-  function sendData(startDate, endDate) {
+  function sendData(startDate, endDate, ma) {
     $.ajax({
       url: '/Bill/FilterBills',
       type: 'GET',
       data: {
         startDate: startDate,
-        endDate: endDate
+        endDate: endDate,
+        ma : ma
       },
       success: function(response) {
         $('#search-result-container').html(response);

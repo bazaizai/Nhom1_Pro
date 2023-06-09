@@ -69,8 +69,19 @@ namespace AppView.Controllers
             await billService.DeleteBillAsync(id);
             return RedirectToAction("GetAllBill");
         }
-        public async Task<IActionResult> SearchBill(string ma)
+        public async Task<IActionResult> SearchBill(DateTime startDate, DateTime endDate, string ma)
         {
+            if(startDate!=null&& endDate!=null)
+            {
+                if (ma != null && ma != "")
+                {
+                    ViewBag.Bills = await billService.GetBillsByDateRangeAsync(startDate, endDate, ma);
+                    return PartialView("SearchBill");
+                }
+                else
+                    ViewBag.Bills = await billService.GetBillsByDateRangeAsync(startDate, endDate);
+                return PartialView("SearchBill");
+            }
             if (ma != null && ma != "")
             {
                 ViewBag.Bills = (await billService.GetAllBillsAsync()).Where(x => x.Ma.Contains(ma)).ToList();
@@ -92,10 +103,17 @@ namespace AppView.Controllers
             List<BillDetail> bills =(await billDetailServices.GetAllAsync()).Where(c => c.IdBill == id).ToList();
             return View(bills);
         }
-        public async Task<IActionResult> FilterBills(DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> FilterBills(DateTime startDate, DateTime endDate, string ma)
         {
-            ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate);
+            if(ma!= null&&ma!="")
+            {
+                ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate, ma);
+                return PartialView("FilterBills");
+            }
+            else
+                ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate);
             return PartialView("FilterBills");
         }
+
     }
 }
