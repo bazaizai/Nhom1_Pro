@@ -24,4 +24,4 @@ $(document).ready(function () {
         $('#offcanvasRight-1').offcanvas('show');
         $('#offcanvasScrolling').offcanvas('hide');
     });
-});x
+});
