@@ -134,12 +134,14 @@ namespace AppView.Controllers
             {
                 
                 var data = (await userServices.GetAllUser()).FirstOrDefault(s => s.TaiKhoan.Equals(username) && s.MatKhau.Equals(password));
-                var role = (await roleServices.GetAllRole()).FirstOrDefault(s => s.Id == data.IdRole).Ten;
+                var NameRole = (await roleServices.GetAllRole()).FirstOrDefault(s => s.Id == data.IdRole).Ten;
+                var role = (await roleServices.GetAllRole()).FirstOrDefault(s => s.Id == data.IdRole).Id;
                 //add Session
-                if(data !=null)
+                if (data !=null)
                 {
                     HttpContext.Session.SetString("acc", data.TaiKhoan);
-                    HttpContext.Session.SetString("role", role);
+                    HttpContext.Session.SetString("role", NameRole);
+                    HttpContext.Session.SetString("roleid", role.ToString());
                     var acc = HttpContext.Session.GetString("acc");
                     TempData["MessageForLogin"] = "Login successful";
                     return RedirectToAction("Index");
@@ -177,7 +179,10 @@ namespace AppView.Controllers
             }
         }
 
-
+        public IActionResult About()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

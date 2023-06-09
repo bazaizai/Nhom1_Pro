@@ -1,5 +1,6 @@
 ﻿using AppData.IRepositories;
 using AppData.Repositories;
+using AppView.Models;
 using AppView.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
+using System.Data;
 using System.Drawing;
 
 namespace AppView.Controllers
@@ -50,8 +52,15 @@ namespace AppView.Controllers
         // GET: UserController/Details/5
         public ActionResult Details(Guid id)
         {
-            var user = repos.GetAll().FirstOrDefault(c => c.Id == id);
-            return View(user);
+            var taikhoan = HttpContext.Session.GetString("acc");
+            var role = HttpContext.Session.GetString("roleid");
+            if(taikhoan!=null && role !=null)
+            {
+                var user = repos.GetAll().FirstOrDefault(c => c.TaiKhoan == taikhoan && c.IdRole == Guid.Parse(role));
+                return View(user);
+            }
+            return View();
+          
         }
 
         // GET: UserController/Create
@@ -107,7 +116,49 @@ namespace AppView.Controllers
             await usersService.DeleteUser(id);
             return RedirectToAction("GetAllUser");
         }
+        //    [HttpPost]
+        //    public async IActionResult RequestPasswordReset([FromBody] PasswordModel model)
+        //    {
+        //        var user = (await usersService.GetAllUser()).FirstOrDefault(c=>c.Email==model.Email);
+        //        if (user == null)
+        //        {
+        //            return BadRequest("User not found");
+        //        }
 
+        //        var resetToken = GenerateResetToken();  
+        //        _userRepository.StoreResetToken(user.Id, resetToken);
+
+        //        var resetLink = $"https://yourwebsite.com/resetpassword/{resetToken}";
+
+        //        // Send email to the user with the reset link
+        //        _emailService.SendPasswordResetEmail(user.Email, resetLink);
+
+        //        return Ok();
+        //    }
+
+        //    [HttpPost("reset")]
+        //    public IActionResult ResetPassword([FromBody] ResetPasswordModel model)
+        //    {
+        //        var user = _userRepository.GetUserByResetToken(model.ResetToken);
+        //        if (user == null)
+        //        {
+        //            return BadRequest("Invalid reset token");
+        //        }
+
+        //        // Update the user's password in the database
+        //        _userRepository.UpdatePassword(user.Id, model.NewPassword);
+
+        //        return Ok();
+        //    }
+
+        //    // Other helper methods...
+
+        //    private string GenerateResetToken()
+        //    {
+        //        // Generate a unique token using a secure method (e.g., Guid.NewGuid())
+        //        return Guid.NewGuid().ToString();
+        //    }
+        //}
         // POST: UserController/Delete/5
         //[HttpPost]
         //[ValidateAntiForgeryToken]
