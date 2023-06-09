@@ -72,7 +72,7 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> SearchBill(DateTime startDate, DateTime endDate, string ma)
         {
-            if(startDate!=null&& endDate!=null)
+            if(startDate.Year!=1&& endDate.Year!=1)
             {
                 if (ma != null && ma != "")
                 {
@@ -106,13 +106,19 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> FilterBills(DateTime startDate, DateTime endDate, string ma)
         {
-            if(ma!= null&&ma!="")
+            
+            if (startDate.Year != 1 && endDate.Year != 1)
             {
-                ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate, ma);
-                return PartialView("FilterBills");
+                if (ma != null && ma != "")
+                {
+                    ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate, ma);
+                    return PartialView("FilterBills");
+                }
+                else
+                    ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate);
             }
             else
-                ViewBag.Date = await billService.GetBillsByDateRangeAsync(startDate, endDate);
+                ViewBag.Date = await billService.GetAllBillsAsync();
             return PartialView("FilterBills");
         }
 
