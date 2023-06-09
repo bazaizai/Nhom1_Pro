@@ -16,6 +16,7 @@ namespace AppView.Controllers
         private readonly IUserServices userServices;
         private readonly ICartServices cartServices;
         private readonly IRoleServices roleServices;
+        private IBillDetailServices billDetailServices;
         public BillController()
         {
             allRepo = new AllRepo<Bill>();
@@ -23,6 +24,7 @@ namespace AppView.Controllers
             userServices = new UserServices();
             cartServices = new CartServices();
             roleServices = new RoleServices();
+            billDetailServices = new BillDetailServices();
         }
         public async Task<IActionResult> GetAllBill()
         {
@@ -71,6 +73,11 @@ namespace AppView.Controllers
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             List<Bill> billList = (await billService.GetAllBillsAsync()).Where(c=>c.IdUser==UserID).OrderByDescending(c => c.NgayTao).ToList();
             return View(billList);
+        }
+        public async Task<IActionResult> ShowBillDetails(Guid id)
+        {
+            List<BillDetail> bills =(await billDetailServices.GetAllAsync()).Where(c => c.IdBill == id).ToList();
+            return View(bills);
         }
     }
 }

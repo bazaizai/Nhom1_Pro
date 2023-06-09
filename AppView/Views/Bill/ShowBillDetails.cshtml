@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Nhom1_Pro.Models.BillDetail>
+
+@{
+    ViewData["Title"] = "ShowBillDetails";
+}
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã hóa đơn
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    Số lượng đặt
+                </th>
+                <th>
+                    Giá
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdBill)
+                    </td>
+                    <td>
+                     @item.IdProductDetail
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoLuong)
+                    </td>
+                    <td>
+                        @item.DonGia dong
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
