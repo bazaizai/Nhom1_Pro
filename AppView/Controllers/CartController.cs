@@ -18,6 +18,7 @@ namespace AppView.Controllers
         CartServices cartServices;
         CartDetailServices cartDetailServices;
         UserServices userServices;
+        private ProductDetailService productDetailService;
         public CartController()
         {
             Carts = dbContextModel.Carts;
@@ -86,6 +87,44 @@ namespace AppView.Controllers
             var b = await cartDetailServices.GetAllAsync();
             var a = (await cartDetailServices.GetAllAsync()).Where(c => c.IdUser == idCart).ToList();
             return View(a);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddToCartUser(CartViewModel model)
+        {
+            var acc = HttpContext.Session.GetString("acc");
+            var IdCart = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
+            var product = (await productDetailService.GetAll()).FirstOrDefault(c=>c.Id== model.IdProduct);
+            var existing = (await cartDetailServices.GetAllAsync()).FirstOrDefault(x => x.IdProduct == product.Id && x.IdUser == IdCart);
+            // if (existing != null)
+            // {
+            //     //Kiểm tra số lượng vs số lượng tồn
+            //     if (existing.Soluong + model.SoLuongCart <= product.SoLuongTon)
+            //     {
+            //         // Nếu sản phẩm đã có trong giỏ hàng thì tăng số lượng lên 1
+            //         existing.Soluong += model.SoLuongCart;
+            //     }
+            //     else
+            //     {
+            //         TempData["quantityCartUser"] = "Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này";
+            //         existing.Soluong = product.SoLuongTon;
+            //     }
+            //     cartDetailServices.UpdateCartDetail(existing);
+            // }
+            // else
+            // {
+                var cartDetails = new CartDetail();
+                cartDetails.Id = Guid.NewGuid();
+                cartDetails.UserID = IdCart;
+                cartDetails.DetailProductID = model.IdProduct;
+                cartDetails.Soluong = model.SoLuongCart;
+                cartDetails.Dongia = Convert.ToDecimal(product.GiaBan);
+                cartDetails.TrangThai = 0;
+                cartDetailServices.AddItemAsync(cartDetails);
+            //}
+            // List<CartDetail> cartDetail = cartDetailServices.GetAllCartDetail().Where(x => x.UserID == IdCart).ToList();
+            // HttpContext.Session.SetString("itemCount", cartDetail.Count().ToString());
+            return RedirectToAction("Index", "Home", new { id = product.Id });
         }
     }
 }

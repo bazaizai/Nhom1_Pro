@@ -4,7 +4,7 @@
     ViewData["Title"] = "ShowCart";
 }
 
-<section class=h-custom">
+<section class="h-custom">
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col">
@@ -18,7 +18,7 @@
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Tạm tính</th>
                                 <th scope="col">
-                                    <a asp-controller="Cart" asp-action="DeleteCartAll">Xoá tất cả</a>
+                                    <a asp-controller="Cart" asp-action="">Xoá tất cả</a>
                                 </th>
                             </tr>
                         </thead>
@@ -32,7 +32,7 @@
                                                  style="width: 120px;">
                                             <div class="flex-column ms-4">
                                                 <p class="mb-2">
-                                                    <a href="chitietsp.html" style="text-decoration: none; font-size: 15px;">@Html.ActionLink(item.Name + "-" + item.Color + "-" + item.Size, "Details", "Home", new { id = item.Id })</a>
+                                                    <a href="chitietsp.html" style="text-decoration: none; font-size: 15px;">@Html.ActionLink(item.Name + "-" + item.Color + "-" + item.Size, "", "Home", new { id = item.Id })</a>
                                                 </p>
 
                                             </div>
@@ -49,7 +49,7 @@
                                         </p>
                                     </td>
                                     <td class="align-middle">
-                                        <form method="post" asp-action="UpdateCart" asp-controller="Cart">
+                                        <form method="post" asp-action="" asp-controller="Cart">
                                             <input type="hidden" name="ProductID" value="@item.Id" />
                                             <div class="d-flex flex-row">
                                                 <button class="btn btn-link px-2"
@@ -76,7 +76,7 @@
                                     </td>
                                     <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">
-                @Html.ActionLink("Delete", "DeleteCart", new { id = item.Id })
+                @Html.ActionLink("Delete", "", new { id = item.Id })
                                         </p>
                                     </td>
                                 </tr>

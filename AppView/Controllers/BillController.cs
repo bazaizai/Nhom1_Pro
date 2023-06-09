@@ -111,9 +111,8 @@ namespace AppView.Controllers
                     TrangThai = 0
                 });
                 await CartDetailServices.RemoveItem(item.Id);
-                //var product = await ProductDetailServices.GetById(item.IdProduct);
-                //product.SoLuongTon -= item.SoLuongCart;
-                //await ProductDetailServices.UpdateItem(product);
+                var product = await ProductDetailServices.GetById(item.IdProduct);
+                await ProductDetailServices.UpdateSoLuong(product.Id, item.SoLuongCart);
             }
             return RedirectToAction("ShowCart", "Cart");
         }

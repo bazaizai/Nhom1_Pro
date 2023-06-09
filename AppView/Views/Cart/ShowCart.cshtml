@@ -19,7 +19,7 @@
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Tạm tính</th>
                                 <th scope="col">
-                                    <a asp-controller="Cart" asp-action="DeleteCartAll">Xoá tất cả</a>
+                                    <a asp-controller="Cart" asp-action="">Xoá tất cả</a>
                                 </th>
                             </tr>
                         </thead>
@@ -33,7 +33,7 @@
                                                  style="width: 120px;">
                                             <div class="flex-column ms-4">
                                                 <p class="mb-2">
-                                                    <a href="chitietsp.html" style="text-decoration: none; font-size: 15px;">@Html.ActionLink(item.Name + "-" + item.Color + "-" + item.Size, "Details", "Home", new { id = item.Id })</a>
+                                                    <a style="text-decoration: none; font-size: 15px;">@Html.ActionLink(item.Name + "-" + item.Color + "-" + item.Size, "", "Home", new { id = item.Id })</a>
                                                 </p>
 
                                             </div>
@@ -50,23 +50,14 @@
                                         </p>
                                     </td>
                                     <td class="align-middle">
-                                        <form method="post" asp-action="UpdateCart" asp-controller="Cart">
                                             <input type="hidden" name="ProductID" value="@item.Id" />
                                             <div class="d-flex flex-row">
-                                                <button class="btn btn-link px-2"
-                                                        onclick="decreaseQuantity()" name="dec" value="dec">
-                                                    <i class="fas fa-minus"></i>
-                                                </button>
+                                                
 
-                                                <input min="0" name="quantity" value="@item.SoLuongCart" data-product-id="@item.Id" type="number"
-                                                       class="form-control form-control-sm soLuongDonHang" style="width: 60px; height: 10px" oninput="handleInput(event)" />
+                                                <input min="0" name="quantity" value="@item.SoLuongCart" data-product-id="@item.IdProduct" type="number"
+                                                       class="form-control form-control-sm soLuongDonHang" style="width: 60px; height: 10px" oninput="handleInput(this)" />
 
-                                                <button class="btn btn-link px-2"
-                                                        onclick="increaseQuantity()" name="inc" value="inc">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
                                             </div>
-                                        </form>
                                     </td>
                                     <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">
@@ -76,7 +67,7 @@
                                     </td>
                                     <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">
-                                            @Html.ActionLink("Delete", "DeleteCart", new { id = item.Id })
+                                            @Html.ActionLink("Delete", "", new { id = item.Id })
                                         </p>
                                     </td>
                                 </tr>
@@ -85,7 +76,8 @@
                         </tbody>
                     </table>
                     <div style="text-align: right;">
-                        <input id="voucherinput" style="font-size: 15px;border-radius:10px;border-color:#0d6efd;" placeholder="Mã giảm giá" name="voucher">
+                        <input id="voucherinput" style="font-size: 15px;border-radius:10px;border-color:#0d6efd;" placeholder="Mã giảm giá" name="voucher" oninput="voucher(this.value)"><br />
+                        <label id="textvoucher" style="color:red"></label>
                     </div>
                 </div>
 
@@ -202,7 +194,7 @@
 
                                     <div class="d-flex justify-content-between" style="font-weight: 500;" id="voucherDiv">
                                         <p class="mb-0" style="font-size: 15px;">Voucher</p>
-                                        <p class="mb-0" style="font-size: 15px;" >0đ</p>
+                                        <p class="mb-0" style="font-size: 15px;" id="vouc">0đ</p>
                                     </div>
 
                                     <hr class="my-4">
@@ -238,9 +230,17 @@
     }
     @*thành phố*@
     <script>
+        var tongtien="";
         $(document).ready(function () {
             const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province';
             const token = '1194852d-fde8-11ed-8a8c-6e4795e6d902';
+            var totalAmountElement = document.getElementById("totalAmount");
+            totalAmountElement.innerText = "0".toLocaleString("vi-VN") + "đ";
+            totalAmountElement.value = "0".toString();
+            var totalAmountElement1 = document.getElementById("totalAmount1");
+            totalAmountElement1.innerText = "0".toLocaleString("vi-VN") + "đ";
+            var paymentAmountElement = document.getElementById("paymentAmount");
+            paymentAmountElement.innerText = "0".toLocaleString("vi-VN") + "đ";
 
             axios.get(apiUrl, {
                 headers: {
@@ -248,6 +248,7 @@
                 }
             })
                 .then(response => {
+
                     var selectElement = $('#tinh');
                     selectElement.empty();
 
@@ -429,6 +430,7 @@
                             console.log(giahang);
                             var totalAmountElement = document.getElementById("totalAmount");
                             var tongTien = giahang + response.data.data.service_fee;
+                            tongtien=tongTien;
                             // Hiển thị tổng tiền
                             totalAmountElement.innerText = tongTien.toLocaleString("vi-VN") + "đ";
                             totalAmountElement.value=tongTien.toString();
@@ -445,19 +447,71 @@
             });
         });
     </script>
-    @*tiền ship*@
+    @*tiền*@
     <script>
-
-        var inputElement = document.getElementById("voucherinput");
-        var voucherDiv = document.getElementById("voucherDiv");
-
-        inputElement.addEventListener("input", function () {
-            if (inputElement.value !== "") {
-                voucherDiv.style.display = "block";
-            } else {
-                voucherDiv.style.display = "none";
+        function voucher(value){
+            if(value!=null&&value.trim()!=""){
+                var formData = new FormData();
+                formData.append('ma', value);
+                $.ajax({
+                    url: 'https://localhost:7280/api/Voucher/' + value,
+                    type: 'GET',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result != undefined) {
+                            $('#vouc').text("-"+result.MucUuDai.toLocaleString("vi-VN") + "đ");
+                            $('#textvoucher').text("");
+                            var totalAmountElement = document.getElementById("totalAmount");
+                            tongtien = tongtien - result.MucUuDai;
+                            totalAmountElement.innerText = tongtien.toLocaleString("vi-VN") + "đ";
+                            totalAmountElement.value = tongtien.toString();
+                            var totalAmountElement1 = document.getElementById("totalAmount1");
+                            totalAmountElement1.innerText = tongtien.toLocaleString("vi-VN") + "đ";
+                            var paymentAmountElement = document.getElementById("paymentAmount");
+                            paymentAmountElement.innerText = tongtien.toLocaleString("vi-VN") + "đ";
+                        }
+                        else {
+                            $('#textvoucher').text("mã không hợp lệ");
+                            $('#vouc').text("0".toLocaleString("vi-VN") + "đ");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log(status);
+                        console.log(error);
+                        console.log(xhr);
+                    }
+                });
+            }else{
+                $('#vouc').text("0".toLocaleString("vi-VN") + "đ");
+                $('#textvoucher').text("");
             }
-        });
+            
 
+        }    
+    </script>
+    <script>
+        function handleInput(value) {
+          var soluong = value.value;
+          var id = value.getAttribute("data-product-id");
+          console.log(soluong);
+          console.log(id);
+          
+          
+                      $.ajax({
+                          url: 'https://localhost:7280/api/CartDetails/udpade?id={id}&soluong={soluong}',
+                          type: 'POST',
+                          
+                          contentType: 'application/json',
+                          success: function (result) {
+                              $('#productList').html(result);
+                          },
+                          error: function (error) {
+                             
+                          }
+                      });
+        }
     </script>
 }

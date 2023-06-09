@@ -26,6 +26,7 @@ namespace AppAPI.Controllers
         private readonly IAllRepo<Material> _reposMaterial;
         private readonly IAllRepo<Image> _reposImage;
         private readonly IAllRepo<ProductDetail> _reposCTSP;
+        private readonly IAllRepo<User> _repoUser;
         public CartDetailsController()
         {
             CartDetails = dbContextModel.CartDetails;
@@ -39,6 +40,7 @@ namespace AppAPI.Controllers
             _reposMaterial = new AllRepo<Material>();
             _reposImage = new AllRepo<Image>();
             _reposCTSP = new AllRepo<ProductDetail>();
+            _repoUser = new AllRepo<User>();
         }
         // GET: api/<CartDetailsController>
         [HttpGet]
@@ -55,7 +57,7 @@ namespace AppAPI.Controllers
                 Color = _reposColor.GetAll().FirstOrDefault(c => c.Id == _reposCTSP.GetAll().FirstOrDefault(p => p.Id == pd.DetailProductID).IdColor)?.Ten,
                 Material = _reposMaterial.GetAll().FirstOrDefault(m => m.Id == _reposCTSP.GetAll().FirstOrDefault(p => p.Id == pd.DetailProductID).IdMaterial)?.Ten,
                 TypeProduct = _reposTypeProduct.GetAll().FirstOrDefault(tp => tp.Id == _reposCTSP.GetAll().FirstOrDefault(p => p.Id == pd.DetailProductID).IdTypeProduct)?.Ten,
-                GiaBan = pd.Dongia,
+                GiaBan = _reposCTSP.GetAll().FirstOrDefault(c=>c.Id==pd.DetailProductID).GiaBan,
                 TrangThai = pd.TrangThai,
                 SoLuongCart = pd.Soluong,
                 LinkImage = _reposImage.GetAll().Any(x => x.IdProductDetail == pd.DetailProductID) ? _reposImage.GetAll().Where(pro => pro.IdProductDetail == pd.DetailProductID).FirstOrDefault().TenAnh : null,
@@ -108,5 +110,16 @@ namespace AppAPI.Controllers
         {
             return allRepo.RemoveItem(allRepo.GetAll().FirstOrDefault(c => c.Id == id));
         }
+
+        [HttpPost("udpade")]
+        public decimal UpdateCart(Guid id,int soluong)
+        {
+            var cartDetail = allRepo.GetAll().FirstOrDefault(c => c.Id == id);
+            cartDetail.Soluong = soluong;
+            allRepo.EditItem(cartDetail);
+            return cartDetail.Soluong*cartDetail.Dongia;
+        }
+        
+       
     }
 }
