@@ -96,6 +96,8 @@ namespace AppAPI.Controllers
             return Ok(new { success = productExists });
         }
 
+        //[HttpGet("Vô Hiệu hóa")]
+
         [HttpGet("list-BienThe")]
         public ActionResult GetAllBienThe()
         {
