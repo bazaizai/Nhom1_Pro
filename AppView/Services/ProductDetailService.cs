@@ -72,6 +72,11 @@ namespace AppView.Services
             }
             return false;
         }
+        
+        public async Task RemoveRange(List<Guid> guids)
+        {
+            await client.PostAsJsonAsync($"https://localhost:7280/api/SanPhamCT/Xoa-List-SanPham", guids);
+        }
 
         public async Task<bool> UpdateItem(ProductDetailPutViewModel item)
         {

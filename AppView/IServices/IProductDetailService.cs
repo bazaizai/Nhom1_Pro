@@ -14,5 +14,7 @@ namespace AppView.IServices
         Task<object> GetAllBienThe();
         Task<ProductDetailPutViewModel> GetProductUpdate(Guid id);
         Task UpdateSoLuong(Guid id, int soLuongCa);
+        Task RemoveRange(List<Guid> guids);
+
     }
 }
