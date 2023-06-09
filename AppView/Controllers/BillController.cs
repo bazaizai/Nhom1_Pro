@@ -23,7 +23,7 @@ namespace AppView.Controllers
             allRepo = new AllRepo<Bill>();
             billService = new BillService();
             userServices = new UserServices();
-            billService = new BillService();
+            BillService = new BillService();
             BillDetailServices = new BillDetailServices();
             CartDetailServices = new CartDetailServices();
             ProductDetailServices = new ProductDetailService();
@@ -71,20 +71,20 @@ namespace AppView.Controllers
             return RedirectToAction("GetAllBill");
         }
 
-        public async Task<IActionResult> Pay(string name, string phone, string address, string tongtien, string phiship, string voucher)
+        public async Task<IActionResult> Pay(string name, string phone, string address, string tongtien, string phiship, string voucher1)
         {
             decimal tien = Convert.ToDecimal(tongtien);
             decimal ship = Convert.ToDecimal(phiship);
             var acc = HttpContext.Session.GetString("acc");
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
-            var IDvoucher = (await VoucherServices.GetAllAsync(voucher));
+            var IDvoucher = (await VoucherServices.GetAllAsync(voucher1));
 
             var bill = new Bill()
             {
                 Id = Guid.NewGuid(),
                 IdUser = UserID,
-                IdVoucher = IDvoucher == null ? Guid.Parse("b55cb83a-e559-4e86-bb36-2e0b37d81db0") : IDvoucher.Id,
+                IdVoucher = IDvoucher == null ? Guid.Parse("B55CB83A-E559-4E86-BB36-2E0B37D81DB0") : IDvoucher.Id,
                 NgayTao = DateTime.Now,
                 NgayShip = DateTime.Now.AddDays(2),
                 NgayNhan = DateTime.Now.AddDays(4),
@@ -98,7 +98,7 @@ namespace AppView.Controllers
                 MoTa = "0",
                 TrangThai = 0
             };
-            await billService.CreateBillAsync(bill);
+            await BillService.CreateBillAsync(bill);
             foreach (var item in listcart)
             {
                 await BillDetailServices.AddItemAsync(new BillDetail()

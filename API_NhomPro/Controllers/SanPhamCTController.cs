@@ -176,7 +176,7 @@ namespace AppAPI.Controllers
             {
                 var configuration = new MapperConfiguration(cfg =>
                 {
-                     cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
+                    cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
                 });
                 var productDetai = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == pro.Id);
                 IMapper mapper = configuration.CreateMapper();
@@ -191,12 +191,13 @@ namespace AppAPI.Controllers
         public void UpdateSoLuong(Guid Id, int soLuongCart)
         {
             var productUpdate = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == Id);
-            if(productUpdate != null)
+            if (productUpdate != null)
             {
                 productUpdate.SoLuongTon -= soLuongCart;
                 _reposCTSP.EditItem(productUpdate);
             }
         }
+        
 
         [HttpPut("Update-Image")]
         public async Task<bool> UpdateImage(Guid idProduct, [FromForm] IFormFile? fileImage)

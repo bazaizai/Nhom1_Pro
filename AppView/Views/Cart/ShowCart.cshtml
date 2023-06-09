@@ -26,7 +26,8 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
+                                var total = item.GiaBan * item.SoLuongCart;
+                                <tr data-row-id="{{@item.Id}}">
                                     <th scope="row">
                                         <div class="d-flex align-items-center">
                                             <img src="/Image/@item.LinkImage" class="img-fluid rounded-3"
@@ -43,28 +44,22 @@
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">@item.Material</p>
                                     </td>
                                     <td class="align-middle">
-                                        <p class="mb-0" style="font-weight: 500; font-size: 15px;">
+                                        <p class="mb-0" style="font-weight: 500; font-size: 15px;" name="giaBan">
                                             
                                             @string.Format("{0:N0}đ", item.GiaBan)
                                             
                                         </p>
                                     </td>
                                     <td class="align-middle">
-                                            <input type="hidden" name="ProductID" value="@item.Id" />
                                             <div class="d-flex flex-row">
-                                                
-
-                                                <input min="0" name="quantity" value="@item.SoLuongCart" data-product-id="@item.IdProduct" type="number"
-                                                       class="form-control form-control-sm soLuongDonHang" style="width: 60px; height: 10px" oninput="handleInput(this)" />
-
-                                            </div>
+    <input min="0" name="quantity" value="@item.SoLuongCart" data-product-id="@item.IdProduct" data-cart-id="@item.Id" type="number" class="form-control form-control-sm soLuongDonHang" style="width: 60px; height: 10px" oninput="handleInput(this)" />
+</div>
                                     </td>
                                     <td class="align-middle">
-                                        <p class="mb-0" style="font-weight: 500; font-size: 15px;">
-                                            
-                                            @string.Format("{0:N0}đ", item.GiaBan * item.SoLuongCart)
-                                        </p>
-                                    </td>
+    <p class="mb-0" style="font-weight: 500; font-size: 15px;">
+        <span id="giaban_@item.IdProduct" name="tong">@string.Format("{0:N0}đ", item.GiaBan * item.SoLuongCart)</span>
+    </p>
+</td>
                                     <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">
                                             @Html.ActionLink("Delete", "", new { id = item.Id })
@@ -145,7 +140,7 @@
                                                 <input type="email" id="typeText" class="form-control form-control-lg"
                                                        siez="17" placeholder="Email" />
                                             </div>
-                                            <select id="tinh" class="select2" style="margin-right:30px;margin-top:-20px">
+                                            <select id="tinh" class="select2" style="margin-right:30px;margin-top:-20px" required>
                                             </select>
                                             <select id="phuongXa" class="select2" style="margin-right:30px;margin-top:20px">
                                             </select>
@@ -155,10 +150,10 @@
                                                 <input type="number" name="phone" class="form-control form-control-lg"
                                                        placeholder="SĐT" size="7" minlength="10" maxlength="10" required />
                                             </div>
-                                            <select id="quanHuyen" class="select2" style="margin-right:30px;margin-top:-20px">
+                                            <select id="quanHuyen" class="select2" style="margin-right:30px;margin-top:-20px" required>
                                             </select>
                                             <select id="dichvu" class="select2" style="margin-right:30px;margin-top:20px">
-                                            </select>
+                                            </select required>
                                         </div>
                                         @*<div class="col-12 col-xl-6">
                                             <div class="d-flex" style="margin-top:20px">
@@ -195,6 +190,7 @@
                                     <div class="d-flex justify-content-between" style="font-weight: 500;" id="voucherDiv">
                                         <p class="mb-0" style="font-size: 15px;">Voucher</p>
                                         <p class="mb-0" style="font-size: 15px;" id="vouc">0đ</p>
+                                        <input name="voucher1" id="voucher1" hidden />
                                     </div>
 
                                     <hr class="my-4">
@@ -228,9 +224,13 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    
     @*thành phố*@
     <script>
         var tongtien="";
+        var ship="";
+        var uudai="";
+        var SUM="";
         $(document).ready(function () {
             const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province';
             const token = '1194852d-fde8-11ed-8a8c-6e4795e6d902';
@@ -427,9 +427,9 @@
                             var giahangElement = document.getElementById("giahang");
                             var giahang = giahangElement.innerText.replace("đ", "").replace(/\,/g, "").trim();
                             giahang = parseInt(giahang);
-                            console.log(giahang);
                             var totalAmountElement = document.getElementById("totalAmount");
                             var tongTien = giahang + response.data.data.service_fee;
+                            ship=response.data.data.service_fee;
                             tongtien=tongTien;
                             // Hiển thị tổng tiền
                             totalAmountElement.innerText = tongTien.toLocaleString("vi-VN") + "đ";
@@ -463,18 +463,32 @@
                         if (result != undefined) {
                             $('#vouc').text("-"+result.MucUuDai.toLocaleString("vi-VN") + "đ");
                             $('#textvoucher').text("");
+                            uudai = result.MucUuDai;
                             var totalAmountElement = document.getElementById("totalAmount");
-                            tongtien = tongtien - result.MucUuDai;
+                            var tongtien1 = tongtien - result.MucUuDai;
+                            totalAmountElement.innerText = tongtien1.toLocaleString("vi-VN") + "đ";
+                            totalAmountElement.value = tongtien1.toString();
+                            var totalAmountElement1 = document.getElementById("totalAmount1");
+                            totalAmountElement1.innerText = tongtien1.toLocaleString("vi-VN") + "đ";
+                            var paymentAmountElement = document.getElementById("paymentAmount");
+                            paymentAmountElement.innerText = tongtien1.toLocaleString("vi-VN") + "đ";
+
+                            var voucherValue = document.getElementById("voucherinput").value;
+                            document.getElementById("voucher1").value = voucherValue;
+                        }
+                        else {
+                            $('#textvoucher').text("mã không hợp lệ");
+                            $('#vouc').text("0".toLocaleString("vi-VN") + "đ");
+                            var totalAmountElement = document.getElementById("totalAmount");
                             totalAmountElement.innerText = tongtien.toLocaleString("vi-VN") + "đ";
                             totalAmountElement.value = tongtien.toString();
                             var totalAmountElement1 = document.getElementById("totalAmount1");
                             totalAmountElement1.innerText = tongtien.toLocaleString("vi-VN") + "đ";
                             var paymentAmountElement = document.getElementById("paymentAmount");
                             paymentAmountElement.innerText = tongtien.toLocaleString("vi-VN") + "đ";
-                        }
-                        else {
-                            $('#textvoucher').text("mã không hợp lệ");
-                            $('#vouc').text("0".toLocaleString("vi-VN") + "đ");
+
+                            var voucherValue = document.getElementById("voucherinput").value;
+                            document.getElementById("voucher1").value = null;
                         }
                     },
                     error: function (xhr, status, error) {
@@ -493,25 +507,33 @@
         }    
     </script>
     <script>
-        function handleInput(value) {
-          var soluong = value.value;
-          var id = value.getAttribute("data-product-id");
-          console.log(soluong);
-          console.log(id);
-          
-          
-                      $.ajax({
-                          url: 'https://localhost:7280/api/CartDetails/udpade?id={id}&soluong={soluong}',
-                          type: 'POST',
-                          
-                          contentType: 'application/json',
-                          success: function (result) {
-                              $('#productList').html(result);
-                          },
-                          error: function (error) {
-                             
-                          }
-                      });
-        }
-    </script>
+$(document).ready(function() {
+  $('.soLuongDonHang').on('input', function() {
+    var soLuong = $(this).val();
+    var productId = $(this).data('product-id');
+    var Idcart = $(this).data('cart-id');
+
+    $.ajax({
+      url: '/Cart/CapNhatSoLuong',
+      method: 'POST',
+      data: { productId: productId, soLuong: soLuong ,Idcart:Idcart},
+      success: function(response) {
+        var formattedPrice = response.price;
+        var formattedSum = response.sum;
+        var Sum = formattedSum + ship - uudai;
+        SUM =Sum;
+        $('#giaban_' + productId).text(formattedPrice);
+        $('#giahang').text(formattedSum.toLocaleString("vi-VN") + "đ");
+        $('#totalAmount').text(Sum.toLocaleString("vi-VN") + "đ");
+        $('#totalAmount1').text(Sum.toLocaleString("vi-VN") + "đ");
+        $('#paymentAmount').text(Sum.toLocaleString("vi-VN") + "đ");
+
+      },
+      error: function(xhr, status, error) {
+        // Xử lý lỗi nếu có
+      }
+    });
+  });
+});
+</script>
 }

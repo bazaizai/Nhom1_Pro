@@ -11,6 +11,6 @@ namespace AppView.IServices
         public Task<bool> AddItemAsync(CartDetail item);
         public Task<bool> RemoveItem(Guid id);
         public Task<bool> EditItem(CartDetail item);
-        
+
     }
 }

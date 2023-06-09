@@ -19,7 +19,7 @@ namespace AppView.Services
         {
             string apiUrl = $"https://localhost:7280/api/CartDetails/{item.Id}?idUser={item.UserID}&idProduct={item.DetailProductID}&sl={item.Soluong}&trangthai={item.TrangThai}";
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.PostAsync(apiUrl, null);
+            var response = await httpClient.PutAsync(apiUrl, null);
             return true;
         }
 

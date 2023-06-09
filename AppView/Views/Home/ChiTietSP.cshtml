@@ -5,97 +5,105 @@
     //var user = SessionServices.GetObjFromUser(Context.Session, "user");
 }
 
-  <div class="text-center" style="margin-left: 50px; margin-right: 50px;">
+<div class="text-center" style="margin-left: 50px; margin-right: 50px;">
     <div class="row align-items-start">
-      <div class="col-1"></div>
-      <div class="col-6">
-        <div class="container text-center">
-            <div class="row align-items-start">
-                
-                       <div class="col-6">
-                            <img alt="..." src="@Url.Content(Model.LinkImage)" width="100%">
-                        </div>
-                       
-            </div>
-          </div>
-          <div style="text-align: left;">
-            <p>SKU: BCPTN-OVRHS29GWP-PP99 @*Ten*@</p>
-            <p style="font-size: 25px;">The Overhand Script '47 MVP DV is a structured and curved adjustable with raised embroidery on the front, flat embroidery on the side, a plastic snap closure, and a braided nylon rope along the visor. Made from garment washed cotton twill.</p>
+        <div class="col-1"></div>
+        <div class="col-6">
+            <div class="container text-center">
+                <div class="row align-items-start">
 
-            <p style="font-size: 25px;">• Team:   </p>
-            <p style="font-size: 25px;">• Color:  </p>
-            <p style="font-size: 25px;">•</p>
-            <a href="" style="font-size: 20px; color: black; font-weight: bold;">View product detail</a>
-          </div>
-      </div>
-      <div class="col-4">
-        <nav style="--bs-breadcrumb-divider: '>'; margin-top: 100px;" aria-label="breadcrumb">
-          <ol class="breadcrumb text-muted">
-            <li class="breadcrumb-item "><a href="#">Home</a></li>
-            <li class="breadcrumb-item active"  aria-current="page"><a href="#">MLB</a></li>
-          </ol>
-        </nav>
-        <div>
-          <h3 style="text-align: left; font-weight: bold; font-size: 40px;"></h3>
-          <p style="text-align: left; font-size: 20px; margin-top: 30px; margin-bottom: 30px;">$</p>
-          <p style="text-align: left; font-size: 17px;">Pay in 4 interest-free installments for orders over <b>$50.00</b> with <img src="~/image/paypal.png" width="20px"> <a href="#" style="text-align: left; font-size: 18px;">Learn more</a></p>
-          <div style="text-align: left; margin-top: 30px;">
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span style="font-weight: bold; font-size: 16px; margin-left: 10px;">Write a review</span>
-          </div>
-               @* @{
-                if (user == null) {*@ <form method="post" asp-action="AddToCart" asp-controller="Cart">
-          <div style="text-align: left; margin-top: 50px;">
-              <input  min="0" name="Quantity" max="@Model.SoLuongTon" value="1" type="number"
-                            class="form-control form-control-sm" style="width: 70px;" />
-          </div>
-          <div style="text-align: left; margin-top: 50px;">
-              <input type="hidden" name="Id" value="@Model.Id"/>
-            <button style="width: 85%; line-height: 40px; background-color: black; color: white;" type="submit">ADD TO BAG</button>
-          </div>
-                        </form>
-                  @*  }
+                   @* <div class="col-6">
+                        <img alt="..." src="@Url.Content(Model.LinkImage)" width="100%">
+                    </div>*@
+
+                </div>
+            </div>
+            <div style="text-align: left;">
+                <p>SKU: BCPTN-OVRHS29GWP-PP99 @*Ten*@</p>
+                <p style="font-size: 25px;">The Overhand Script '47 MVP DV is a structured and curved adjustable with raised embroidery on the front, flat embroidery on the side, a plastic snap closure, and a braided nylon rope along the visor. Made from garment washed cotton twill.</p>
+
+                <p style="font-size: 25px;">• Team: </p>
+                <p style="font-size: 25px;">• Color: </p>
+                <p style="font-size: 25px;">•</p>
+                <a href="" style="font-size: 20px; color: black; font-weight: bold;">View product detail</a>
+            </div>
+        </div>
+        <div class="col-4">
+            <nav style="--bs-breadcrumb-divider: '>'; margin-top: 100px;" aria-label="breadcrumb">
+                <ol class="breadcrumb text-muted">
+                    <li class="breadcrumb-item ">
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="#">MLB</a>
+                    </li>
+                </ol>
+            </nav>
+            <div>
+                <h3 style="text-align: left; font-weight: bold; font-size: 40px;"></h3>
+                <p style="text-align: left; font-size: 20px; margin-top: 30px; margin-bottom: 30px;">$</p>
+                <p style="text-align: left; font-size: 17px;">Pay in 4 interest-free installments for orders over <b>$50.00</b> with <img src="~/image/paypal.png" width="20px"> <a href="#" style="text-align: left; font-size: 18px;">Learn more</a></p>
+                <div style="text-align: left; margin-top: 30px;">
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span style="font-weight: bold; font-size: 16px; margin-left: 10px;">Write a review</span>
+                </div>
+                @* @{
+                if (user == null) {*@
+                @* <form method="post" asp-action="AddToCart" asp-controller="Cart"> *@
+                @* <div style="text-align: left; margin-top: 50px;"> *@
+                @*     <input  min="0" name="Quantity" max="@Model.SoLuongTon" value="1" type="number" *@
+                @*                   class="form-control form-control-sm" style="width: 70px;" /> *@
+                @* </div> *@
+                @* <div style="text-align: left; margin-top: 50px;"> *@
+                @*     <input type="hidden" name="Id" value="@Model.Id"/> *@
+                @*   <button style="width: 85%; line-height: 40px; background-color: black; color: white;" type="submit">ADD TO BAG</button> *@
+                @* </div> *@
+                @*               </form> *@
+                @*  }
                     else
                     {*@
-                        <form method="post" asp-action="AddToCartUser" asp-controller="Cart">
-          <div style="text-align: left; margin-top: 50px;">
-              <input  min="0" name="Quantity" max="" value="1" type="number"
-                            class="form-control form-control-sm" style="width: 70px;" />
-          </div>
-          <div style="text-align: left; margin-top: 50px;">
-              <input type="hidden" name="IDSP" value=""/>
-              <input type="hidden" name="UserId" value=""/>
-            <button style="width: 85%; line-height: 40px; background-color: black; color: white;" type="submit">ADD TO BAG</button>
-          </div>
-          </form>
-                    }
+                <form method="post" asp-action="AddToCartUser" asp-controller="Cart">
+                    <div style="text-align: left; margin-top: 50px;">
+                        <input min="0" name="SoLuongCart" max="" value="1" type="number"
+                               class="form-control form-control-sm" style="width: 70px;"/>
+                    </div>
+                    <div style="text-align: left; margin-top: 50px;">
+                        <input type="hidden" name="IdProduct" value="@Model.Id" />
+                        @* <input type="hidden" name="UserId" value=""/> *@
+                        <button style="width: 85%; line-height: 40px; background-color: black; color: white;" type="submit">ADD TO BAG</button>
+                    </div>
+                </form>
                 }
-                
-          <p style="text-align: left; margin-top: 50px; margin-bottom: 40px; font-size: 17px;">Easy to clean and care for<img src="~/image/water.png" width="30px" style="margin-left: 380px;"></p><hr style="width: 85%;">
-          <p style="text-align: left; margin-top: 50px; margin-bottom: 40px; font-size: 17px;">Free shipping on orders $75+ | 60 day free returns<img src="~/image/return.png" width="30px" style="margin-left: 200px;"></p><hr style="width: 85%;">
-          <div style="text-align: left; margin-top: 40px; margin-bottom: 20px; background-color: rgb(240, 241, 234); border-radius: 10px; padding: 15px 15px 15px 10px; width: 85%;">
-            <h3>'47 FAMILY: FREE SHIPPING FOR MEMBERS</h3>
-            <a href="" style="color: gray;">Join</a> or <a href="" style="color: gray;">Sign in</a>
-          </div>
+                }
+
+                <p style="text-align: left; margin-top: 50px; margin-bottom: 40px; font-size: 17px;">Easy to clean and care for<img src="~/image/water.png" width="30px" style="margin-left: 380px;"></p><hr style="width: 85%;">
+                <p style="text-align: left; margin-top: 50px; margin-bottom: 40px; font-size: 17px;">Free shipping on orders $75+ | 60 day free returns<img src="~/image/return.png" width="30px" style="margin-left: 200px;"></p><hr style="width: 85%;">
+                <div style="text-align: left; margin-top: 40px; margin-bottom: 20px; background-color: rgb(240, 241, 234); border-radius: 10px; padding: 15px 15px 15px 10px; width: 85%;">
+                    <h3>'47 FAMILY: FREE SHIPPING FOR MEMBERS</h3>
+                    <a href="" style="color: gray;">Join</a> or <a href="" style="color: gray;">Sign in</a>
+                </div>
+            </div>
         </div>
-      </div>
-      <hr style="width: 85%; margin-left: 7%; margin-top: 50px; margin-bottom: 50px;">
-      <div style="text-align: left; margin-top: 30px; margin-left: 180px;">
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-      </div>
-      <p style="text-align: left; margin-left: 180px; margin-top: 30px;">0 Review</p>
-      <div class="text-end" style="padding-right: 180px; margin-bottom: 30px;">
-        <button type="button" class="btn btn-dark" style="font-weight: bolder; padding-right: 5px;border-radius: 0px;"><img src="image\edit.png" alt="" width="30px"><strong> Write A Review</strong></button>
-        <button type="button" class="btn btn-dark" style="font-weight: bolder; border-radius: 0px;"><img src="image\chat.png" alt="" width="30px"><strong> Ask A Question</strong></button>
-      </div> 
+        <hr style="width: 85%; margin-left: 7%; margin-top: 50px; margin-bottom: 50px;">
+        <div style="text-align: left; margin-top: 30px; margin-left: 180px;">
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+        </div>
+        <p style="text-align: left; margin-left: 180px; margin-top: 30px;">0 Review</p>
+        <div class="text-end" style="padding-right: 180px; margin-bottom: 30px;">
+            <button type="button" class="btn btn-dark" style="font-weight: bolder; padding-right: 5px;border-radius: 0px;">
+                <img src="image\edit.png" alt="" width="30px"><strong> Write A Review</strong>
+            </button>
+            <button type="button" class="btn btn-dark" style="font-weight: bolder; border-radius: 0px;">
+                <img src="image\chat.png" alt="" width="30px"><strong> Ask A Question</strong>
+            </button>
+        </div>
     </div>
-  </div>
-  
+</div>
