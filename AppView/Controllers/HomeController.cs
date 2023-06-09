@@ -142,7 +142,7 @@ namespace AppView.Controllers
                     HttpContext.Session.SetString("acc", data.TaiKhoan);
                     HttpContext.Session.SetString("role", NameRole);
                     HttpContext.Session.SetString("roleid", role.ToString());
-                    var acc = HttpContext.Session.GetString("acc");
+                    //var acc = HttpContext.Session.GetString("acc");
                     TempData["MessageForLogin"] = "Login successful";
                     return RedirectToAction("Index");
                 }    
