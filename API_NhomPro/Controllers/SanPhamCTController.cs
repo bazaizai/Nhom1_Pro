@@ -55,7 +55,7 @@ namespace AppAPI.Controllers
                 MoTa = pd.MoTa,
                 SoLuongTon = pd.SoLuongTon,
                 TrangThai = pd.TrangThai,
-                LinkImage = _reposImage.GetAll().Any(x => x.IdProductDetail == pd.Id) ? _reposImage.GetAll().Where(pro => pro.IdProductDetail == pd.Id).FirstOrDefault().TenAnh : null,
+                LinkImage = _reposImage.GetAll().FirstOrDefault(x => x.IdProductDetail == pd.Id)?.TenAnh,
             });
             return productDetailDTOs;
         }
@@ -114,7 +114,7 @@ namespace AppAPI.Controllers
         [HttpPost("Create-ProductDetail")]
         public IActionResult CreateProductDetail([FromBody] ProductDetailViewModel pro)
         {
-            pro.TrangThai = 0;
+            pro.TrangThai = 1;
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProductDetailViewModel, ProductDetail>();
@@ -167,38 +167,59 @@ namespace AppAPI.Controllers
         [HttpPut("Update-ProductDetail")]
         public async Task<bool> UpdateProductDetail([FromBody] ProductDetailPutViewModel pro)
         {
-            pro.TrangThai = 0;
-            var configuration = new MapperConfiguration(cfg =>
+            if (ModelState.IsValid)
             {
-                cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
-            });
 
-            IMapper mapper = configuration.CreateMapper();
-            ProductDetail productDetail = mapper.Map<ProductDetail>(pro);
+            }
+            var item = _reposCTSP.GetAll().FirstOrDefault(x => x.IdProduct == pro.IdProduct && x.IdColor == pro.IdColor && x.IdSize == pro.IdSize && x.IdTypeProduct == pro.IdTypeProduct && x.IdMaterial == pro.IdMaterial);
+            if (item == null || item.Id == pro.Id)
+            {
+                var configuration = new MapperConfiguration(cfg =>
+                {
+                     cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
+                });
+                var productDetai = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == pro.Id);
+                IMapper mapper = configuration.CreateMapper();
+                mapper.Map(pro, productDetai);
 
-            return _reposCTSP.EditItem(productDetail);
+                return _reposCTSP.EditItem(productDetai);
+            }
+            return false;
+        }
+
+        [HttpGet("Update-soLuong")]
+        public void UpdateSoLuong(Guid Id, int soLuongCart)
+        {
+            var productUpdate = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == Id);
+            if(productUpdate != null)
+            {
+                productUpdate.SoLuongTon -= soLuongCart;
+                _reposCTSP.EditItem(productUpdate);
+            }
         }
 
         [HttpPut("Update-Image")]
-        public async Task<bool> UpdateImage(Guid idProduct,[FromForm] IFormFile? fileImage)
+        public async Task<bool> UpdateImage(Guid idProduct, [FromForm] IFormFile? fileImage)
         {
             Image image = new Image();
-            if(fileImage != null && _reposImage.GetAll().Any(x=>x.IdProductDetail == idProduct)!=null)
+            if (fileImage != null && _reposImage.GetAll().Any(x => x.IdProductDetail == idProduct) != null)
             {
-                    image = _reposImage.GetAll().Where(x => x.IdProductDetail == idProduct).FirstOrDefault();
-                    image.TenAnh = fileImage.FileName;
-                    string currentDirectory = Directory.GetCurrentDirectory();
-                    string rootPath = Directory.GetParent(currentDirectory).FullName;
-                    string destinationPath = Path.Combine(rootPath, "AppView", "wwwroot", "assets", "images", "others");
-                    string fileName = Path.GetFileName(fileImage.FileName);
-                    string destinationFilePath = Path.Combine(destinationPath, fileName);
-                    using (var stream = new FileStream(destinationFilePath, FileMode.Create))
-                    {
-                        await fileImage.CopyToAsync(stream);
-                    }
+                image = _reposImage.GetAll().Where(x => x.IdProductDetail == idProduct).FirstOrDefault();
+                image.TenAnh = fileImage.FileName;
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string rootPath = Directory.GetParent(currentDirectory).FullName;
+                string destinationPath = Path.Combine(rootPath, "AppView", "wwwroot", "assets", "images", "others");
+                string fileName = Path.GetFileName(fileImage.FileName);
+                string destinationFilePath = Path.Combine(destinationPath, fileName);
+                using (var stream = new FileStream(destinationFilePath, FileMode.Create))
+                {
+                    await fileImage.CopyToAsync(stream);
+                }
                 return _reposImage.EditItem(image);
             }
             return false;
         }
+
+
     }
 }
