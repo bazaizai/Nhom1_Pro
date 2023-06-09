@@ -1,0 +1,208 @@
+.sale {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.p {
+    font-size: 15px;
+    color: gray;
+    padding: 5px;
+}
+
+.h1 {
+    padding: 0;
+    font-size: 20px;
+}
+
+.btn-secondary {
+    background-color: white;
+    border: none;
+    color: gray;
+    padding: 8px;
+}
+
+    .btn-secondary:hover {
+        color: cyan;
+        background-color: white;
+        text-decoration: underline 2px;
+    }
+
+    .btn-secondary:active {
+        color: gray;
+        background-color: white;
+    }
+
+    .btn-secondary:disabled {
+        color: gray;
+        background-color: white;
+    }
+
+.card .col {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.card .na {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    padding: 0px;
+}
+
+    .card .na::marker {
+        color: black;
+    }
+
+.card .card-text {
+    font-size: 15px;
+    font-weight: bold;
+    color: #212529;
+}
+
+.container .text {
+    text-decoration: none;
+}
+
+.textasp {
+    text-decoration: none;
+    font-size: 20px;
+}
+
+
+.container .img-thumbnail {
+    border: none;
+    background-color: #f8f9fa;
+    height: 400px;
+    width: 300px;
+}
+
+.container .anh {
+    position: relative;
+}
+
+.container .saleoff {
+    display: flex;
+    position: absolute;
+    left: 10px;
+    top: -17px;
+    font-weight: bold;
+    padding-top: 10px;
+    width: 100px;
+}
+
+.container .new {
+    display: flex;
+    position: absolute;
+    left: 10px;
+    top: -17px;
+    font-weight: bold;
+    padding-top: 10px;
+    width: 100px;
+}
+
+.hot {
+    display: flex;
+    position: absolute;
+    left: 4px;
+    top: -20px;
+    font-weight: bold;
+    padding-top: 10px;
+    width: 100px;
+}
+
+.container .saleoff1 {
+    display: flex;
+    position: absolute;
+    left: 4px;
+    top: -17px;
+    font-weight: bold;
+    padding-top: 10px;
+    width: 100px;
+}
+
+.container .new1 {
+    display: flex;
+    position: absolute;
+    left: 4px;
+    top: -17px;
+    font-weight: bold;
+    padding-top: 10px;
+    width: 100px;
+}
+
+.hot1 {
+    display: flex;
+    position: absolute;
+    left: 4px;
+    top: -17px;
+    font-weight: bold;
+    padding-top: 10px;
+    width: 100px;
+}
+
+.hot2 {
+    display: flex;
+    position: absolute;
+    top: -32px;
+    left: 75px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.label {
+    color: white;
+    top: 0;
+    margin-top: 15px;
+    margin-left: -60px;
+    font-size: 15px;
+}
+
+.nav-link:hover {
+    color: cyan;
+    text-decoration: underline 2px;
+}
+
+.nav-link {
+    color: gray;
+}
+
+.text:hover {
+    color: purple;
+    text-decoration: underline 2px;
+}
+
+.col-3 {
+    padding-top: 50px;
+}
+
+.thumbnail_images ul {
+    list-style: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin-top: 10px
+}
+
+    .thumbnail_images ul li {
+        margin: 5px;
+        padding: 10px;
+        border: 2px solid #eee;
+        cursor: pointer;
+        transition: all 0.5s
+    }
+
+        .thumbnail_images ul li:hover {
+            border: 2px solid #000
+        }
+
+a {
+    color: #007784;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #8224E3;
+        text-decoration: underline;
+    }

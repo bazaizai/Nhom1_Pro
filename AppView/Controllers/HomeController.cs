@@ -111,8 +111,8 @@ namespace AppView.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
-            return View();
+            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
+            return View(listSanPham);
         }
 
         public async Task<IActionResult> Login(string username, string password)
@@ -121,13 +121,13 @@ namespace AppView.Controllers
             {
                 var data = (await userServices.GetAllUser()).FirstOrDefault(s => s.TaiKhoan.Equals(username) && s.MatKhau.Equals(password));
                 //add Session
-                if(data !=null)
+                if (data != null)
                 {
                     HttpContext.Session.SetString("acc", data.TaiKhoan);
                     var acc = HttpContext.Session.GetString("acc");
                     TempData["MessageForLogin"] = "Xin chào " + acc + " đã đến với 47 Brand";
                     return RedirectToAction("Index");
-                }    
+                }
                 else
                 {
                     TempData["MessageForLogin"] = "Login failed";
@@ -160,7 +160,16 @@ namespace AppView.Controllers
                 return BadRequest();
             }
         }
-
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var product = await _productDetail.GetById(id);
+            return View(product);
+        }
+        public async Task<IActionResult> ChiTietSP(Guid id)
+        {
+            var product = await _productDetail.GetById(id);
+            return View(product);
+        }
 
         public IActionResult Privacy()
         {

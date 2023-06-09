@@ -1,5 +1,5 @@
-﻿@*@model Ass.ViewModel.ProductView
-@using Ass.Services;*@
+﻿@model AppData.Models.ProductDetailDTO
+
 @{
     ViewData["Title"] = "ChiTietSP";
     //var user = SessionServices.GetObjFromUser(Context.Session, "user");
@@ -11,12 +11,11 @@
       <div class="col-6">
         <div class="container text-center">
             <div class="row align-items-start">
-                @foreach (var item in Model.DuongDan)
-                    {
+                
                        <div class="col-6">
-                            <img alt="..." src="@Url.Content(item)" width="100%">
+                            <img alt="..." src="@Url.Content(Model.LinkImage)" width="100%">
                         </div>
-                    }    
+                       
             </div>
           </div>
           <div style="text-align: left;">
@@ -49,7 +48,7 @@
             <span style="font-weight: bold; font-size: 16px; margin-left: 10px;">Write a review</span>
           </div>
                @* @{
-                    if (user == null) {*@ <form method="post" asp-action="AddToCart" asp-controller="Home">
+                if (user == null) {*@ <form method="post" asp-action="AddToCart" asp-controller="Cart">
           <div style="text-align: left; margin-top: 50px;">
               <input  min="0" name="Quantity" max="@Model.SoLuongTon" value="1" type="number"
                             class="form-control form-control-sm" style="width: 70px;" />
@@ -62,7 +61,7 @@
                   @*  }
                     else
                     {*@
-                        <form method="post" asp-action="AddToCartUser" asp-controller="Home">
+                        <form method="post" asp-action="AddToCartUser" asp-controller="Cart">
           <div style="text-align: left; margin-top: 50px;">
               <input  min="0" name="Quantity" max="" value="1" type="number"
                             class="form-control form-control-sm" style="width: 70px;" />
