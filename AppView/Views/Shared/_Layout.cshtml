@@ -111,42 +111,41 @@
 
                                         <img src="~/image/login.png" class="img" alt="..." width="20px">                             
                                         <a class="nav-link" href="#" id="Feature"> <strong class="color">@acc.ToString()</strong></a>
-                                    </li>                                
+                                    </li>
+                                    <li class="nav-item">
+                                        <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
+
+                                        <a class="nav-link" href="#Cart" id="Cart">
+                                            @*{
+                                        aria-controls="offcanvasRight">
+                                        @*{
+
+                                        if (login == null)
+                                        {*@
+                                            <strong class="color">
+                                                BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
+                                                    @{
+                                                        //var carts = SessionServices.GetObjFromCart(Context.Session, "ListCartSession");
+                                                    }
+                                                </span>
+                                            </strong>
+                                            @*}
+                                        else
+                                        {
+                                        <strong class="color">
+                                        BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
+                                        @cartDetailServices.GetCartDetailById(login.Id).Count()
+                                        </span>
+                                        </strong>
+                                        }*@
+                                        </a>
+                                    </li>
                                 }
                                 <li class="nav-item">
                                             <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
                                     <a class="nav-link" href="#" id="#"> <strong class="color">TEAMS</strong></a>
                                 </li>
-                                <li class="nav-item">
-                                    <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
-                                    <a class="nav-link" href="#Cart" id="Cart"
-
-                                      >
-                                      @*{
-
-                                       aria-controls="offcanvasRight">
-                                        @*{
-
-                                            if (login == null)
-                                            {*@
-                                        <strong class="color">
-                                            BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
-                                                @{
-                                                    //var carts = SessionServices.GetObjFromCart(Context.Session, "ListCartSession");
-                                                }
-                                            </span>
-                                        </strong>
-                                        @*}
-                                            else
-                                            {
-                                                <strong class="color">
-                                                    BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
-                                                        @cartDetailServices.GetCartDetailById(login.Id).Count()
-                                                    </span>
-                                                </strong>
-                                            }*@
-                                    </a>
-                                </li>
+                               
                             </ul>
                         </div>
 

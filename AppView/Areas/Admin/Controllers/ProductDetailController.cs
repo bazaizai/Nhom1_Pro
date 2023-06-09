@@ -96,6 +96,11 @@ namespace AppView.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePro([FromBody] ProductDetailViewModel obj)
         {
+            if(!ModelState.IsValid)
+            {
+                var errors = new List<string> { "Số lượng không được để trống.", "Giá nhập không được để trống.", "Giá bán không được để trống." };
+                return Json(new { success = false, error = errors });
+            }
             try
             {
                 HttpResponseMessage response = await _productDetailService.AddItem(obj);
@@ -129,6 +134,19 @@ namespace AppView.Areas.Admin.Controllers
                 ViewBag.Material = data.materials;
                 ViewBag.TypeProduct = data.typeProducts;
                 return View(await _productDetailService.GetProductUpdate(id));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateItem([FromBody] ProductDetailPutViewModel obj)
+        {
+            try
+            {
+                return await _productDetailService.UpdateItem(obj) ? Ok() : NotFound();
             }
             catch (Exception)
             {
