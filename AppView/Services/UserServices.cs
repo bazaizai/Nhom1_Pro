@@ -72,7 +72,7 @@ namespace AppView.Services
             var response = await httpClient.GetAsync(apiUrl);
             string apiData = await response.Content.ReadAsStringAsync();
             var users = JsonConvert.DeserializeObject<User>(apiData);
-            return users ;
+            return users;
         }
 
         public async Task<bool> GetByName(string name)

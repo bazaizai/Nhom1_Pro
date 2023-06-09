@@ -132,7 +132,6 @@ namespace AppView.Controllers
         {
             if (ModelState.IsValid)
             {
-                
                var data = (await userServices.GetByLogin(username,password));
                 //add Session
                 if (data !=null)

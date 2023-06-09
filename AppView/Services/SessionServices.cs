@@ -9,7 +9,7 @@ namespace AppView.Services
         {
             //Lấy string Json từ Session
             var jsonData = session.GetString(key);
-            if (jsonData == null) return new User();
+            if (jsonData == null) return null;
             //Chuyển đổi dữ liệu vừa lấy được sang dạng mong muốn.
             var obj = JsonConvert.DeserializeObject<User>(jsonData);// nếu null trả về một list rỗng
             return obj;

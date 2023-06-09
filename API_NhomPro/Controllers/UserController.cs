@@ -112,9 +112,9 @@ namespace AppAPI.Controllers
             return repos.RemoveItem(user);
         }
         [HttpGet("GetUserByName")]
-        public IEnumerable<User> GetUserByLogin(string taikhoan, string matkhau)
+        public User GetUserByLogin(string taikhoan, string matkhau)
         {
-            return repos.GetAll().Where(c => c.TaiKhoan == taikhoan && c.MatKhau == matkhau);
+            return repos.GetAll().FirstOrDefault(c => c.TaiKhoan == taikhoan && c.MatKhau == matkhau);
         }
     }
 }
