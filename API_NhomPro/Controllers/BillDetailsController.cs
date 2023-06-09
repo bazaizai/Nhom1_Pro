@@ -1,4 +1,5 @@
 ﻿using AppData.IRepositories;
+using AppData.Models;
 using AppData.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,21 +16,50 @@ namespace AppAPI.Controllers
         private readonly IAllRepo<BillDetail> BillRepo;
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<BillDetail> BillDetails;
-        private readonly IAllRepo<ProductDetail> ProductRepo;
+        private readonly IAllRepo<ProductDetail> ProductDetailRepo;
         DbSet<ProductDetail> ProductDetails;
+        private readonly IAllRepo<Product> ProductRepo;
+        DbSet<Product> Products;
 
         public BillDetailsController()
         {
             BillDetails = dbContextModel.BillDetails;
             ProductDetails = dbContextModel.ProductDetails;
             BillRepo = new AllRepo<BillDetail>(dbContextModel, BillDetails); ;
-            ProductRepo = new AllRepo<ProductDetail>(dbContextModel, ProductDetails);
+            ProductDetailRepo = new AllRepo<ProductDetail>(dbContextModel, ProductDetails);
+            Products = dbContextModel.Products;
+            ProductRepo = new AllRepo<Product>(dbContextModel, Products);
         }
         // GET: api/<BillDetailsController>
         [HttpGet]
         public IEnumerable<BillDetail> Get()
         {
             return BillRepo.GetAll().ToList();
+        } 
+        [HttpGet("iduser")]
+        public IEnumerable<BillDetailView> GetByUser(Guid id)
+        {
+            var lst = (from a in BillRepo.GetAll()
+                       join b in (from a1 in ProductDetailRepo.GetAll()
+                                  join b1 in ProductRepo.GetAll() on a1.IdProduct equals b1.Id
+                                  select new ProductDetailDTO()
+                                  {
+                                      Id = a1.Id,
+                                      Name = b1.Ten
+                                  }
+                                  ).ToList() on a.IdProductDetail equals b.Id
+                        select new BillDetailView()
+                        {
+                            Id = a.Id,
+                            DonGia = a.DonGia,
+                            IdProductDetail = a.IdProductDetail,
+                            IdBill = a.IdBill,
+                            Ten = b.Name,
+                            SoLuong = a.SoLuong,
+                            TrangThai = a.TrangThai
+                        }
+                       ).ToList();
+            return lst;
         }
 
         // GET api/<BillDetailsController>/5
@@ -44,7 +74,7 @@ namespace AppAPI.Controllers
         public string Post(Guid idBill, Guid idProduct, int sl, int trangthai)
         {
             var b = BillRepo.GetAll().FirstOrDefault(c => c.IdBill == idBill && c.IdProductDetail == idProduct); 
-            var c = ProductRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
+            var c = ProductDetailRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
             if (b != null)
             {
                 b.SoLuong = b.SoLuong + sl;
@@ -66,7 +96,7 @@ namespace AppAPI.Controllers
         [HttpPut("{id}")]
         public bool Put(Guid id, Guid idBill, Guid idProduct, int sl, int trangthai)
         {
-            var c = ProductRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
+            var c = ProductDetailRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
             var a = new BillDetail() { Id = id, IdBill = idBill, IdProductDetail = idProduct, DonGia = (decimal)c.GiaBan, SoLuong = sl, TrangThai = trangthai };
             return BillRepo.EditItem(a);
         }

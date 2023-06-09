@@ -98,7 +98,6 @@ namespace AppAPI.Controllers
             bill.TienShip = tienShip;
             bill.MoTa = moTa;
             bill.TrangThai = trangThai;
-
             return allRepo.EditItem(bill);
         }
     }
