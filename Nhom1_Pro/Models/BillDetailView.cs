@@ -12,6 +12,7 @@ namespace AppData.Models
         public Guid Id { get; set; }
         public Guid? IdBill { get; set; }
         public Guid? IdProductDetail { get; set; }
+        public string Ma { get; set; }
         public string? Ten { get; set; }
         public int? SoLuong { get; set; }
         public decimal? DonGia { get; set; }

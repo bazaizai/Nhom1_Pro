@@ -42,17 +42,16 @@
                     @Html.DisplayNameFor(model => model.TienShip)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.MoTa)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.TrangThai)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
+
             @foreach (var item in Model)
             {
+                  
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Ma)
@@ -78,17 +77,22 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Sdt)
                     </td>
+
                     <td>
-                        @Html.DisplayFor(modelItem => item.TongTien)
+                        @{
+                            var culture = new System.Globalization.CultureInfo("vi-VN"); // Tạo đối tượng CultureInfo cho tiền tệ Việt Nam
+                            var TienShip = string.Format(culture, "{0:N0} đ", item.TienShip); // Định dạng giá trị tiền tệ và thêm đơn vị VND
+                            var TongTien = string.Format(culture, "{0:N0} đ", item.TongTien); // Định dạng giá trị tiền tệ và thêm đơn vị VND
+                            var SoTienGiam = string.Format(culture, "{0:N0} đ", item.SoTienGiam); // Định dạng giá trị tiền tệ và thêm đơn vị VND
+                        }
+                        @Html.DisplayFor(modelItem => SoTienGiam)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SoTienGiam)
+                     
+                        @Html.DisplayFor(modelItem => TienShip)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TienShip)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MoTa)
+                        @Html.DisplayFor(modelItem => TongTien)
                     </td>
                     <td>
                         @(item.TrangThai == 0 ? "Đã hoàn thành" : "Chưa hoàn thành")

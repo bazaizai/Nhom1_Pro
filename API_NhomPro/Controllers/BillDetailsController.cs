@@ -36,8 +36,8 @@ namespace AppAPI.Controllers
         {
             return BillRepo.GetAll().ToList();
         } 
-        [HttpGet("iduser")]
-        public IEnumerable<BillDetailView> GetByUser(Guid id)
+        [HttpGet("idBill")]
+        public IEnumerable<BillDetailView> GetByBill(Guid id)
         {
             var lst = (from a in BillRepo.GetAll()
                        join b in (from a1 in ProductDetailRepo.GetAll()
@@ -59,7 +59,7 @@ namespace AppAPI.Controllers
                             TrangThai = a.TrangThai
                         }
                        ).ToList();
-            return lst;
+            return lst.Where(c=>c.IdBill==id);
         }
 
         // GET api/<BillDetailsController>/5
