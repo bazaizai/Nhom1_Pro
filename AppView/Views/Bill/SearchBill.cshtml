@@ -3,22 +3,10 @@
     var culture = new System.Globalization.CultureInfo("vi-VN");
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Management App | theuicode.com</title>
-    <link rel="stylesheet" href="~/css/bill.css" asp-append-version="true">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous" asp-append-version="true">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" asp-append-version="true" />
 
-</head>
 
-<body>
+<body id="result-container">
     
- 
-
         <div class="mx-5 px-5">
             <table class="table table-borderless row-gap">
                 <tbody>
@@ -43,8 +31,8 @@
                         else
                         if (a[0] == "11") b = "November";
                         else b = "December";
-                   
-                    <tr class="invoice-row" valign="middle">
+
+                    <tr class="invoice-row" valign="middle" data-id="@x.Id">
                             @if (x.TrangThai == 1)
                             {
                                 <td>
@@ -99,6 +87,28 @@
     </div>
     
 </body>
+<script>
+    $(document).ready(function () {
+        $('tr').on('click', function () {
+            var id = $(this).data('id');
+            sendData(id);
+        });
 
-</html>
+        function sendData(id) {
+            $.ajax({
+                url: '/BillDetailView/Details',
+                type: 'GET',
+                data: { id: id },
+                success: function (response) {
+                    // Xử lý kết quả từ action (nếu cần)
+                    $('#result-container').html(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ', ' + errorThrown);
+                }
+            });
+        }
+    });
+</script>
+
 

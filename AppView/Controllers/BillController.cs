@@ -5,6 +5,7 @@ using AppView.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
+using System.Linq;
 
 namespace AppView.Controllers
 {
@@ -29,6 +30,7 @@ namespace AppView.Controllers
         public async Task<IActionResult> GetAllBill()
         {
             var a = await billService.GetAllBillsAsync();
+            ViewBag.Bills = a;
             return View(a);
         }
       
@@ -66,6 +68,17 @@ namespace AppView.Controllers
         {
             await billService.DeleteBillAsync(id);
             return RedirectToAction("GetAllBill");
+        }
+        public async Task<IActionResult> SearchBill(string ma)
+        {
+            if (ma != null && ma != "")
+            {
+                ViewBag.Bills = (await billService.GetAllBillsAsync()).Where(x => x.Ma.Contains(ma)).ToList();
+                return PartialView("SearchBill");
+            }
+            else
+                ViewBag.Bills = await billService.GetAllBillsAsync();
+            return PartialView("SearchBill");
         }
         public async Task<IActionResult> ShowBillForUser()
         {
