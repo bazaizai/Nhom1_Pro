@@ -21,9 +21,10 @@ namespace AppView.Controllers
         }
 
         // GET: BillDetailViewController1/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View();
+            var a = (await billDetailServices.GetAllAsync()).Where(x => x.IdBill == id);
+            return View(a); 
         }
 
         // GET: BillDetailViewController1/Create

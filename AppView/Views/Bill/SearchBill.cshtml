@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Nhom1_Pro.Models.Bill>
+@{
+    var culture = new System.Globalization.CultureInfo("vi-VN");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Management App | theuicode.com</title>
+    <link rel="stylesheet" href="~/css/bill.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" asp-append-version="true" />
+
+</head>
+
+<body>
+    
+ 
+
+        <div class="mx-5 px-5">
+            <table class="table table-borderless row-gap">
+                <tbody>
+                        @foreach (var x in ViewBag.Bills)
+                    {
+                        string[] a = x.NgayTao.ToString().Split('/');
+                        string b;
+                        if (a[0] == "1") b = "January";
+                        else if (a[0] == "2") b = "February";
+                        else
+                        if (a[0] == "3") b = "March";
+                        else if (a[0] == "4") b = "April";
+                        else
+                        if (a[0] == "5") b = "May";
+                        else if (a[0] == "6") b = "June";
+                        else
+                        if (a[0] == "7") b = "July";
+                        else if (a[0] == "8") b = "August";
+                        else
+                        if (a[0] == "9") b = "September";
+                        else if (a[0] == "10") b = "October";
+                        else
+                        if (a[0] == "11") b = "November";
+                        else b = "December";
+                   
+                    <tr class="invoice-row" valign="middle">
+                            @if (x.TrangThai == 1)
+                            {
+                                <td>
+                                    <div class="ml-3 status unpaid-bg"></div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div class="ml-3 status paid-bg"></div>
+                                </td>
+                            }
+                            <td>
+                                <div class="d-flex flex-column align-items-center">
+                                    <span class="month">@b</span>
+                                    <span class="date">@a[1]</span>
+                                </div>
+                            </td>
+                            <td>@x.Id</td>
+                            <td>@x.TenNguoiNhan</td>
+                            <td>@x.Sdt</td>
+                            @if (x.TrangThai == 1)
+                            {
+                                <td>
+                                    <div class="unpaid">UNPAID</div>
+                                </td>
+                                <td>
+                                    <div class="unpaid text-right mr-5">@string.Format("{0:N0}đ",x.TongTien.ToString().Replace(".00","")) </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div class="paid">PAID</div>
+                                </td>
+                                <td>
+                                    <div class="paid text-right mr-5">@string.Format("{0:N0}đ",x.TongTien.ToString().Replace(".00","")) </div>
+                                </td>
+                            }
+                        <td>
+                            <a asp-action="Details" asp-controller="BillDetailView" asp-route-id="@x.Id">Detail</a>
+                        </td>
+                            <td>
+                                <i class="fas fa-ellipsis-h">
+                            </td>
+                        </tr>
+                    
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+
+</html>
+

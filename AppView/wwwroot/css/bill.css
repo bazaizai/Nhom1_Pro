@@ -183,3 +183,11 @@ div.add-invoice {
         text-transform: uppercase;
         letter-spacing: 2px;
     }
+a {
+    color: #f5f9fb;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+}
