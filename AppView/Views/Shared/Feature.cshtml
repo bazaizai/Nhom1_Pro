@@ -1,17 +1,19 @@
 ﻿@{
-
+    @using AppView.IServices;
+    @using AppView.Services;
     @using Microsoft.AspNetCore.Http
     //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
     //    IRoleServices roleServices = new RoleServices();
     //    ICartDetailServices cartDetailServices = new CartsDetailservices();
-    var acc = Context.Session.GetString("acc");
-    var role = Context.Session.GetString("role");
+    var acc = SessionServices.GetObjFromSession(Context.Session, "acc");
+    IUserServices userServices = new UserServices();
+    IRoleServices roleServices = new RoleServices();
     // tính tổng số lượng sản phẩm trong giỏ hàng
 }
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="feature" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-        @if(acc!=null)
+        @if (acc != null)
         {
             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Xin chào @acc.ToString()</h5>
         }
@@ -20,47 +22,7 @@
     <div class="offcanvas-body canvas-cus">
         @{
             var a = 0;
-            if(acc!=null && role.ToString()=="Admin")
-            {
-                a = 1;
-            }
-            if (a == 1)
-            {
-                <table class="table" style="height: 100px;font-size: 20px">
-                    <thead>
-                <tr scope="col  ">
-                    <td>
-                        <img src="~/image/QLUser.png" class="img" width="100px" />
-                    </td>
-                    <td class="align-middle text-start">
-                        <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý người dùng</strong></a>
-                    </td>
-                </tr>
-                <tr scope="col" >
-                    <td>
-                        <img src="~/image/folder_bills.png" class="img" width="100px" />
-                    </td>
-                    <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý  hóa  đơn</strong></a></td>
-                </tr>
-                <tr scope="col">
-                    <td>
-                        <img src="~/image/voucher.png" class="img" width="100px" />
-                    <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý voucher</strong></a></td>
-                </tr>
-                <tr scope="col ">
-                    <td>
-                        <img src="~/image/sale.png" class="img" width="100px" />
-                    <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý khuyến mãi</strong></a></td>
-                </tr>
-                <tr scope="col ">
-                    <td>
-                        <img src="~/image/exit.png" class="img" width="100px" />
-                    <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Logout" asp-controller="Home" style="padding-left:20px"> <strong class="color">Đăng xuất</strong></a></td>
-                </tr>
-            </thead>
-                </table>
-            }
-            if(a==0)
+            if (acc != null && a==0)
             {
                 <table class="table" style="height: 100px;font-size: 20px">
                     <thead>
@@ -96,7 +58,44 @@
                     </thead>
                 </table>
             }
-        
+            else if (acc != null && (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == acc.IdRole).Ten == "Admin")
+            {         
+                <table class="table" style="height: 100px;font-size: 20px">
+                    <thead>
+                        <tr scope="col  ">
+                            <td>
+                                <img src="~/image/QLUser.png" class="img" width="100px" />
+                            </td>
+                            <td class="align-middle text-start">
+                                <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý người dùng</strong></a>
+                            </td>
+                        </tr>
+                        <tr scope="col">
+                            <td>
+                                <img src="~/image/folder_bills.png" class="img" width="100px" />
+                            </td>
+                            <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý  hóa  đơn</strong></a></td>
+                        </tr>
+                        <tr scope="col">
+                            <td>
+                                <img src="~/image/voucher.png" class="img" width="100px" />
+                            <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý voucher</strong></a></td>
+                        </tr>
+                        <tr scope="col ">
+                            <td>
+                                <img src="~/image/sale.png" class="img" width="100px" />
+                            <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Index" asp-controller="QuanLy" style="padding-left:20px"> <strong class="color">Quản lý khuyến mãi</strong></a></td>
+                        </tr>
+                        <tr scope="col ">
+                            <td>
+                                <img src="~/image/exit.png" class="img" width="100px" />
+                            <td class="align-middle"> <a class="nav-link" asp-area="" asp-action="Logout" asp-controller="Home" style="padding-left:20px"> <strong class="color">Đăng xuất</strong></a></td>
+                        </tr>
+                    </thead>
+                </table>
+            }
+
+
         }
     </div>
 </div>

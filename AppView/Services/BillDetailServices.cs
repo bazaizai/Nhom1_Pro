@@ -1,4 +1,5 @@
-﻿using AppView.IServices;
+﻿using AppData.Models;
+using AppView.IServices;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
 
@@ -29,6 +30,16 @@ namespace AppView.Services
             var response = await client.GetAsync(apiUrl);
             var apidata = await response.Content.ReadAsStringAsync();
             List<BillDetail> lstBill = JsonConvert.DeserializeObject<List<BillDetail>>(apidata);
+            return lstBill;
+        }
+
+        public async Task<List<BillDetailView>> GetByBill(Guid id)
+        {
+            string apiUrl = $" https://localhost:7280/api/BillDetails/idBill?id={id}";
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(apiUrl);
+            var apidata = await response.Content.ReadAsStringAsync();
+            List<BillDetailView> lstBill = JsonConvert.DeserializeObject<List<BillDetailView>>(apidata);
             return lstBill;
         }
 

@@ -133,16 +133,11 @@ namespace AppView.Controllers
             if (ModelState.IsValid)
             {
                 
-                var data = (await userServices.GetAllUser()).FirstOrDefault(s => s.TaiKhoan.Equals(username) && s.MatKhau.Equals(password));
-                var NameRole = (await roleServices.GetAllRole()).FirstOrDefault(s => s.Id == data.IdRole).Ten;
-                var role = (await roleServices.GetAllRole()).FirstOrDefault(s => s.Id == data.IdRole).Id;
+               var data = (await userServices.GetByLogin(username,password));
                 //add Session
                 if (data !=null)
                 {
-                    HttpContext.Session.SetString("acc", data.TaiKhoan);
-                    HttpContext.Session.SetString("role", NameRole);
-                    HttpContext.Session.SetString("roleid", role.ToString());
-                    //var acc = HttpContext.Session.GetString("acc");
+                    SessionServices.SetObjToSession(HttpContext.Session, "acc", data);
                     TempData["MessageForLogin"] = "Login successful";
                     return RedirectToAction("Index");
                 }    

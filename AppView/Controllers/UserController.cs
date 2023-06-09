@@ -52,11 +52,10 @@ namespace AppView.Controllers
         // GET: UserController/Details/5
         public ActionResult Details(Guid id)
         {
-            var taikhoan = HttpContext.Session.GetString("acc");
-            var role = HttpContext.Session.GetString("roleid");
-            if(taikhoan!=null && role !=null)
+            var taikhoan = SessionServices.GetObjFromSession(HttpContext.Session,"acc");
+            if(taikhoan!=null)
             {
-                var user = repos.GetAll().FirstOrDefault(c => c.TaiKhoan == taikhoan && c.IdRole == Guid.Parse(role));
+                var user = repos.GetAll().FirstOrDefault(c => c.TaiKhoan == taikhoan.TaiKhoan && c.IdRole == taikhoan.IdRole);
                 return View(user);
             }
             return View();

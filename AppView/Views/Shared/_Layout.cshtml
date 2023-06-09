@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿@using AppView.IServices;
+@using AppView.Services;
+@using Microsoft.AspNetCore.Http
 @{
     Html.RenderPartial("Cart");
 }
@@ -9,6 +11,9 @@
     Html.RenderPartial("Feature");
 }
 @{
+    IUserServices userServices = new UserServices();
+    IRoleServices roleServices = new RoleServices();
+
     //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
     //    IRoleServices roleServices = new RoleServices();
     //    ICartDetailServices cartDetailServices = new CartsDetailservices();

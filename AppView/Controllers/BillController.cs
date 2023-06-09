@@ -1,4 +1,5 @@
 ﻿using AppData.IRepositories;
+using AppData.Models;
 using AppData.Repositories;
 using AppView.IServices;
 using AppView.Services;
@@ -69,14 +70,14 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> ShowBillForUser()
         {
-            var acc = HttpContext.Session.GetString("acc");
-            var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
+            var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc");
+            var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc.TaiKhoan).Id;
             List<Bill> billList = (await billService.GetAllBillsAsync()).Where(c=>c.IdUser==UserID).OrderByDescending(c => c.NgayTao).ToList();
             return View(billList);
         }
         public async Task<IActionResult> ShowBillDetails(Guid id)
         {
-            List<BillDetail> bills =(await billDetailServices.GetAllAsync()).Where(c => c.IdBill == id).ToList();
+            List<BillDetailView> bills =await billDetailServices.GetByBill(id);
             return View(bills);
         }
     }
