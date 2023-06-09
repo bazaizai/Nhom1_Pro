@@ -21,7 +21,8 @@
     </div>
     <div class="offcanvas-body canvas-cus">
         @{
-                if ((await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == acc.IdRole).Ten == "Admin")
+    
+                if (acc!=null && (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == acc.IdRole).Ten == "Admin")
                 {
                     <table class="table" style="height: 100px;font-size: 20px">
                         <thead>
