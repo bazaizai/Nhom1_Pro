@@ -51,7 +51,7 @@
                                 <span class="date">@a[1]</span>
                             </div>
                         </td>
-                        <td>@x.Id</td>
+                        <td>@x.Ma</td>
                         <td>@x.TenNguoiNhan</td>
                         <td>@x.Sdt</td>
                         @if (x.TrangThai == 1)
@@ -108,6 +108,16 @@
                 }
             });
         }
+    });
+    $(document).ready(function () {
+        $('tr').hover(
+            function () {
+                $(this).css('color', 'red');
+            },
+            function () {
+                $(this).css('color', 'black');
+            }
+        );
     });
 </script>
 
