@@ -137,12 +137,12 @@ namespace AppView.Controllers
                 if (data !=null)
                 {
                     SessionServices.SetObjToSession(HttpContext.Session, "acc", data);
-                    TempData["MessageForLogin"] = "Login successful";
+                    TempData["MessageForLogin"] = "Đăng nhập thành công";
                     return RedirectToAction("Index");
                 }    
                 else
                 {
-                    TempData["MessageForLogin"] = "Login failed";
+                    TempData["MessageForLogin"] = "Đăng nhập thất bại";
                     return RedirectToAction("Index");
                 }
             }
