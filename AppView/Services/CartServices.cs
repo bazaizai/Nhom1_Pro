@@ -28,7 +28,7 @@ namespace AppView.Services
         public async Task<bool> DeleteCart(Guid id)
         {
             var httpClient = new HttpClient();
-            string apiUrl = $"https://localhost:7280/api/Role/Delete-Cart?Userid={id}";
+            string apiUrl = $"https://localhost:7280/api/Cart/Delete-Cart?id={id}";
             var response = await httpClient.DeleteAsync(apiUrl);
             return true;
         }

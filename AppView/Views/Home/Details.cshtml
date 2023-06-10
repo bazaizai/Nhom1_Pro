@@ -1,11 +1,21 @@
 ﻿@model AppData.Models.ProductDetailDTO
-@using Newtonsoft.Json;
-@using Microsoft.AspNetCore.Http.Extensions
+@using AppView.Services;
 @{
     ViewData["Title"] = "Details";
-    //var acc = Context.Session.GetString("acc");
+    
+    var acc = SessionServices.GetObjFromSession(Context.Session, "acc");
 }
-
+@if (TempData["quantityCartUser"] != null)
+{
+    <script>
+        Swal.fire({
+            title: '@TempData["quantityCartUser"]',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    </script>
+}
 <div class="container text-center">
     <div class="row align-items-start">
         <div class="col-6">
@@ -100,8 +110,8 @@
                     </div>
                 </form>
                                         }*@
-                                       @* @if (acc != null)
-                                        {*@
+                                        @if (acc != null)
+                                        {
             <form method="post" asp-action="AddToCartUser" asp-controller="Cart">
                     <input type="hidden" name="ProductID" value="@Model.Id" />
                     <div class="d-flex flex-row" style="display:inline-flex">
@@ -125,7 +135,7 @@
                         <button class="btn btn-dark" style="background-color: rgb(3, 182, 242);">Thêm vào giỏ hàng</button>
                     </div>
                 </form>
-                                        @*}*@
+                                        }
             @*<p style="font-size: 15px; margin-top:10px">
                 Danh mục:<a style="text-decoration: none; color: rgb(3, 182, 242);">@Html.ActionLink(Model.Category.Name,"ShowProductByCategory",new{id=Model.CategoryID })</a>*@
                 <hr>

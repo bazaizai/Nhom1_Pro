@@ -14,16 +14,20 @@ namespace AppAPI.Controllers
     {
         private readonly IAllRepo<Cart> repos;
         private readonly IAllRepo<User> Userrepos;
+        private readonly IAllRepo<CartDetail> CartDetailrepos;
         DBContextModel dbContextModel = new DBContextModel();
         DbSet<Cart> Carts;
         DbSet<User> Users;
+        DbSet<CartDetail> CartDetail;
         public CartController()
         {
             Carts = dbContextModel.Carts;
             AllRepo<Cart> all = new AllRepo<Cart>(dbContextModel, Carts);
             AllRepo<User> all1 = new AllRepo<User>(dbContextModel, Users);
+            AllRepo<CartDetail> allCartdetail = new AllRepo<CartDetail>(dbContextModel, CartDetail);
             repos = all;
             Userrepos = all1;
+            CartDetailrepos = allCartdetail;
         }
         // GET: api/<CartController>
         [HttpGet]

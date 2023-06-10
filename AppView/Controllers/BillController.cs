@@ -84,7 +84,7 @@ namespace AppView.Controllers
         {
             decimal tien = Convert.ToDecimal(tongtien);
             decimal ship = Convert.ToDecimal(phiship);
-            var acc = HttpContext.Session.GetString("acc");
+            var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc").TaiKhoan;
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
             var IDvoucher = (await VoucherServices.GetAllAsync(voucher1));

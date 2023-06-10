@@ -19,7 +19,7 @@
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Tạm tính</th>
                                 <th scope="col">
-                                    <a asp-controller="Cart" asp-action="">Xoá tất cả</a>
+                                    <a asp-controller="Cart" asp-action="DeleteAll">Xoá tất cả</a>
                                 </th>
                             </tr>
                         </thead>
@@ -62,7 +62,7 @@
 </td>
                                     <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">
-                                            @Html.ActionLink("Delete", "", new { id = item.Id })
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                                         </p>
                                     </td>
                                 </tr>
@@ -198,7 +198,7 @@
                                     
                                     <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
                                         <p class="mb-2" style="font-size: 15px;">Tổng</p>
-                                        <input class="mb-2" style="font-size: 15px;border:none" name="tongtien" id="totalAmount" hidden><p id="totalAmount1"></p>
+                                        <input class="mb-2" style="font-size: 15px;border:none" name="tongtien" id="totalAmount" hidden><p id="totalAmount1"> </p>
                                     </div>
                                         <button type="submit" class="btn btn-primary btn-block btn-lg">
                                             <div class="d-flex justify-content-between">

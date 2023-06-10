@@ -172,7 +172,11 @@ namespace AppView.Controllers
                 return BadRequest();
             }
         }
-
+        public async Task<IActionResult> ChiTietSP(Guid id)
+        {
+            var product = await _productDetail.GetById(id);
+            return View(product);
+        }
         public IActionResult About()
         {
             return View();
