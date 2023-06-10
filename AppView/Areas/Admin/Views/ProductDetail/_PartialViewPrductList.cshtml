@@ -5,7 +5,7 @@
         <tr role="row">
             <th>
                 <div class="checkbox">
-                    <input id="checkAll" type="checkbox" onclick="test(this)">
+                    <input id="checkAll" type="checkbox">
                     <label for="checkAll" class="m-b-0"></label>
                 </div>
             </th>
@@ -101,12 +101,34 @@
             var isChecked = $(this).is(':checked');
             var checkboxes = $('tbody input[type="checkbox"]');
             checkboxes.prop('checked', isChecked);
-           
+
             var checkedValues = checkboxes.filter(':checked').map(function () {
                 return $(this).attr('data-id');
             }).get();
+            window.checkedValues = checkedValues;
 
-            console.log(checkedValues);
+            if (checkedValues.length > 0) {
+                window.parent.RemoveHidden();
+            } else {
+                window.parent.AddHidden();
+            }
+            
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $('tbody input[type="checkbox"]').click(function () {
+            var checkeds = $('tbody input[type="checkbox"]').filter(':checked').map(function () {
+                return $(this).attr('data-id');
+            }).get();
+            window.checkedValues = checkeds;
+            if (checkeds.length > 0) {
+                window.parent.RemoveHidden();
+            } else {
+                window.parent.AddHidden();
+            }
         });
     });
 </script>

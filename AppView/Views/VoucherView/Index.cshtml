@@ -1,95 +1,203 @@
 ﻿@model IEnumerable<Nhom1_Pro.Models.Voucher>
 
 @{
-    ViewData["Title"] = "IndexAsync";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>IndexAsync</h1>
+<div class="card">
+    <div class="card-body">
+        <h4 id="dsSanPham">DANH SÁCH VOUCHER</h4>
+        <a class="btn btn-primary" asp-controller="VoucherView" asp-action="Create" style="float : right; margin-left:20px">
+            <i class="anticon anticon-plus"></i>
+            <span>Tạo Voucher</span>
+        </a>
+        <div style="clear: both"></div>
+        <div class="m-t-25">
+            <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="col-sm-12">
+                    <div class="row">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ma)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LoaiHinhKm)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MucUuDai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhamVi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DieuKien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoLuongTon)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoLanSuDung)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayBatDau)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayKetThuc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TrangThai)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoaiHinhKm)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MucUuDai)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhamVi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DieuKien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoLuongTon)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoLanSuDung)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayBatDau)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayKetThuc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TrangThai)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id})
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    </div>
+                    <div id="productList">
+                        <table class="table table-hover e-commerce-table dataTable no-footer">
+                            <thead>
+                                <tr role="row">
+                                    <th>
+                                        <div class="checkbox">
+                                            <input id="checkAll" type="checkbox">
+                                            <label for="checkAll" class="m-b-0"></label>
+                                        </div>
+                                    </th>
+                                    <th class="sorting">STT</th>
+                                    <th class="sorting">Mã</th>
+                                    <th class="sorting">Mức ưu đãi</th>
+                                    <th class="sorting">Phạm vi</th>
+                                    <th class="sorting">Điều kiện</th>
+                                    <th class="sorting">Số lượng</th>
+                                    <th class="sorting">Số lần SD</th>
+                                    <th class="sorting">Ngày BĐ</th>
+                                    <th class="sorting">Ngày KT</th>
+                                    <th class="sorting">Trạng thái</th>
+                                    <th class="sorting"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int Stt = 1;
+                                }
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="sorting_1">
+                                                <div class="checkbox">
+                                                    <input id="check-item-@Stt" type="checkbox" data-id="@item.Id">
+                                                    <label for="check-item-@Stt" class="m-b-0"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Stt
+                                            </td>
+                                            <td>
+                                                <a asp-controller="VoucherView" asp-action="Detail" asp-route-id="@item.Id">
+                                                    @item.Ma
+                                                </a>
+                                            </td>
+                                            <td>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.MucUuDai).Replace(",00", "")</td>
+                                            <td>@item.PhamVi</td>
+                                            <td>@item.DieuKien</td>
+                                            <td>@item.SoLuongTon</td>
+                                            <td>@item.SoLanSuDung</td>
+                                            <td>@item.NgayBatDau</td>
+                                            <td>@item.NgayKetThuc</td>
+                                            @if (item.TrangThai == 1)
+                                            {
+
+
+                                                <td class="sorting_1">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="badge badge-success badge-dot m-r-10"></div>
+                                                        <div>Action</div>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="sorting_1">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="badge badge-danger badge-dot m-r-10"></div>
+                                                        <div>No Action</div>
+                                                    </div>
+                                                </td>
+                                            }
+
+                                            <td class="text-right">
+                                                <a class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" asp-area="" asp-controller="VoucherView" asp-action="Edit" asp-route-id="@item.Id">
+                                                    <i class="anticon anticon-edit"></i>
+                                                </a>
+                                                <a class="btn btn-icon btn-hover btn-sm btn-rounded" asp-area="" asp-controller="VoucherView" asp-action="Delete" asp-route-id="@item.Id">
+                                                    <i class="anticon anticon-delete"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        Stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<h1>IndexAsync</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ma)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LoaiHinhKm)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MucUuDai)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhamVi)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DieuKien)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SoLuongTon)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SoLanSuDung)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NgayBatDau)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NgayKetThuc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TrangThai)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ma)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoaiHinhKm)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MucUuDai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhamVi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DieuKien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoLuongTon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoLanSuDung)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayBatDau)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayKetThuc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrangThai)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id})
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

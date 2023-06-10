@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nhom1_Pro.Models;
+using System;
 using System.Xml.Linq;
 
 
@@ -60,6 +61,50 @@ namespace AppAPI.Controllers
             return productDetailDTOs;
         }
 
+        [HttpDelete("ThaoTac-SanPham")]
+        public void XoaListSanPham(List<Guid> listGuid)
+        {
+            listGuid.ForEach(item =>
+            {
+                var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                if (product != null)
+                {
+                    _reposImage.GetAll().Where(x => x.IdProductDetail == item).ToList().ForEach(item => _reposImage.RemoveItem(item));
+                    _reposCTSP.RemoveItem(product);
+                }
+            });
+        }
+
+        [HttpPut("CapNhatList-ListSP")]
+        public IEnumerable<ProductDetailDTO> CapNhatTrangThai([FromBody] List<Guid> listGuid, string action)
+        {
+            if (action == "xoaMem")
+            {
+                listGuid.ForEach(item =>
+                {
+                    var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                    if (product != null)
+                    {
+                        product.TrangThai = 0;
+                        _reposCTSP.EditItem(product);
+                    }
+                });
+            }
+            else
+            {
+                listGuid.ForEach(item =>
+                {
+                    var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                    if (product != null)
+                    {
+                        product.TrangThai = 1;
+                        _reposCTSP.EditItem(product);
+                    }
+                });
+            }
+            return GetAllProductDetail();
+        }
+
         [HttpPost("GetProductDetail")]
         public IActionResult GetProductDetail([FromBody] ProductDetailPutViewModel obj)
         {
@@ -81,6 +126,8 @@ namespace AppAPI.Controllers
 
             return Ok(new { success = productExists });
         }
+
+        //[HttpGet("Vô Hiệu hóa")]
 
         [HttpGet("list-BienThe")]
         public ActionResult GetAllBienThe()
@@ -176,7 +223,7 @@ namespace AppAPI.Controllers
             {
                 var configuration = new MapperConfiguration(cfg =>
                 {
-                     cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
+                    cfg.CreateMap<ProductDetailPutViewModel, ProductDetail>();
                 });
                 var productDetai = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == pro.Id);
                 IMapper mapper = configuration.CreateMapper();
@@ -191,7 +238,7 @@ namespace AppAPI.Controllers
         public void UpdateSoLuong(Guid Id, int soLuongCart)
         {
             var productUpdate = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == Id);
-            if(productUpdate != null)
+            if (productUpdate != null)
             {
                 productUpdate.SoLuongTon -= soLuongCart;
                 _reposCTSP.EditItem(productUpdate);
