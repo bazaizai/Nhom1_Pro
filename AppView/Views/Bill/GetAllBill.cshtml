@@ -1,130 +1,227 @@
 ﻿@model IEnumerable<Nhom1_Pro.Models.Bill>
-
 @{
-    ViewData["Title"] = "GetAllBill";
+    var culture = new System.Globalization.CultureInfo("vi-VN");
 }
 
-<h1>GetAllBill</h1>
-@*<form class="d-flex" role="search">
-    <div style="display:flex">
-        <button class="logo" style="border:none;background-color:white" type="submit">@*<img src="~/Image/timkiem.png" alt="" width="30" height="24">*@</button>
-       @* @Html.TextBox("sreach","",new{@class="form-control me-2",@type="sreach"})
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Management App | theuicode.com</title>
+    <link rel="stylesheet" href="~/css/bill.css" asp-append-version="true">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" asp-append-version="true" />
+    
+</head>
+
+<body id="result-container">
+    <div class="container-fluid p-0">
+        <input class="c-form__input" id="myInput" type="text" placeholder="Tìm kiếm mã hóa đơn"
+               aria-label="Termes à rechercher" aria-describedby="c-topsearch__description"
+               style="width: 100%;height: 44px;">
+        <form id="filter-form">
+            <label for="start-date">Từ ngày:</label>
+            <input type="date" id="start-date" name="startDate">
+
+            <label for="end-date">Đến ngày:</label>
+            <input type="date" id="end-date" name="endDate">
+
+            <button type="submit">Lọc</button>
+        </form>
+        <div class="d-flex flex-row pt-4 pb-3 px-4" style="background: white;">
+            <i class="fas fa-arrow-left"></i>
+            <div class="d-flex flex-row flex-grow-1 justify-content-between">
+                <div class="d-flex flex-column ml-5 pl-3">
+                    <span class="cust-invoice">Customer Invoice</span>
+                    <span class="heading mt-3">Landing Page Design</span>
+                    <span class="category px-1 mt-2">webdesign</span>
+                    <span class="company mt-2">Askon Tech Ltd</span>
+                </div>
+                <div class="d-flex flex-column align-self-center">
+                    <span class="mb-3 label">Progress</span>
+                    <div class="progress"></div>
+                </div>
+                <div class="d-flex flex-column align-self-center">
+                    <span class="mb-3 label">Members</span>
+                    <div class="d-flex flex-row">
+                        <div class="member mx-1 red">ZS</div>
+                        <div class="member mx-1 blue">XM</div>
+                        <div class="member mx-1 purple">HW</div>
+                        <div class="member mx-1 add">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <i class="fas fa-ellipsis-h"></i>
+        </div>
+
+        <div class="d-flex flex-row menu">
+            <span>Descriptions</span>
+            <span>Milestone</span>
+            <span class="active">Invoice</span>
+        </div>
+
+        <div id="search-result-container" class="mx-5 px-5">
+            <table class="table table-borderless row-gap">
+                <tbody>
+                    @foreach (var x in ViewBag.Bills)
+                    {
+                        string[] a = x.NgayTao.ToString().Split('/');
+                        string b;
+                        if (a[0] == "1") b = "January";
+                        else if (a[0] == "2") b = "February";
+                        else
+                        if (a[0] == "3") b = "March";
+                        else if (a[0] == "4") b = "April";
+                        else
+                        if (a[0] == "5") b = "May";
+                        else if (a[0] == "6") b = "June";
+                        else
+                        if (a[0] == "7") b = "July";
+                        else if (a[0] == "8") b = "August";
+                        else
+                        if (a[0] == "9") b = "September";
+                        else if (a[0] == "10") b = "October";
+                        else
+                        if (a[0] == "11") b = "November";
+                        else b = "December";
+                        <tr class="invoice-row" valign="middle" data-id="@x.Id">
+                            @if (x.TrangThai == 1)
+                            {
+                                <td>
+                                    <div class="ml-3 status unpaid-bg"></div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div class="ml-3 status paid-bg"></div>
+                                </td>
+                            }
+                        <td>
+                            <div class="d-flex flex-column align-items-center">
+                                    <span class="month">@b</span>
+                                    <span class="date">@a[1]</span>
+                            </div>
+                        </td>
+                        <td>@x.Id</td>
+                        <td>@x.TenNguoiNhan</td>
+                        <td>@x.Sdt</td>
+                            @if (x.TrangThai == 1)
+                            {
+                                <td>
+                                    <div class="unpaid">UNPAID</div>
+                                </td>
+                                <td>
+                                    <div class="unpaid text-right mr-5">@string.Format("{0:N0}đ",x.TongTien.ToString().Replace(".00","")) </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <div class="paid">PAID</div>
+                                </td>
+                                <td>
+                                    <div class="paid text-right mr-5">@string.Format("{0:N0}đ",x.TongTien.ToString().Replace(".00","")) </div>
+                                </td>
+                            }
+                            <td>
+                                <a asp-action="ShowBillDetails" asp-controller="Bill" asp-route-id="@x.Id" style="text-decoration:none">Detail</a>
+                            </td>
+                        <td>
+                            <i class="fas fa-ellipsis-h">
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex flex-row justify-content-end position-sticky pr-5 pb-5" style="right: 0; bottom:0;">
+            <div class="add-invoice d-flex flex-column align-items-center p-3">
+                <i class="fas fa-plus"></i>
+                <span class="invoice-label mt-3">Invoice</span>
+            </div>
+        </div>
     </div>
-</form>*@
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdVoucher)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ma)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayThanhToan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayShip)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayNhan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TenNguoiNhan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiaChi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sdt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TongTien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoTienGiam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TienShip)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MoTa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TrangThai)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdUser)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdVoucher)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayThanhToan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayShip)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayNhan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenNguoiNhan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiaChi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sdt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TongTien)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoTienGiam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TienShip)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MoTa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TrangThai)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id}) |
-                @Html.ActionLink("Details", "Details", new {id=item.Id  }) |
-                    @Html.ActionLink("Delete", "Delete", new {  id=item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#myInput').on('input', function () {
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
+            var searchText = $(this).val();
+            $.ajax({
+                url: '/Bill/SearchBill',
+                type: 'GET',
+                data: { 
+                    startDate: startDate,
+                    endDate: endDate,
+                    ma: searchText },
+                success: function (response) {
+                    $('#search-result-container').html(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ', ' + errorThrown);
+                }
+            });
+        });
+    });
+</script>
+<script>
+$(document).ready(function() {
+  $('tr').on('click', function() {
+    var id = $(this).data('id');
+    sendData(id);
+  });
+
+  function sendData(id) {
+    $.ajax({
+      url: '/BillDetailView/Details',
+      type: 'GET',
+      data: { id: id },
+      success: function(response) {
+        // Xử lý kết quả từ action (nếu cần)
+        $('#result-container').html(response);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + textStatus + ', ' + errorThrown);
+      }
+    });
+  }
+});
+</script>
+<script>
+$(document).ready(function() {
+  $('#filter-form').on('submit', function(e) {
+    e.preventDefault(); // Ngăn chặn sự kiện submit mặc định
+
+    var startDate = $('#start-date').val();
+    var endDate = $('#end-date').val();
+    var ma = $('#myInput').val();
+    sendData(startDate, endDate,ma);
+  });
+
+  function sendData(startDate, endDate, ma) {
+    $.ajax({
+      url: '/Bill/FilterBills',
+      type: 'GET',
+      data: {
+        startDate: startDate,
+        endDate: endDate,
+        ma : ma
+      },
+      success: function(response) {
+        $('#search-result-container').html(response);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + textStatus + ', ' + errorThrown);
+      }
+    });
+  }
+});
+</script>

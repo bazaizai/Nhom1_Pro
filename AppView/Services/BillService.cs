@@ -1,5 +1,6 @@
 ﻿using AppView.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
 using System.Runtime.InteropServices;
@@ -8,6 +9,7 @@ namespace AppView.Services
 {
     public class BillService : IBillService
     {
+        
         public async Task<bool> CreateBillAsync(Bill obj)
         {
             try
@@ -78,6 +80,24 @@ namespace AppView.Services
 
                 return false;
             }
+        }
+        public async Task<List<Bill>> GetBillsByDateRangeAsync(DateTime startDate, DateTime endDate, string ma)
+        {
+            
+            var bills = (await GetAllBillsAsync())
+                .Where(b => b.NgayTao >= startDate && b.NgayTao <= endDate && b.Ma.Contains(ma))
+                .ToList();
+
+            return bills;
+        }
+        public async Task<List<Bill>> GetBillsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+           
+            var bills = (await GetAllBillsAsync())
+                .Where(b => b.NgayTao >= startDate && b.NgayTao <= endDate)
+                .ToList();
+
+            return bills;
         }
     }
 }

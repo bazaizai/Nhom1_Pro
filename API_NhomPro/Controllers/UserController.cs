@@ -40,6 +40,7 @@ namespace AppAPI.Controllers
         {
             return repos.GetAll();
         }
+ 
         //[HttpGet("code")]
         //public ActionResult GetAllBienThe()
         //{
@@ -109,6 +110,11 @@ namespace AppAPI.Controllers
         {
             var user = repos.GetAll().First(p => p.Id == id);
             return repos.RemoveItem(user);
+        }
+        [HttpGet("GetUserByName")]
+        public User GetUserByLogin(string taikhoan, string matkhau)
+        {
+            return repos.GetAll().FirstOrDefault(c => c.TaiKhoan == taikhoan && c.MatKhau == matkhau);
         }
     }
 }

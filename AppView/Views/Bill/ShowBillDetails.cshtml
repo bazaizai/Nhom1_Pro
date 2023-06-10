@@ -1,0 +1,51 @@
+﻿@model IEnumerable<AppData.Models.BillDetailView>
+
+@{
+    ViewData["Title"] = "ShowBillDetails";
+}
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã hóa đơn
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    Số lượng đặt
+                </th>
+                <th>
+                    Giá
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                       Ảnh ở đây
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ten)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoLuong)
+                    </td>
+                    <td>
+                        @{
+                            var culture = new System.Globalization.CultureInfo("vi-VN"); // Tạo đối tượng CultureInfo cho tiền tệ Việt Nam
+                            var DonGia = string.Format(culture, "{0:N0} đ", item.DonGia); // Định dạng giá trị tiền tệ và thêm đơn vị VND
+                        }
+                        @Html.DisplayFor(modelItem => DonGia)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

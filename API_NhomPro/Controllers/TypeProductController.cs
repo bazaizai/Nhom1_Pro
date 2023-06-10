@@ -33,8 +33,17 @@ namespace AppAPI.Controllers
         }
 
         [HttpPost]
-        public bool CreateBill(string ten,string ma, int trangThai)
+        public bool CreateBill(string ten, int trangThai)
         {
+            string ma;
+            if (allRepo.GetAll().Count() == null)
+            {
+                ma = "TypeProduct1";
+            }
+            else
+            {
+                ma = "TypeProduct" + (allRepo.GetAll().Count() + 1);
+            }
             TypeProduct typeProduct = new TypeProduct()
             {
                 Id = Guid.NewGuid(),
