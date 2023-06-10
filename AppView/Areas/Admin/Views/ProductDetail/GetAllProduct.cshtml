@@ -17,13 +17,6 @@
             <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                 <div class="col-sm-12">
                     <div class="row">
-
-                        <div class="col-sm-12 col-md-3">
-                            <select class="custom-select" asp-items="ViewBag.Category">
-                                <option value="" disabled selected>Chose Category</option>
-                                <option>View All</option>
-                            </select>
-                        </div>
                         <div class="col-sm-12 col-md-3">
                             <select class="custom-select">
                                 <option onchange="" value="" disabled selected>Chose Status</option>
@@ -44,8 +37,8 @@
                             <select class="custom-select" onchange="ThaoTac(this.value)">
                                 <option value="" disabled selected>Thao tác</option>
                                 <option value="Delete">Xóa sản phẩm</option>
-                                <option value="Active">Active</option>
-                                <option value="No Active">No Active</option>
+                                <option value="xoaMem">Xóa mềm sản phẩm</option>
+                                <option value="khoiPhuc">Khôi phục hoạt động</option>
                             </select>
                         </div>
                     </div>
@@ -95,7 +88,6 @@
 <script>
     function ThaoTac(value) {
         if (value == "Delete") {
-
             var data = new FormData();
             data.append('guids', JSON.stringify(window.checkedValues));
             $.ajax({
@@ -106,6 +98,17 @@
                 processData: false,
                 success: function (result) {
                     $('#productList').html(result);
+
+                    AddHidden();
+                    // Tạo một mảng mới chứa các tùy chọn mới
+                    $('#thaoTacSP').html(`
+    <select class="custom-select" onchange="ThaoTac(this.value)">
+        <option value="" disabled selected>Thao tác</option>
+        <option value="Delete">Xóa sản phẩm</option>
+        <option value="xoaMem">Xóa mềm sản phẩm</option>
+        <option value="khoiPhuc">Khôi phục hoạt động</option>
+    </select>
+`);
                 },
                 error: function (xhr, status, error) {
                     console.log(xhr.responseText);
@@ -114,6 +117,46 @@
                     console.log(xhr);
                 }
             });
+
+        } else {
+
+            axios.put('https://localhost:7280/api/SanPhamCT/CapNhatList-ListSP?action=' + value, window.checkedValues)
+                .then(function (response) {
+
+                    $.ajax({
+                        url: '/Admin/ProductDetail/_PartialViewPrductList',
+                        type: 'POST',
+                        data: JSON.stringify(response.data),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            $('#productList').html(result);
+
+                            AddHidden();
+                            // Tạo một mảng mới chứa các tùy chọn mới
+                            $('#thaoTacSP').html(`
+    <select class="custom-select" onchange="ThaoTac(this.value)">
+        <option value="" disabled selected>Thao tác</option>
+        <option value="Delete">Xóa sản phẩm</option>
+        <option value="xoaMem">Xóa mềm sản phẩm</option>
+        <option value="khoiPhuc">Khôi phục hoạt động</option>
+    </select>
+`);
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(xhr.responseText);
+                            console.log(status);
+                            console.log(error);
+                            console.log(xhr);
+                        }
+                    });
+                })
+                .catch(function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                    console.log(status);
+                    console.log(error);
+                    console.log(xhr);
+                });
+
 
         }
     }

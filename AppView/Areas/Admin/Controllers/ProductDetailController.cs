@@ -127,15 +127,20 @@ namespace AppView.Areas.Admin.Controllers
         {
             try
             {
-                var listGuids = JsonConvert.DeserializeObject<List<Guid>>(guids);
-                await _productDetailService.RemoveRange(listGuids);
+                await _productDetailService.DeleteRange(guids);
                 return PartialView("_PartialViewPrductList", await _productDetailService.GetAll());
             }
             catch (HttpRequestException)
             {
                 return BadRequest();
             }
-            return Ok();
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> _PartialViewPrductList([FromBody] IEnumerable<ProductDetailDTO> model)
+        {
+            return  PartialView("_PartialViewPrductList", model);
         }
 
 

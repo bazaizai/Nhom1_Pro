@@ -21,6 +21,17 @@ namespace AppView.Services
             return await client.PostAsJsonAsync(apiUrl, obj);
         }
 
+        public async Task DeleteRange(string jsonListGuid)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:7280/api/SanPhamCT/ThaoTac-SanPham");
+            request.Content = new StringContent(
+                jsonListGuid,
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
+            await client.SendAsync(request);
+        }
+
         public async Task<IEnumerable<ProductDetailDTO>> GetAll()
         {
             HttpResponseMessage response = await client.GetAsync("https://localhost:7280/api/SanPhamCT/list-SanPhamCT");
@@ -72,23 +83,18 @@ namespace AppView.Services
             }
             return false;
         }
-        
-        public async Task RemoveRange(List<Guid> guids)
-        {
-            await client.PostAsJsonAsync($"https://localhost:7280/api/SanPhamCT/Xoa-List-SanPham", guids);
-        }
 
         public async Task<bool> UpdateItem(ProductDetailPutViewModel item)
         {
             var url = "https://localhost:7280/api/SanPhamCT/Update-ProductDetail";
-            HttpResponseMessage response = await client.PutAsJsonAsync(url,item);
+            HttpResponseMessage response = await client.PutAsJsonAsync(url, item);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<bool>();
         }
 
         public async Task UpdateSoLuong(Guid id, int soLuongCart)
         {
-             await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Update-soLuong?Id={id}&soLuongCart={soLuongCart}");
+            await client.GetAsync($"https://localhost:7280/api/SanPhamCT/Update-soLuong?Id={id}&soLuongCart={soLuongCart}");
         }
 
     }

@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nhom1_Pro.Models;
+using System;
 using System.Xml.Linq;
 
 
@@ -60,7 +61,7 @@ namespace AppAPI.Controllers
             return productDetailDTOs;
         }
 
-        [HttpPost("Xoa-List-SanPham")]
+        [HttpDelete("ThaoTac-SanPham")]
         public void XoaListSanPham(List<Guid> listGuid)
         {
             listGuid.ForEach(item =>
@@ -72,6 +73,36 @@ namespace AppAPI.Controllers
                     _reposCTSP.RemoveItem(product);
                 }
             });
+        }
+
+        [HttpPut("CapNhatList-ListSP")]
+        public IEnumerable<ProductDetailDTO> CapNhatTrangThai([FromBody] List<Guid> listGuid, string action)
+        {
+            if (action == "xoaMem")
+            {
+                listGuid.ForEach(item =>
+                {
+                    var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                    if (product != null)
+                    {
+                        product.TrangThai = 0;
+                        _reposCTSP.EditItem(product);
+                    }
+                });
+            }
+            else
+            {
+                listGuid.ForEach(item =>
+                {
+                    var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                    if (product != null)
+                    {
+                        product.TrangThai = 1;
+                        _reposCTSP.EditItem(product);
+                    }
+                });
+            }
+            return GetAllProductDetail();
         }
 
         [HttpPost("GetProductDetail")]
