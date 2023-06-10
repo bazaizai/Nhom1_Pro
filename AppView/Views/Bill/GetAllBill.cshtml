@@ -10,13 +10,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Management App | theuicode.com</title>
     <link rel="stylesheet" href="~/css/bill.css" asp-append-version="true">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous" asp-append-version="true">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" asp-append-version="true" />
     
 </head>
 
-<body>
+<body id="result-container">
     <div class="container-fluid p-0">
+        <input class="c-form__input" id="myInput" type="text" placeholder="Tìm kiếm mã hóa đơn"
+               aria-label="Termes à rechercher" aria-describedby="c-topsearch__description"
+               style="width: 100%;height: 44px;">
+        <form id="filter-form">
+            <label for="start-date">Từ ngày:</label>
+            <input type="date" id="start-date" name="startDate">
+
+            <label for="end-date">Đến ngày:</label>
+            <input type="date" id="end-date" name="endDate">
+
+            <button type="submit">Lọc</button>
+        </form>
         <div class="d-flex flex-row pt-4 pb-3 px-4" style="background: white;">
             <i class="fas fa-arrow-left"></i>
             <div class="d-flex flex-row flex-grow-1 justify-content-between">
@@ -51,10 +64,10 @@
             <span class="active">Invoice</span>
         </div>
 
-        <div class="mx-5 px-5">
+        <div id="search-result-container" class="mx-5 px-5">
             <table class="table table-borderless row-gap">
                 <tbody>
-                    @foreach (var x in Model)
+                    @foreach (var x in ViewBag.Bills)
                     {
                         string[] a = x.NgayTao.ToString().Split('/');
                         string b;
@@ -75,7 +88,7 @@
                         else
                         if (a[0] == "11") b = "November";
                         else b = "December";
-                        <tr class="invoice-row" valign="middle">
+                        <tr class="invoice-row" valign="middle" data-id="@x.Id">
                             @if (x.TrangThai == 1)
                             {
                                 <td>
@@ -115,7 +128,9 @@
                                     <div class="paid text-right mr-5">@string.Format("{0:N0}đ",x.TongTien.ToString().Replace(".00","")) </div>
                                 </td>
                             }
-                            
+                            <td>
+                                <a asp-action="Details" asp-controller="BillDetailView" asp-route-id="@x.Id" style="text-decoration:none">Detail</a>
+                            </td>
                         <td>
                             <i class="fas fa-ellipsis-h">
                         </td>
@@ -134,4 +149,79 @@
     </div>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        $('#myInput').on('input', function () {
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
+            var searchText = $(this).val();
+            $.ajax({
+                url: '/Bill/SearchBill',
+                type: 'GET',
+                data: { 
+                    startDate: startDate,
+                    endDate: endDate,
+                    ma: searchText },
+                success: function (response) {
+                    $('#search-result-container').html(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('Error: ' + textStatus + ', ' + errorThrown);
+                }
+            });
+        });
+    });
+</script>
+<script>
+$(document).ready(function() {
+  $('tr').on('click', function() {
+    var id = $(this).data('id');
+    sendData(id);
+  });
 
+  function sendData(id) {
+    $.ajax({
+      url: '/BillDetailView/Details',
+      type: 'GET',
+      data: { id: id },
+      success: function(response) {
+        // Xử lý kết quả từ action (nếu cần)
+        $('#result-container').html(response);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + textStatus + ', ' + errorThrown);
+      }
+    });
+  }
+});
+</script>
+<script>
+$(document).ready(function() {
+  $('#filter-form').on('submit', function(e) {
+    e.preventDefault(); // Ngăn chặn sự kiện submit mặc định
+
+    var startDate = $('#start-date').val();
+    var endDate = $('#end-date').val();
+    var ma = $('#myInput').val();
+    sendData(startDate, endDate,ma);
+  });
+
+  function sendData(startDate, endDate, ma) {
+    $.ajax({
+      url: '/Bill/FilterBills',
+      type: 'GET',
+      data: {
+        startDate: startDate,
+        endDate: endDate,
+        ma : ma
+      },
+      success: function(response) {
+        $('#search-result-container').html(response);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + textStatus + ', ' + errorThrown);
+      }
+    });
+  }
+});
+</script>

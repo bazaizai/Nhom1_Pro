@@ -1,18 +1,21 @@
-﻿@using Microsoft.AspNetCore.Http
+﻿@using AppView.IServices;
+@using AppView.Services;
+
+@using Microsoft.AspNetCore.Http
 @{
     Html.RenderPartial("Cart");
-}
-@{
+    Html.RenderPartial("Feature");
     Html.RenderPartial("Login");
 }
+
 @{
-    Html.RenderPartial("Feature");
-}
-@{
+    IUserServices userServices = new UserServices();
+    IRoleServices roleServices = new RoleServices();
+
     //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
     //    IRoleServices roleServices = new RoleServices();
     //    ICartDetailServices cartDetailServices = new CartsDetailservices();
-    var acc = Context.Session.GetString("acc");
+    var acc = SessionServices.GetObjFromSession(Context.Session,"acc");
     // tính tổng số lượng sản phẩm trong giỏ hàng
 }
 <!DOCTYPE html>
@@ -100,27 +103,27 @@
                             </div>
 
                             <ul class="nav">
-                                @if (acc == null)
+                                @{if (acc == null)
                                 {
                                     <li class="nav-item">
-
                                         <img src="~/image/login.png" class="img" alt="..." width="20px">
                                         <a class="nav-link" href="#" id="Login"> <strong class="color">LOGIN</strong></a>
                                     </li>
                                 }
-                                @if(acc!=null)
+                               else
                                 {
+                                  
+                                        
                                     <li class="nav-item">
 
                                         <img src="~/image/login.png" class="img" alt="..." width="20px">                             
-                                        <a class="nav-link" href="#" id="Feature"> <strong class="color">@acc.ToString()</strong></a>
+                                        <a class="nav-link" href="#" id="Feature"> <strong class="color">@acc.Ten</strong></a>
                                     </li>
                                     <li class="nav-item">
                                         <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
 
                                         <a class="nav-link"  asp-action="ShowCart" asp-controller="Cart">
                                             @*{
-
                                         aria-controls="offcanvasRight">
                                         @*{
 
@@ -144,7 +147,7 @@
                                         }*@
                                         </a>
                                     </li>
-                                }
+                                }}
                                 <li class="nav-item">
                                             <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
                                     <a class="nav-link" href="#" id="#"> <strong class="color">TEAMS</strong></a>

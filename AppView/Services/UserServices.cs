@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Nhom1_Pro.Models;
 using System.Drawing;
 using System.Net;
+using System.Xml.Linq;
 
 namespace AppView.Services
 {
@@ -62,6 +63,16 @@ namespace AppView.Services
         public Task<bool> GetByID(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<User> GetByLogin(string taikhoan, string matkhau)
+        {
+            var httpClient = new HttpClient();
+            string apiUrl = $"https://localhost:7280/api/User/GetUserByName?taikhoan={taikhoan}&matkhau={matkhau}";
+            var response = await httpClient.GetAsync(apiUrl);
+            string apiData = await response.Content.ReadAsStringAsync();
+            var users = JsonConvert.DeserializeObject<User>(apiData);
+            return users;
         }
 
         public async Task<bool> GetByName(string name)

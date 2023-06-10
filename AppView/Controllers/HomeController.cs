@@ -31,6 +31,18 @@ namespace AppView.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
+            //Tu tao role admin neu khong co
+            Role RoleAdmin = (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == Guid.Parse("92917570-dd9d-445c-9373-40b4640c2ac0"));
+            if (RoleAdmin == null)
+            {
+                Role role = new Role()
+                {
+                    Id = Guid.Parse("92917570-dd9d-445c-9373-40b4640c2ac0"),
+                    Ten = "Admin",
+                    TrangThai = 0
+                };
+                roleServices.AddRoleGuest(role.Id, role.Ten, role.TrangThai);
+            }    
             var taikhoan = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == user.TaiKhoan);
             var Email = (await userServices.GetAllUser()).FirstOrDefault(c => c.Email == user.Email);
             var Sdt = (await userServices.GetAllUser()).FirstOrDefault(c => c.Sdt == user.Sdt);
@@ -58,6 +70,7 @@ namespace AppView.Controllers
             // If no duplicates were found, continue with creating the new user
             user.Id = Guid.NewGuid();
             user.TrangThai = 0;
+ 
             Role Role = (await roleServices.GetAllRole()).FirstOrDefault(c => c.Id == Guid.Parse("f79544bc-fdc7-47cf-9f92-41cc05fb381f"));
             if (Role == null)
             {
@@ -111,23 +124,22 @@ namespace AppView.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
-            return View(listSanPham);
+            //var listSanPham = (await _productDetail.GetAll()).GroupBy(item => new { item.Material, item.TypeProduct, item.Name }).Select(item => item.First()).ToList();
+            return View();
         }
 
         public async Task<IActionResult> Login(string username, string password)
         {
             if (ModelState.IsValid)
             {
-                var data = (await userServices.GetAllUser()).FirstOrDefault(s => s.TaiKhoan.Equals(username) && s.MatKhau.Equals(password));
+               var data = (await userServices.GetByLogin(username,password));
                 //add Session
-                if (data != null)
+                if (data !=null)
                 {
-                    HttpContext.Session.SetString("acc", data.TaiKhoan);
-                    var acc = HttpContext.Session.GetString("acc");
-                    TempData["MessageForLogin"] = "Xin chào " + acc + " đã đến với 47 Brand";
+                    SessionServices.SetObjToSession(HttpContext.Session, "acc", data);
+                    TempData["MessageForLogin"] = "Login successful";
                     return RedirectToAction("Index");
-                }
+                }    
                 else
                 {
                     TempData["MessageForLogin"] = "Login failed";
@@ -160,17 +172,11 @@ namespace AppView.Controllers
                 return BadRequest();
             }
         }
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var product = await _productDetail.GetById(id);
-            return View(product);
-        }
-        public async Task<IActionResult> ChiTietSP(Guid id)
-        {
-            var product = await _productDetail.GetById(id);
-            return View(product);
-        }
 
+        public IActionResult About()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
