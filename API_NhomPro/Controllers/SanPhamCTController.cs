@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nhom1_Pro.Models;
+using System;
 using System.Xml.Linq;
 
 
@@ -60,6 +61,50 @@ namespace AppAPI.Controllers
             return productDetailDTOs;
         }
 
+        [HttpDelete("ThaoTac-SanPham")]
+        public void XoaListSanPham(List<Guid> listGuid)
+        {
+            listGuid.ForEach(item =>
+            {
+                var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                if (product != null)
+                {
+                    _reposImage.GetAll().Where(x => x.IdProductDetail == item).ToList().ForEach(item => _reposImage.RemoveItem(item));
+                    _reposCTSP.RemoveItem(product);
+                }
+            });
+        }
+
+        [HttpPut("CapNhatList-ListSP")]
+        public IEnumerable<ProductDetailDTO> CapNhatTrangThai([FromBody] List<Guid> listGuid, string action)
+        {
+            if (action == "xoaMem")
+            {
+                listGuid.ForEach(item =>
+                {
+                    var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                    if (product != null)
+                    {
+                        product.TrangThai = 0;
+                        _reposCTSP.EditItem(product);
+                    }
+                });
+            }
+            else
+            {
+                listGuid.ForEach(item =>
+                {
+                    var product = _reposCTSP.GetAll().FirstOrDefault(x => x.Id == item);
+                    if (product != null)
+                    {
+                        product.TrangThai = 1;
+                        _reposCTSP.EditItem(product);
+                    }
+                });
+            }
+            return GetAllProductDetail();
+        }
+
         [HttpPost("GetProductDetail")]
         public IActionResult GetProductDetail([FromBody] ProductDetailPutViewModel obj)
         {
@@ -82,16 +127,18 @@ namespace AppAPI.Controllers
             return Ok(new { success = productExists });
         }
 
+        //[HttpGet("Vô Hiệu hóa")]
+
         [HttpGet("list-BienThe")]
         public ActionResult GetAllBienThe()
         {
             var selectList = new
             {
-                colors = new SelectList(_reposColor.GetAll().Where(cl => cl.TrangThai == 1).ToList(), "Id", "Ten"),
-                sizes = new SelectList(_reposSize.GetAll().Where(si => si.TrangThai == 1).ToList(), "Id", "Size1"),
-                sanphams = new SelectList(_reposSP.GetAll().Where(sp => sp.TrangThai == 1).ToList(), "Id", "Ten"),
-                materials = new SelectList(_reposMaterial.GetAll().Where(ma => ma.TrangThai == 1).ToList(), "Id", "Ten"),
-                typeProducts = new SelectList(_reposTypeProduct.GetAll().Where(ty => ty.TrangThai == 1).ToList(), "Id", "Ten")
+                colors = new SelectList(_reposColor.GetAll().Where(cl => cl.TrangThai == 0).ToList(), "Id", "Ten"),
+                sizes = new SelectList(_reposSize.GetAll().Where(si => si.TrangThai == 0).ToList(), "Id", "Size1"),
+                sanphams = new SelectList(_reposSP.GetAll().Where(sp => sp.TrangThai == 0).ToList(), "Id", "Ten"),
+                materials = new SelectList(_reposMaterial.GetAll().Where(ma => ma.TrangThai == 0).ToList(), "Id", "Ten"),
+                typeProducts = new SelectList(_reposTypeProduct.GetAll().Where(ty => ty.TrangThai == 0).ToList(), "Id", "Ten")
             };
             return new OkObjectResult(selectList);
         }

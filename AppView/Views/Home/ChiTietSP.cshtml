@@ -33,19 +33,19 @@
             <div class="container text-center">
                 <div class="row align-items-start">
 
-                    @* <div class="col-6">
-                    <img alt="..." src="@Url.Content(Model.LinkImage)" width="100%">
-                    </div>*@
+                     <div class="col">
+                        <img alt="..." src="~/assets/images/others/@Model.LinkImage" width="100%">
+                    </div>
 
                 </div>
             </div>
             <div style="text-align: left;">
-                <p>SKU: BCPTN-OVRHS29GWP-PP99 @*Ten*@</p>
+                <p>SKU: BCPTN-OVRHS29GWP-PP99 @Model.Name</p>
                 <p style="font-size: 25px;">The Overhand Script '47 MVP DV is a structured and curved adjustable with raised embroidery on the front, flat embroidery on the side, a plastic snap closure, and a braided nylon rope along the visor. Made from garment washed cotton twill.</p>
 
-                <p style="font-size: 25px;">• Team: </p>
-                <p style="font-size: 25px;">• Color: </p>
-                <p style="font-size: 25px;">•</p>
+                <p style="font-size: 25px;">• Material: @Model.Material</p>
+                <p style="font-size: 25px;">• Color: @Model.Color</p>
+                <p style="font-size: 25px;">• TypeProduct: @Model.TypeProduct</p>
                 <a href="" style="font-size: 20px; color: black; font-weight: bold;">View product detail</a>
             </div>
         </div>
@@ -62,7 +62,7 @@
             </nav>
             <div>
                 <h3 style="text-align: left; font-weight: bold; font-size: 40px;"></h3>
-                <p style="text-align: left; font-size: 20px; margin-top: 30px; margin-bottom: 30px;">$</p>
+                <p style="text-align: left; font-size: 20px; margin-top: 30px; margin-bottom: 30px;">@string.Format("{0:N0}đ", Model.GiaBan)</p>
                 <p style="text-align: left; font-size: 17px;">Pay in 4 interest-free installments for orders over <b>$50.00</b> with <img src="~/image/paypal.png" width="20px"> <a href="#" style="text-align: left; font-size: 18px;">Learn more</a></p>
                 <div style="text-align: left; margin-top: 30px;">
                     <span class="fa fa-star"></span>

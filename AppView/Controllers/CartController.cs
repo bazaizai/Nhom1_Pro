@@ -103,17 +103,17 @@ namespace AppView.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCartUser(CartViewModel model)
         {
+            var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc");
             var product = await productDetailService.GetById(model.IdProduct);
-            if (SessionServices.GetObjFromSession(HttpContext.Session, "acc") == null)
+            if (acc == null)
             {
 
                 TempData["dangnhap"] = "Bạn phải đăng nhập";
             }
             else
             {
-                var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc").TaiKhoan;
-                var IdCart = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
 
+                var IdCart = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc.TaiKhoan).Id;
                 var existing = (await cartDetailServices.GetAllAsync()).FirstOrDefault(x => x.IdProduct == product.Id && x.IdUser == IdCart);
                 if (existing != null)
                 {
@@ -160,15 +160,15 @@ namespace AppView.Controllers
             var apiUrl = $"https://localhost:7280/api/CartDetails/udpade?id={Idcart}&soluong={soLuong}";
             var httpClient = new HttpClient();
             var response = await httpClient.PutAsync(apiUrl, null);
-            var price = (await productDetailService.GetById(productId)).GiaBan * soLuong;
+            var price = Convert.ToDecimal((await productDetailService.GetById(productId)).GiaBan * soLuong);
             var formattedPrice = string.Format(CultureInfo.GetCultureInfo("vi-VN"), "{0:N0}đ", price);
             var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc").TaiKhoan;
             var idCart = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             var a = (await cartDetailServices.GetAllAsync()).Where(c => c.IdUser == idCart).ToList();
-            var sum = 0;
+            decimal? sum = 0;
             foreach (var item in a)
             {
-                sum += item.SoLuongCart * Convert.ToInt32(item.GiaBan);
+                sum += Convert.ToDecimal(item.SoLuongCart) * item.GiaBan;
             }
             return Json(new { price = formattedPrice, sum = sum });
         }

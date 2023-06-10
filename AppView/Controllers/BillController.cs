@@ -87,13 +87,13 @@ namespace AppView.Controllers
             var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc").TaiKhoan;
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
-            var IDvoucher = (await VoucherServices.GetAllAsync(voucher1));
+            var IDvoucher = await VoucherServices.GetAllAsync(voucher1);
 
             var bill = new Bill()
             {
                 Id = Guid.NewGuid(),
                 IdUser = UserID,
-                IdVoucher = IDvoucher == null ? Guid.Parse("B55CB83A-E559-4E86-BB36-2E0B37D81DB0") : IDvoucher.Id,
+                IdVoucher = IDvoucher.Id,
                 NgayTao = DateTime.Now,
                 NgayShip = DateTime.Now.AddDays(2),
                 NgayNhan = DateTime.Now.AddDays(4),

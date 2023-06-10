@@ -19,7 +19,7 @@
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Tạm tính</th>
                                 <th scope="col">
-                                    <a asp-controller="Cart" asp-action="DeleteAll">Xoá tất cả</a>
+                                    <a asp-controller="Cart" asp-action="DeleteAll" class="color">Xoá tất cả</a>
                                 </th>
                             </tr>
                         </thead>
@@ -30,11 +30,11 @@
                                 <tr data-row-id="{{@item.Id}}">
                                     <th scope="row">
                                         <div class="d-flex align-items-center">
-                                            <img src="/Image/@item.LinkImage" class="img-fluid rounded-3"
+                                            <img src="~/assets/images/others/@item.LinkImage" class="img-fluid rounded-3"
                                                  style="width: 120px;">
                                             <div class="flex-column ms-4">
                                                 <p class="mb-2">
-                                                    <a style="text-decoration: none; font-size: 15px;">@Html.ActionLink(item.Name + "-" + item.Color + "-" + item.Size, "", "Home", new { id = item.Id })</a>
+                                                    <a style="text-decoration: none; font-size: 15px;">@Html.ActionLink(item.Name + "-" + item.Color + "-" + item.Size, "ChiTietSP", "Home", new { id = item.IdProduct }, new { @class = "color" })</a>
                                                 </p>
 
                                             </div>
@@ -57,12 +57,12 @@
                                     </td>
                                     <td class="align-middle">
     <p class="mb-0" style="font-weight: 500; font-size: 15px;">
-        <span id="giaban_@item.IdProduct" name="tong">@string.Format("{0:N0}đ", item.GiaBan * item.SoLuongCart)</span>
+        <span id="giaban_@item.Id" name="tong">@string.Format("{0:N0}đ", item.GiaBan * item.SoLuongCart)</span>
     </p>
 </td>
                                     <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500; font-size: 15px;">
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "color" })
                                         </p>
                                     </td>
                                 </tr>
@@ -152,8 +152,8 @@
                                             </div>
                                             <select id="quanHuyen" class="select2" style="margin-right:30px;margin-top:-20px" required>
                                             </select>
-                                            <select id="dichvu" class="select2" style="margin-right:30px;margin-top:20px">
-                                            </select required>
+                                            <select id="dichvu" class="select2" style="margin-right:30px;margin-top:20px" required>
+                                            </select>
                                         </div>
                                         @*<div class="col-12 col-xl-6">
                                             <div class="d-flex" style="margin-top:20px">
@@ -190,7 +190,7 @@
                                     <div class="d-flex justify-content-between" style="font-weight: 500;" id="voucherDiv">
                                         <p class="mb-0" style="font-size: 15px;">Voucher</p>
                                         <p class="mb-0" style="font-size: 15px;" id="vouc">0đ</p>
-                                        <input name="voucher1" id="voucher1" hidden />
+                                        <input name="voucher1" id="voucher1" value="Vouc11" hidden/>
                                     </div>
 
                                     <hr class="my-4">
@@ -200,11 +200,10 @@
                                         <p class="mb-2" style="font-size: 15px;">Tổng</p>
                                         <input class="mb-2" style="font-size: 15px;border:none" name="tongtien" id="totalAmount" hidden><p id="totalAmount1"> </p>
                                     </div>
-                                        <button type="submit" class="btn btn-primary btn-block btn-lg">
-                                            <div class="d-flex justify-content-between">
-                                                <span>Thanh toán: </span>
-                                                <span id="paymentAmount"></span>
-                                            </div>
+                                    <button type="submit" class="btn btn-dark" onclick="kiemTraTuyChon()"style="width:100%;height:50px">
+                                        
+                                                Thanh toán
+                                            
                                         </button>
                                     
 
@@ -488,7 +487,7 @@
                             paymentAmountElement.innerText = tongtien.toLocaleString("vi-VN") + "đ";
 
                             var voucherValue = document.getElementById("voucherinput").value;
-                            document.getElementById("voucher1").value = null;
+                            document.getElementById("voucher1").value = "Vouc11";
                         }
                     },
                     error: function (xhr, status, error) {
@@ -522,7 +521,10 @@ $(document).ready(function() {
         var formattedSum = response.sum;
         var Sum = formattedSum + ship - uudai;
         SUM =Sum;
-        $('#giaban_' + productId).text(formattedPrice);
+        console.log(formattedPrice);
+        console.log(formattedSum);
+        console.log(Sum);
+        $('#giaban_' + Idcart).text(formattedPrice);
         $('#giahang').text(formattedSum.toLocaleString("vi-VN") + "đ");
         $('#totalAmount').text(Sum.toLocaleString("vi-VN") + "đ");
         $('#totalAmount1').text(Sum.toLocaleString("vi-VN") + "đ");
@@ -535,5 +537,17 @@ $(document).ready(function() {
     });
   });
 });
+</script>
+<script>
+  function kiemTraTuyChon() {
+    var selectElement = document.getElementById("tinh");
+    var huyenElement = document.getElementById("quanHuyen");
+    var dichvuElement = document.getElementById("dichvu");
+    var paymentAmount = document.getElementById("paymentAmount").textContent;
+    
+    if (selectElement.value === "" || huyenElement.value === ""||dichvuElement.value==="") {
+      alert("Vui lòng chọn địa chỉ");
+    }
+  }
 </script>
 }
