@@ -15,11 +15,17 @@ namespace AppAPI.Controllers
         private readonly IAllRepo<SaleDetail> repos;
         DBContextModel context = new DBContextModel();
         DbSet<SaleDetail> SaleDetail;
+
         public SaleDetailController()
         {
             SaleDetail = context.DetailSales;
             AllRepo<SaleDetail> all = new AllRepo<SaleDetail>(context, SaleDetail);
             repos = all;
+        }
+        [HttpGet("{id}")]
+        public IEnumerable<SaleDetail> Get(Guid id) 
+        {
+            return repos.GetAll().Where(p => p.Id == id);
         }
         [HttpGet]
         public IEnumerable<SaleDetail> Get()

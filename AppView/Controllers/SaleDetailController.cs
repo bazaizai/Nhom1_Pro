@@ -1,4 +1,5 @@
 ﻿using AppData.IRepositories;
+using AppData.Models;
 using AppData.Repositories;
 using AppView.IServices;
 using AppView.Services;
@@ -13,17 +14,14 @@ namespace AppView.Controllers
 {
     public class SaleDetailController : Controller
     {
-        private readonly IAllRepo<SaleDetail> repos;
-        private readonly IAllRepo<Product> repoproduct;
-        DBContextModel context = new DBContextModel();
-        DbSet<SaleDetail> saleDetail;
         ISaleDetailService SaleDetailService;
+        IProductDetailService productDetailService;
+        ISaleService SaleService;
         public SaleDetailController()
         {
-            saleDetail = context.DetailSales;
-            AllRepo<SaleDetail> all = new AllRepo<SaleDetail>(context, saleDetail);
-            repos = all;
             SaleDetailService = new SaleDetailService();
+            productDetailService = new ProductDetailService();
+            SaleService = new SaleService();
         }
 
         public async Task<IActionResult> GetAllSaleDetail()
@@ -31,50 +29,98 @@ namespace AppView.Controllers
             var SaleDetails = await SaleDetailService.GetAllDetaiSale();
             return View(SaleDetails);
         }
-        public IActionResult DetailSaleDetail(Guid id)
+        public async Task<IActionResult> DetailSaleDetail(Guid id)
         {
-            var sp = repos.GetAll().FirstOrDefault(x => x.Id == id);
+            var sp = (await SaleDetailService.GetAllDetaiSale()).FirstOrDefault(x => x.Id == id);
             return View(sp);
         }
 
 
-        public IActionResult CreateSaleDetail()
+        public async Task<IActionResult> CreateSaleDetail()
         {
-            //var listsp = context.ProductDetails.Include("Product").ToList();
-            //IEnumerable<SelectListItem> salesList = new SelectList(context.Sales, "Id", "Ten");
-            //ViewBag.SaleList = salesList;
-            //IEnumerable<SelectListItem> productDetailsList = listsp.Select(pd => new SelectListItem
-            //{
-            //    Value = pd.Id.ToString(),
-            //    Text = pd.Product.Ten // Truy cập thuộc tính navigation để lấy tên sản phẩm
-            //});
-
-            //ViewBag.ProductDetailsList = productDetailsList;
-
-            //return View();
-            ViewData["IdSale"] = new SelectList(context.Sales, "Id", "Ten");
-            // Tạo SelectList cho sale
-            SelectList salesList = new SelectList(context.Sales, "Id", "Ten");
+            var sp = (await SaleDetailService.getallSpSale()).Where(x => x.TrangThaiSale == 0 || x.TrangThaiSale == null);
+            ViewBag.ProductList = sp;
+            var filteredSales = (await SaleService.GetAllSale()).Where(s => s.TrangThai == 0).ToList();
+            ViewData["IdSale"] = new SelectList(filteredSales, "Id", "Ten");
+            SelectList salesList = new SelectList(filteredSales, "Id", "Ten");
             ViewBag.SaleList = salesList;
-            //ViewData["IdChiTietSp"] = new SelectList(context.ProductDetails, "Id", "Id");
-            //// Tạo SelectList cho CtSanPham
-            //SelectList productDetailsList = new SelectList(context.ProductDetails, "Id", "Id");
-            //ViewBag.ProductDetailsList = productDetailsList;
-
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSaleDetail(SaleDetail p)
+        public async Task<IActionResult> CreateSaleDetail(SaleDetail s, List<string> selectedProducts)
         {
-            if (await SaleDetailService.CreateDetaiSale(p))
+            List<SaleDetail> saleDetails = await SaleDetailService.GetAllDetaiSale();
+            List<Sale> lstsales = (await SaleService.GetAllSale());
+            s.TrangThai = 0;
+            var lstsp = await SaleDetailService.getallSpSale();
+            if (selectedProducts != null && selectedProducts.Count > 0)
             {
-                return RedirectToAction("GetAllSaleDetail");
+                foreach (var productid in selectedProducts)
+                {
+                    if (saleDetails.Find(a => a.IdSale == s.IdSale && a.IdChiTietSp == Guid.Parse(productid)) != null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (saleDetails.Find(a => a.IdChiTietSp == Guid.Parse(productid)) == null)// sp chưa có sale
+                        {
+                            s.IdChiTietSp = Guid.Parse(productid);
+                            await SaleDetailService.CreateDetaiSale(s);
+                        }
+                        else
+                        {
+
+                            var a = saleDetails.Find(a => a.IdChiTietSp == Guid.Parse(productid));
+                            //await SaleDetailService.DeleteDetaiSale(a.Id);
+                            a.TrangThai = 1;// 0 hoạt động
+                            await SaleDetailService.EditDetaiSale(a);
+                            //foreach (var p in lstsp)
+                            //{
+                            //    var m = productSales.Where(x => x.NgayKetThuc != null && x.TrangThaiSale != null);
+                            //    if (m.First(m => m.TrangThaiSale == 0) != null)
+                            //    {
+                            //        int a = 1;
+                            //    }
+                            //    else
+                            //    {
+                            //        DateTime? maxvalue = DateTime.MinValue;
+                            //        productSale a = null;
+                            //        foreach (var q in m)
+                            //        {
+                            //            if (q.NgayKetThuc > maxvalue)
+                            //            {
+                            //                maxvalue = q.NgayKetThuc;
+                            //                a = q;
+                            //            }
+                            //        }
+                            //        if (maxvalue > DateTime.Now)
+                            //        {
+                            //            var n = saledetails.Find(x => x.IdChiTietSp == a.Id);
+                            //            n.TrangThai = 0;// hoạt động
+                            //            await EditDetaiSale(n);
+                            //        }
+                            //    }
+                        }
+
+
+
+
+
+
+                        s.IdChiTietSp = Guid.Parse(productid);
+                        await SaleDetailService.CreateDetaiSale(s);
+                    }
+
+
+                }
             }
-            else return BadRequest();
-
-
+            return RedirectToAction("GetAllSaleDetail");
         }
+
+
+
 
 
         public async Task<IActionResult> DeleteSaleDetail(Guid id)
@@ -85,15 +131,15 @@ namespace AppView.Controllers
             }
             else return BadRequest();
         }
-        public IActionResult EditSaleDetail(Guid id)
+        public async Task<IActionResult> EditSaleDetail(Guid id)
         {
-            IEnumerable<SelectListItem> salesList = new SelectList(context.Sales, "Id", "Ten");
+            IEnumerable<SelectListItem> salesList = new SelectList(await SaleService.GetAllSale(), "Id", "Ten");
             ViewBag.SaleList = salesList;
 
-            IEnumerable<SelectListItem> productDetailsList = new SelectList(context.ProductDetails, "Id", "Id");
+            IEnumerable<SelectListItem> productDetailsList = new SelectList(await productDetailService.GetAll(), "Id", "Id");
             ViewBag.ProductDetailsList = productDetailsList;
             ViewBag.SaleList = salesList;
-            var sp = repos.GetAll().FirstOrDefault(x => x.Id == id);
+            var sp = (await SaleDetailService.GetAllDetaiSale()).FirstOrDefault(x => x.Id == id);
 
             if (sp == null)
             {

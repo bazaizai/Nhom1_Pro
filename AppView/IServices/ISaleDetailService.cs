@@ -1,4 +1,5 @@
-﻿using Nhom1_Pro.Models;
+﻿using AppData.Models;
+using Nhom1_Pro.Models;
 
 namespace AppView.IServices
 {
@@ -8,5 +9,8 @@ namespace AppView.IServices
         public Task<bool> CreateDetaiSale(SaleDetail p);
         public Task<bool> EditDetaiSale(SaleDetail p);
         public Task<bool> DeleteDetaiSale(Guid id);
+        public Task<List<productSale>> getallSpSale();
+        public Task<SaleDetail> GetById(Guid id);
+        void StartAutoUpdate();
     }
 }

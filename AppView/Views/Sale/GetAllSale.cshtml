@@ -7,7 +7,7 @@
 <h1>GetAllSale</h1>
 
 <p>
-    <a asp-action="CreateSale">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -73,9 +73,9 @@
                 @Html.DisplayFor(modelItem => item.TrangThai)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "EditSale", new { id=item.Id }) |
-                    @Html.ActionLink("Details", "DetailSale", new {id=item.Id }) |
-                    @Html.ActionLink("Delete", "DeleteSale", new { id=item.Id })
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

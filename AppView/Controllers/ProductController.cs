@@ -12,15 +12,10 @@ namespace AppView.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IAllRepo<Product> repos;
-        DBContextModel context = new DBContextModel();
-        DbSet<Product> product;
+      
         Isalesevice ProductService;
         public ProductController()
-        {
-            product = context.Products;
-            AllRepo<Product> all = new AllRepo<Product>(context, product);
-            repos = all;
+        {       
             ProductService = new ProductService();
         }
         
@@ -29,9 +24,9 @@ namespace AppView.Controllers
             var sanphams = await ProductService.GetAllSanPham();
             return View(sanphams);
         }
-        public IActionResult DetailSp(Guid id)
+        public async Task<IActionResult> DetailSp(Guid id)
         {
-            var sp = repos.GetAll().FirstOrDefault(x => x.Id == id);
+            var sp = (await ProductService.GetAllSanPham()).FirstOrDefault(x => x.Id == id);
             return View(sp);
         }
        
@@ -60,9 +55,9 @@ namespace AppView.Controllers
             }
             else return BadRequest();
         }
-        public IActionResult EditSp(Guid id)
+        public async Task<IActionResult> EditSpAsync(Guid id)
         {
-            var sp = repos.GetAll().FirstOrDefault(x => x.Id == id);
+            var sp = (await ProductService.GetAllSanPham()).FirstOrDefault(x => x.Id == id);
 
             if (sp == null)
             {

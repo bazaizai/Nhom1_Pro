@@ -7,6 +7,18 @@ namespace AppView.Services
 {
     public class SaleService : ISaleService
     {
+        private bool isRunning;
+        private Thread autoUpdateThread;
+        ISaleDetailService saleDetailService;
+        public SaleService()
+        {
+            isRunning = false;
+
+        }
+        public async Task<Sale> GetById(Guid id)
+        {
+            return (await GetAllSale()).FirstOrDefault(x => x.Id == id);
+        }
         public async Task<bool> CreateSale(Sale p)
         {
             string apiUrl = $"https://localhost:7280/api/Sale?ma={p.Ma}&ten={p.Ten}&ngaybatdau={p.NgayBatDau}&ngayketthuc={p.NgayKetThuc}&LoaiHinhKm={p.LoaiHinhKm}&mota={p.MoTa}&mucgiam={p.MucGiam}&trangthai={p.TrangThai}";
@@ -56,11 +68,70 @@ namespace AppView.Services
         public async Task<List<Sale>> GetAllSale()
         {
             string apiUrl = "https://localhost:7280/api/Sale";
-            var httpClient = new HttpClient(); // tạo ra để callApi
+            var httpClient = new HttpClient(); 
             var response = await httpClient.GetAsync(apiUrl);
             string apiData = await response.Content.ReadAsStringAsync();
             var sales = JsonConvert.DeserializeObject<List<Sale>>(apiData);
             return sales;
+        }
+        public void StartAutoUpdate()
+        {
+            if (!isRunning)
+            {
+                isRunning = true;
+                autoUpdateThread = new Thread(() => AutoUpdateThread());
+                autoUpdateThread.Start();
+            }
+        }
+
+
+        public void StopAutoUpdate()
+        {
+            if (isRunning)
+            {
+                isRunning = false;
+                autoUpdateThread.Join();
+            }
+        }
+
+        private async Task AutoUpdateThread()
+        {
+            while (isRunning)
+            {
+                List<Sale> sales = await GetAllSale();
+                List<SaleDetail> lstSaleDetail = await saleDetailService.GetAllDetaiSale();
+                foreach (var sale in sales)
+                {
+                    if (sale.NgayKetThuc <= DateTime.Now)
+                    {
+                        sale.TrangThai = 1;// k hoạt động
+                        await EditSale(sale);
+                        foreach (var detalsale in lstSaleDetail)
+                        {
+                            if (detalsale.IdSale == sale.Id)
+                            {
+                                detalsale.TrangThai = 1;// k hoạt động
+                                await saleDetailService.EditDetaiSale(detalsale);
+                            }
+                        }
+                    }
+                    //else
+                    //{
+                    //    sale.TrangThai = 0;//  hoạt động
+                    //    await EditSale(sale);
+                    //    foreach (var detalsale in lstSaleDetail)
+                    //    {
+                    //        if (detalsale.IdSale == sale.Id)
+                    //        {
+                    //            detalsale.TrangThai = 0;//  hoạt động
+                    //            await saleDetailService.EditDetaiSale(detalsale);
+                    //        }
+                    //    }
+                    //}
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(30));
+            }
         }
     }
 }

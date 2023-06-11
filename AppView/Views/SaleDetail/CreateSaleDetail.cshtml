@@ -1,66 +1,291 @@
-﻿@model Nhom1_Pro.Models.SaleDetail
+﻿@using Nhom1_Pro.Models;
+@model Nhom1_Pro.Models.SaleDetail
+@{
+    DBContextModel DbContext = new DBContextModel();
+    int count = DbContext.ProductDetails.Count();
+
+}
 
 @{
     ViewData["Title"] = "CreateSaleDetail";
 }
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<h1>CreateSaleDetail</h1>
+<link rel="stylesheet" href="https://fontawesome.com/v4.7.0/assets/font-awesome/css/font-awesome.css">
 
-<h4>SaleDetail</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateSaleDetail">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-           @* <div class="form-group">
-                <label asp-for="IdSale" class="control-label">Sale</label>
-                @Html.DropDownListFor(model => model.IdSale, (IEnumerable<SelectListItem>)ViewBag.SaleList, "Select Sale", new { @class = "form-control" })
-                <span asp-validation-for="IdSale" class="text-danger"></span>
-            </div>
+<style>
+    .icon-control {
+        margin-top: 5px;
+        float: right;
+        font-size: 80%;
+    }
 
+
+
+    .btn-light {
+        background-color: #fff;
+        border-color: #e4e4e4;
+    }
+
+    .list-menu {
+        list-style: none;
+        margin: 0;
+        padding-left: 0;
+    }
+
+        .list-menu a {
+            color: #343a40;
+        }
+
+    .card-product-grid .info-wrap {
+        overflow: hidden;
+        padding: 18px 20px;
+    }
+
+    [class*='card-product'] a.title {
+        color: #212529;
+        display: block;
+    }
+
+    .card-product-grid:hover .btn-overlay {
+        opacity: 1;
+    }
+
+    .card-product-grid .btn-overlay {
+        -webkit-transition: .5s;
+        transition: .5s;
+        opacity: 0;
+        left: 0;
+        bottom: 0;
+        color: #fff;
+        width: 100%;
+        padding: 5px 0;
+        text-align: center;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .img-wrap {
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<div class="container">
+    <form asp-action="CreateSaleDetail" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="IdSale" class="control-label">Sale</label>
+            <select asp-for="IdSale" asp-items="ViewBag.SaleList" class="form-control"></select>
+            <span asp-validation-for="IdSale" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MoTa" class="control-label"></label>
+            <input asp-for="MoTa" class="form-control" />
+            <span asp-validation-for="MoTa" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+
+            <aside class="col-md-3">
+
+                <div class="card">
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Product type</h6>
+                            </a>
+                        </header>
+                        <div class="filter-content collapse show" id="collapse_1" style="">
+                            <div class="card-body">
+
+                                @foreach (var x in DbContext.TypeProducts.ToList())
+                                {
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" checked="" class="custom-control-input">
+                                        <div class="custom-control-label">
+                                            @x.Ten
+                                            <b class="badge badge-pill badge-light float-right">15</b>
+                                        </div>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </article>
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Materials </h6>
+                            </a>
+                        </header>
+                        <div class="filter-content collapse show" id="collapse_2" style="">
+                            <div class="card-body">
+                                @foreach (var x in DbContext.Materials.ToList())
+                                {
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" checked="" class="custom-control-input">
+                                        <div class="custom-control-label">
+                                            @x.Ten
+                                            <b class="badge badge-pill badge-light float-right">15</b>
+                                        </div>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </article>
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Price range </h6>
+                            </a>
+                        </header>
+                        <div class="filter-content collapse show" id="collapse_3" style="">
+                            <div class="card-body">
+                                <input type="range" class="custom-range" min="0" max="100" name="">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Min</label>
+                                        <input class="form-control" placeholder="$0" type="number">
+                                    </div>
+                                    <div class="form-group text-right col-md-6">
+                                        <label>Max</label>
+                                        <input class="form-control" placeholder="$1,0000" type="number">
+                                    </div>
+                                </div>
+                                <button class="btn btn-block btn-primary">Apply</button>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">Sizes </h6>
+                            </a>
+                        </header>
+                        <div class="filter-content collapse show" id="collapse_4" style="">
+                            <div class="card-body">
+                                @foreach (var x in DbContext.Sizes.ToList())
+                                {
+                                    <label class="checkbox-btn">
+                                        <input type="checkbox">
+                                        <span class="btn btn-light"> @x.Size1 </span>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </aside>
+            <main class="col-md-9">
+
+                <header class="border-bottom mb-4 pb-3">
+                    <div class="form-inline">
+                        <span class="mr-md-auto">@count Items found </span>
+                        <input type="checkbox" id="select-all-checkbox" style="width: 30px; height: 30px;" />Chọn tất cả
+                    </div>
+                </header>
+                <div class="row">
+                    @foreach (var item in (IEnumerable<AppData.Models.productSale>)ViewBag.ProductList)
+                    {
+                        decimal? x;
+                        if (@item.LoaiHinhKm == "%")
+                        {
+                            x = (@item.GiaBan * @item.MucGiam) / 100;
+
+                        }
+                        else
+                        {
+                            x = @item.GiaBan - @item.MucGiam;
+                        }
+
+                        <div class="col-md-4">
+                            <figure class="card card-product-grid">
+                                <div class="img-wrap" style="margin-left: 13px">
+
+                                    @if (item.TrangThaiSale == 0)
+                                    {
+                                        <span class="badge badge-danger">@item.TenSale </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger " style="background-color:white"> &ensp;</span>
+                                    }
+
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRu4G3zl8tqnPMI3F62MB0HTkF1Ki7dXrwRuA&usqp=CAU" class="img-fluid">
+                                </div>
+                                <figcaption class="info-wrap" style="display: flex; flex-direction: column; align-items: center;">
+                                    <div class="fix-height">
+                                        <span>@item.TenSP</span>
+                                        <div class="price-wrap mt-2">
+                                            <span class="price">@item.GiaBan Đ</span>
+                                            <br>
+                                            @if (item.TrangThaiSale == 0)
+                                            {
+                                                <span class="price">Còn @x Đ </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">&emsp; </span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <input type="checkbox" name="selectedProducts" value="@item.Id.ToString()" id="@item.Id.ToString()" style="width: 30px; height: 30px;" />
+                                </figcaption>
+                            </figure>
+                        </div>
+                    }
+                </div>
+                <nav class="mt-4" aria-label="Page navigation sample">
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </main>
             <div class="form-group">
-                <label asp-for="IdChiTietSp" class="control-label">Chi tiết sản phẩm</label>
-                @Html.DropDownListFor(model => model.IdChiTietSp, (IEnumerable<SelectListItem>)ViewBag.ProductDetailsList, "Select Product Detail", new { @class = "form-control" })
-                <span asp-validation-for="IdChiTietSp" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="IdSale" class="control-label">Sale</label>
-                @Html.DropDownListFor(model => model.IdSale, (IEnumerable<SelectListItem>)ViewBag.SaleList, "Select Sale", new { @class = "form-control" })
-                <span asp-validation-for="IdSale" class="text-danger"></span>
+                <input type="submit" value="AddSale" class="btn btn-primary" />
             </div>
-            <div class="form-group">
-                <label asp-for="IdChiTietSp" class="control-label">Chi tiết sản phẩm</label>
-                @Html.DropDownListFor(model => model.IdChiTietSp, (IEnumerable<SelectListItem>)ViewBag.ProductDetailsList, "Select Product Detail", new { @class = "form-control" })
-                <span asp-validation-for="IdChiTietSp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <input asp-for="MoTa" class="form-control" />
-                <span asp-validation-for="MoTa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TrangThai" class="control-label"></label>
-                <input asp-for="TrangThai" class="form-control" />
-                <span asp-validation-for="TrangThai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
+
+
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+
+<script>
+    // Lấy tham chiếu đến checkbox "Chọn tất cả"
+    var selectAllCheckbox = document.getElementById('select-all-checkbox');
+
+    // Bắt sự kiện khi checkbox "Chọn tất cả" được thay đổi
+    selectAllCheckbox.addEventListener('change', function () {
+        // Lấy danh sách tất cả các checkbox có tên "selectedProducts"
+        var checkboxes = document.querySelectorAll('input[name="selectedProducts"]');
+
+        // Thay đổi trạng thái chọn của tất cả các checkbox
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    });
+
+</script>
+

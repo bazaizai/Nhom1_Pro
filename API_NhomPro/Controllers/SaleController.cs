@@ -23,6 +23,11 @@ namespace AppAPI.Controllers
             repos = all;
         }
 
+        [HttpGet("{id}")]
+        public IEnumerable<Sale> Get(Guid id) 
+        {
+            return repos.GetAll().Where(p => p.Id == id);
+        }
         // GET: api/<SaleController>
         [HttpGet]
         public IEnumerable<Sale> Get()
