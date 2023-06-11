@@ -88,31 +88,70 @@ namespace AppView.Controllers
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
             var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
             var IDvoucher = await VoucherServices.GetAllAsync(voucher1);
-
-            var bill = new Bill()
+            var bill = new Bill();
+            if (IDvoucher == null)
             {
-                Id = Guid.NewGuid(),
-                IdUser = UserID,
-                IdVoucher = IDvoucher.Id,
-                NgayTao = DateTime.Now,
-                NgayShip = DateTime.Now.AddDays(2),
-                NgayNhan = DateTime.Now.AddDays(4),
-                NgayThanhToan = DateTime.Now.AddDays(4),
-                TenNguoiNhan = name,
-                DiaChi = address,
-                Sdt = phone,
-                TongTien = tien,
-                SoTienGiam = IDvoucher.MucUuDai,
-                TienShip = ship,
-                MoTa = "0",
-                TrangThai = 0
-            };
+                var newvoucher = new Voucher()
+                {
+                    Id = Guid.NewGuid(),
+                    DieuKien = "khong",
+                    LoaiHinhKm = "0",
+                    MucUuDai = 0,
+                    SoLanSuDung = 2,
+                    SoLuongTon = 3,
+                    Ma = voucher1,
+                    NgayBatDau = DateTime.Now,
+                    NgayKetThuc = DateTime.Now,
+                    PhamVi = "0",
+                    TrangThai = 1
+                };
+                await VoucherServices.AddItemAsync(newvoucher);
+                 bill = new Bill()
+                {
+                    Id = Guid.NewGuid(),
+                    IdUser = UserID,
+                    IdVoucher = newvoucher.Id,
+                    NgayTao = DateTime.Now,
+                    NgayShip = DateTime.Now.AddDays(2),
+                    NgayNhan = DateTime.Now.AddDays(4),
+                    NgayThanhToan = DateTime.Now.AddDays(4),
+                    TenNguoiNhan = name,
+                    DiaChi = address,
+                    Sdt = phone,
+                    TongTien = tien,
+                    SoTienGiam = newvoucher.MucUuDai,
+                    TienShip = ship,
+                    MoTa = "0",
+                    TrangThai = 0
+                };
+            }
+            else
+            {
+                 bill = new Bill()
+                {
+                    Id = Guid.NewGuid(),
+                    IdUser = UserID,
+                    IdVoucher = IDvoucher.Id,
+                    NgayTao = DateTime.Now,
+                    NgayShip = DateTime.Now.AddDays(2),
+                    NgayNhan = DateTime.Now.AddDays(4),
+                    NgayThanhToan = DateTime.Now.AddDays(4),
+                    TenNguoiNhan = name,
+                    DiaChi = address,
+                    Sdt = phone,
+                    TongTien = tien,
+                    SoTienGiam = IDvoucher.MucUuDai,
+                    TienShip = ship,
+                    MoTa = "0",
+                    TrangThai = 0
+                };
+            }
             await billService.CreateBillAsync(bill);
             foreach (var item in listcart)
             {
                 await billDetailServices.AddItemAsync(new BillDetail()
                 {
-                    Id = new Guid(),
+                    Id = Guid.NewGuid(),
                     IdBill = bill.Id,
                     IdProductDetail = item.IdProduct,
                     SoLuong = item.SoLuongCart,

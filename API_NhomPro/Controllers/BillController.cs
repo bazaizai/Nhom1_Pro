@@ -35,7 +35,7 @@ namespace AppAPI.Controllers
         }
         // GET api/<BillController>/5
         [HttpPost]
-        public bool CreateBill(Guid idUser, Guid idVoucher, DateTime ngayTao, DateTime ngayThanhToan, DateTime ngayShip, DateTime ngayNhan,
+        public bool CreateBill(Guid id, Guid idUser, Guid idVoucher, DateTime ngayTao, DateTime ngayThanhToan, DateTime ngayShip, DateTime ngayNhan,
             string tenNguoiNhan, string diaChi, string sdt, int tongTien, int soTienGiam, int tienShip, string moTa, int trangThai)
         {
             string ma;
@@ -48,7 +48,7 @@ namespace AppAPI.Controllers
             }
             Bill bill = new Bill()
             {
-                Id = Guid.NewGuid(),
+                Id = id,
                 IdUser = idUser,
                 IdVoucher = idVoucher,
                 Ma = ma,
