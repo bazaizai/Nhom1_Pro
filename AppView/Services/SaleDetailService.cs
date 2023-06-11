@@ -116,33 +116,6 @@ namespace AppView.Services
 
                 List<SaleDetail> saledetails = await GetAllDetaiSale();
                 List<productSale> productSales = await getallSpSale();
-
-                //var lstpro = await productDetailService.GetAll();
-                //foreach (var p in lstpro)
-                //{
-                //    var m = productSales.Where(x => x.NgayKetThuc != null && x.TrangThaiSale != null);
-
-                //        decimal? giasaukhigiam = decimal.MinValue;
-
-                //        DateTime? maxvalue = DateTime.MinValue;
-                //    decimal? k;
-                //        productSale a = null;
-                //        foreach (var q in m)
-                //        {
-                //            if (q.NgayKetThuc > maxvalue)
-                //            {
-                //                maxvalue = q.NgayKetThuc;
-                //                a = q;
-                //            }
-                //        }
-                //        if (maxvalue > DateTime.Now)
-                //        {
-                //            var n = saledetails.Find(x => x.IdChiTietSp == a.Id);
-                //            n.TrangThai = 0;// hoạt động
-                //            await EditDetaiSale(n);
-                //        }
-
-                //}
                 var lstID = (await productDetailService.GetAll()).DistinctBy(p => p.Id).Select(p => p.Id).ToList();
                 foreach (var p in lstID)
                 {

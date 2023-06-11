@@ -21,6 +21,7 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> GetAllSale()
         {
+            Response.Headers.Add("Refresh", "30");
             List<Sale> sales = await SaleService.GetAllSale();
             return View(sales);
         }

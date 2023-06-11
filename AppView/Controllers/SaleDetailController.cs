@@ -27,6 +27,7 @@ namespace AppView.Controllers
 
         public async Task<IActionResult> GetAllSaleDetail()
         {
+            Response.Headers.Add("Refresh", "30");
             var SaleDetails = await SaleDetailService.GetAllDetaiSale();
             return View(SaleDetails);
         }
@@ -73,11 +74,6 @@ namespace AppView.Controllers
                         }
                         else
                         {
-
-                            //var a = saleDetails.Find(a => a.IdChiTietSp == Guid.Parse(productid));
-                            ////await SaleDetailService.DeleteDetaiSale(a.Id);
-                            //a.TrangThai = 1;// 0 hoạt động
-                            //await SaleDetailService.EditDetaiSale(a);
                             s.IdChiTietSp = Guid.Parse(productid);
                             await SaleDetailService.CreateDetaiSale(s);
 
