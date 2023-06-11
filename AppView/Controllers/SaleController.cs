@@ -17,6 +17,7 @@ namespace AppView.Controllers
         public SaleController()
         {           
            SaleService = new SaleService();
+            SaleService.StartAutoUpdate();
         }
         public async Task<IActionResult> GetAllSale()
         {

@@ -18,7 +18,8 @@ namespace AppData.Models
         public string? TenSale { get; set; }
         public Guid Id { get; set; }
         public Guid? IdSale { get; set; }
-        
+        public Guid IdSaleDetai { get; set; }
+
         public string? MoTa { get; set; }
         public DateTime? NgayKetThuc { get; set; }
         public int? TrangThaiSale { get; set; }

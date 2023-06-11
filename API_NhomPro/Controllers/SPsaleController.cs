@@ -35,7 +35,8 @@ namespace AppAPI.Controllers
                              TrangThaiSale = ps.TrangThai,
                              IdSale = s.Id,
                              MoTa=s.MoTa,
-                             NgayKetThuc = s.NgayKetThuc
+                             NgayKetThuc = s.NgayKetThuc,
+                             IdSaleDetai=ps != null ? ps.Id : Guid.Empty,
                          };
             return result.ToList();
         }

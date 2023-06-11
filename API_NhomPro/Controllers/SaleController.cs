@@ -40,7 +40,7 @@ namespace AppAPI.Controllers
 
         // POST api/<SaleController>
         [HttpPost]
-        public bool CreateSale(string ma, string ten,DateTime ngaybatdau, DateTime ngayketthuc, string LoaiHinhKm, string mota, decimal mucgiam, int trangthai)
+        public bool CreateSale(string ma, string ten,DateTime ngaybatdau, DateTime ngayketthuc, string LoaiHinhKm, string mota, decimal mucgiam)
         {
             Sale sale = new Sale();
             sale.Ten = ten;
@@ -50,7 +50,13 @@ namespace AppAPI.Controllers
             sale.LoaiHinhKm = LoaiHinhKm;
             sale.MoTa = mota;
             sale.MucGiam = mucgiam;
-            sale.TrangThai = trangthai;
+            
+            if (ngayketthuc <= DateTime.Now)
+            {
+                sale.TrangThai = 1; // Cập nhật trạng thái Sale thành hết hạn (ví dụ: 1 là hết hạn)
+            }
+            else sale.TrangThai = 0;// con hạn 
+           
             sale.Id = Guid.NewGuid();
             
             return repos.AddItem(sale);
@@ -59,7 +65,7 @@ namespace AppAPI.Controllers
         // PUT api/<SaleController>/5
 
         [HttpPut("{id}")]
-        public bool Put(Guid id, string ma, string ten, DateTime ngaybatdau, DateTime ngayketthuc,string LoaiHinhKm, string mota, decimal mucgiam,int trangthai)
+        public bool Put(Guid id, string ma, string ten, DateTime ngaybatdau, DateTime ngayketthuc,string LoaiHinhKm, string mota, decimal mucgiam)
         {
             var sale = repos.GetAll().First(p => p.Id == id);
             sale.Ten = ten;
@@ -69,7 +75,11 @@ namespace AppAPI.Controllers
             sale.LoaiHinhKm=LoaiHinhKm;
             sale.MoTa = mota;
             sale.MucGiam=mucgiam;
-            sale.TrangThai=trangthai;
+            if (ngayketthuc <= DateTime.Now)
+            {
+                sale.TrangThai = 1; // Cập nhật trạng thái Sale thành hết hạn (ví dụ: 1 là hết hạn)
+            }
+            else sale.TrangThai = 0;// con hạn 
             return repos.EditItem(sale);
         }
 

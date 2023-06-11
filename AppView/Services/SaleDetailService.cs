@@ -1,7 +1,9 @@
 ﻿using AppData.Models;
 using AppView.IServices;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using Nhom1_Pro.Models;
+using NuGet.Versioning;
 
 namespace AppView.Services
 {
@@ -9,13 +11,13 @@ namespace AppView.Services
     {
         private bool isRunning;
         private Thread autoUpdateThread;
-        ISaleService SaleService;
-        IProductDetailService ProductDetailService;
+        SaleService SaleService;
+        ProductDetailService productDetailService;
 
         public SaleDetailService()
         {
-            ProductDetailService = new ProductDetailService();
-          
+            productDetailService = new ProductDetailService();
+
         }
 
         public async Task<SaleDetail> GetById(Guid id)
@@ -115,34 +117,100 @@ namespace AppView.Services
                 List<SaleDetail> saledetails = await GetAllDetaiSale();
                 List<productSale> productSales = await getallSpSale();
 
-                var lstpro = await ProductDetailService.GetAll();
-                foreach (var p in lstpro)
-                {
-                    var m = productSales.Where(x => x.NgayKetThuc != null && x.TrangThaiSale != null);
-                   
-                        decimal? giasaukhigiam = decimal.MinValue;
+                //var lstpro = await productDetailService.GetAll();
+                //foreach (var p in lstpro)
+                //{
+                //    var m = productSales.Where(x => x.NgayKetThuc != null && x.TrangThaiSale != null);
 
-                        DateTime? maxvalue = DateTime.MinValue;
-                    decimal? k;
-                        productSale a = null;
-                        foreach (var q in m)
+                //        decimal? giasaukhigiam = decimal.MinValue;
+
+                //        DateTime? maxvalue = DateTime.MinValue;
+                //    decimal? k;
+                //        productSale a = null;
+                //        foreach (var q in m)
+                //        {
+                //            if (q.NgayKetThuc > maxvalue)
+                //            {
+                //                maxvalue = q.NgayKetThuc;
+                //                a = q;
+                //            }
+                //        }
+                //        if (maxvalue > DateTime.Now)
+                //        {
+                //            var n = saledetails.Find(x => x.IdChiTietSp == a.Id);
+                //            n.TrangThai = 0;// hoạt động
+                //            await EditDetaiSale(n);
+                //        }
+
+                //}
+                var lstID = (await productDetailService.GetAll()).DistinctBy(p => p.Id).Select(p => p.Id).ToList();
+                foreach (var p in lstID)
+                {
+                    var r = (await getallSpSale()).Where(x => x.Id == p && x.NgayKetThuc >=DateTime.Now ).ToList();
+
+                    productSale a = null;
+                    decimal? minValue = r.Min(q =>
+                    {
+                        decimal? saleValue = null;
+                        if (q.LoaiHinhKm == "%")
                         {
-                            if (q.NgayKetThuc > maxvalue)
+                            saleValue =q.GiaBan- q.GiaBan * q.MucGiam / 100;
+
+                        }
+                        else if (q.LoaiHinhKm == "Đ")
+                        {
+                            saleValue = q.GiaBan - q.MucGiam;
+
+                        }
+                        return saleValue;
+
+                    });
+                    foreach (var q in r)
+                    {
+                        decimal? saleValue = null;
+
+                        if (q.LoaiHinhKm == "%")
+                        {
+                            saleValue = q.GiaBan - q.GiaBan * q.MucGiam / 100;
+                        }
+                        else if (q.LoaiHinhKm == "Đ")
+                        {
+                            saleValue = q.GiaBan - q.MucGiam;
+                        }
+
+                        if (saleValue == minValue)
+                        {
+                            a = q;
+                            break; // Khi đã tìm được giá trị nhỏ nhất, ta có thể thoát khỏi vòng lặp
+                        }
+                    }
+
+
+
+                    if (a != null)
+                    {
+                        var o = (await GetAllDetaiSale()).Where(x => x.IdChiTietSp == a.Id).ToList();
+                        foreach (var sale in o)
+                        {
+
+                            if (sale.Id == a.IdSaleDetai)
                             {
-                                maxvalue = q.NgayKetThuc;
-                                a = q;
+                                sale.TrangThai = 0;//hoạt động
+                                await EditDetaiSale(sale);
+                            }
+                            else
+                            {
+                                sale.TrangThai = 1;//0 hoạt động
+                                await EditDetaiSale(sale);
                             }
                         }
-                        if (maxvalue > DateTime.Now)
-                        {
-                            var n = saledetails.Find(x => x.IdChiTietSp == a.Id);
-                            n.TrangThai = 0;// hoạt động
-                            await EditDetaiSale(n);
-                        }
-                    
+                    }
+
+
                 }
-                await Task.Delay(TimeSpan.FromSeconds(30));
             }
+            await Task.Delay(TimeSpan.FromSeconds(20));
         }
     }
 }
+

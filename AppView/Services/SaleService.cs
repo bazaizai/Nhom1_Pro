@@ -7,13 +7,15 @@ namespace AppView.Services
 {
     public class SaleService : ISaleService
     {
+        
+        SaleDetailService saleDetailService;     
         private bool isRunning;
         private Thread autoUpdateThread;
-        ISaleDetailService saleDetailService;
+
         public SaleService()
         {
             isRunning = false;
-
+            saleDetailService=new SaleDetailService();
         }
         public async Task<Sale> GetById(Guid id)
         {
@@ -21,7 +23,8 @@ namespace AppView.Services
         }
         public async Task<bool> CreateSale(Sale p)
         {
-            string apiUrl = $"https://localhost:7280/api/Sale?ma={p.Ma}&ten={p.Ten}&ngaybatdau={p.NgayBatDau}&ngayketthuc={p.NgayKetThuc}&LoaiHinhKm={p.LoaiHinhKm}&mota={p.MoTa}&mucgiam={p.MucGiam}&trangthai={p.TrangThai}";
+            
+            string apiUrl = $"https://localhost:7280/api/Sale?ma={p.Ma}&ten={p.Ten}&ngaybatdau={p.NgayBatDau}&ngayketthuc={p.NgayKetThuc}&LoaiHinhKm={p.LoaiHinhKm}&mota={p.MoTa}&mucgiam={p.MucGiam}";
             var httpClient = new HttpClient();
 
             var response = await httpClient.PostAsync(apiUrl, null);
@@ -98,8 +101,10 @@ namespace AppView.Services
         {
             while (isRunning)
             {
+                // Lấy danh sách sale từ API
                 List<Sale> sales = await GetAllSale();
-                List<SaleDetail> lstSaleDetail = await saleDetailService.GetAllDetaiSale();
+                var lstSaleDetail = await saleDetailService.GetAllDetaiSale();
+                // Kiểm tra và cập nhật trạng thái sale
                 foreach (var sale in sales)
                 {
                     if (sale.NgayKetThuc <= DateTime.Now)
@@ -114,23 +119,10 @@ namespace AppView.Services
                                 await saleDetailService.EditDetaiSale(detalsale);
                             }
                         }
-                    }
-                    //else
-                    //{
-                    //    sale.TrangThai = 0;//  hoạt động
-                    //    await EditSale(sale);
-                    //    foreach (var detalsale in lstSaleDetail)
-                    //    {
-                    //        if (detalsale.IdSale == sale.Id)
-                    //        {
-                    //            detalsale.TrangThai = 0;//  hoạt động
-                    //            await saleDetailService.EditDetaiSale(detalsale);
-                    //        }
-                    //    }
-                    //}
+                    }                   
                 }
-
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                // Ngủ trong một khoảng thời gian (ví dụ: 1 phút) trước khi kiểm tra lại
+                await Task.Delay(TimeSpan.FromSeconds(60));
             }
         }
     }

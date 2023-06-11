@@ -22,6 +22,7 @@ namespace AppView.Controllers
             SaleDetailService = new SaleDetailService();
             productDetailService = new ProductDetailService();
             SaleService = new SaleService();
+            SaleDetailService.StartAutoUpdate();
         }
 
         public async Task<IActionResult> GetAllSaleDetail()
@@ -38,7 +39,7 @@ namespace AppView.Controllers
 
         public async Task<IActionResult> CreateSaleDetail()
         {
-            var sp = (await SaleDetailService.getallSpSale()).Where(x => x.TrangThaiSale == 0 || x.TrangThaiSale == null);
+            var sp = (await SaleDetailService.getallSpSale()).DistinctBy(p => p.Id).ToList();
             ViewBag.ProductList = sp;
             var filteredSales = (await SaleService.GetAllSale()).Where(s => s.TrangThai == 0).ToList();
             ViewData["IdSale"] = new SelectList(filteredSales, "Id", "Ten");
@@ -52,6 +53,7 @@ namespace AppView.Controllers
         {
             List<SaleDetail> saleDetails = await SaleDetailService.GetAllDetaiSale();
             List<Sale> lstsales = (await SaleService.GetAllSale());
+            var lstID = (await SaleDetailService.GetAllDetaiSale()).Select(x => x.IdChiTietSp).ToList();
             s.TrangThai = 0;
             var lstsp = await SaleDetailService.getallSpSale();
             if (selectedProducts != null && selectedProducts.Count > 0)
@@ -72,53 +74,81 @@ namespace AppView.Controllers
                         else
                         {
 
-                            var a = saleDetails.Find(a => a.IdChiTietSp == Guid.Parse(productid));
-                            //await SaleDetailService.DeleteDetaiSale(a.Id);
-                            a.TrangThai = 1;// 0 hoạt động
-                            await SaleDetailService.EditDetaiSale(a);
-                            //foreach (var p in lstsp)
-                            //{
-                            //    var m = productSales.Where(x => x.NgayKetThuc != null && x.TrangThaiSale != null);
-                            //    if (m.First(m => m.TrangThaiSale == 0) != null)
-                            //    {
-                            //        int a = 1;
-                            //    }
-                            //    else
-                            //    {
-                            //        DateTime? maxvalue = DateTime.MinValue;
-                            //        productSale a = null;
-                            //        foreach (var q in m)
-                            //        {
-                            //            if (q.NgayKetThuc > maxvalue)
-                            //            {
-                            //                maxvalue = q.NgayKetThuc;
-                            //                a = q;
-                            //            }
-                            //        }
-                            //        if (maxvalue > DateTime.Now)
-                            //        {
-                            //            var n = saledetails.Find(x => x.IdChiTietSp == a.Id);
-                            //            n.TrangThai = 0;// hoạt động
-                            //            await EditDetaiSale(n);
-                            //        }
-                            //    }
+                            //var a = saleDetails.Find(a => a.IdChiTietSp == Guid.Parse(productid));
+                            ////await SaleDetailService.DeleteDetaiSale(a.Id);
+                            //a.TrangThai = 1;// 0 hoạt động
+                            //await SaleDetailService.EditDetaiSale(a);
+                            s.IdChiTietSp = Guid.Parse(productid);
+                            await SaleDetailService.CreateDetaiSale(s);
+
+                            var r = (await SaleDetailService.getallSpSale()).Where(x => x.Id == Guid.Parse(productid)&&x.NgayKetThuc>=DateTime.Now).ToList();
+                            productSale a = null;
+                            decimal? minValue = r.Min(q =>
+                            {
+                                decimal? saleValue = null;
+                                if (q.LoaiHinhKm == "%")
+                                {
+                                    saleValue = q.GiaBan * q.MucGiam / 100;
+
+                                }
+                                else if (q.LoaiHinhKm == "Đ")
+                                {
+                                    saleValue = q.GiaBan - q.MucGiam;
+
+                                }
+                                return saleValue;
+
+                            });
+                            foreach (var q in r)
+                            {
+                                decimal? saleValue = null;
+
+                                if (q.LoaiHinhKm == "%")
+                                {
+                                    saleValue = q.GiaBan * q.MucGiam / 100;
+                                }
+                                else if (q.LoaiHinhKm == "Đ")
+                                {
+                                    saleValue = q.GiaBan - q.MucGiam;
+                                }
+
+                                if (saleValue == minValue)
+                                {
+                                    a = q;
+                                    break; // Khi đã tìm được giá trị nhỏ nhất, ta có thể thoát khỏi vòng lặp
+                                }
+                            }
+
+
+
+                            if (a != null)
+                            {
+                                var o = (await SaleDetailService.GetAllDetaiSale()).FirstOrDefault(x => x.Id == a.IdSaleDetai);
+                                foreach (var sale in saleDetails)
+                                {
+                                    
+                                    if (sale == o)
+                                    {
+                                        sale.TrangThai = 0;//hoạt động
+                                        await SaleDetailService.EditDetaiSale(sale);
+                                    }
+                                    else
+                                    {
+                                        sale.TrangThai = 1;//0 hoạt động
+                                        await SaleDetailService.EditDetaiSale(sale);
+                                    }
+                                }
+                            }
+
+
                         }
 
-
-
-
-
-
-                        s.IdChiTietSp = Guid.Parse(productid);
-                        await SaleDetailService.CreateDetaiSale(s);
                     }
-
-
                 }
+
             }
             return RedirectToAction("GetAllSaleDetail");
         }
-
 
 
 
