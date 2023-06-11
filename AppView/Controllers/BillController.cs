@@ -14,6 +14,9 @@ namespace AppView.Controllers
     {
         public IAllRepo<Bill> allRepo;
         public IBillService billService;
+        private ICartDetailServices CartDetailServices;
+        private IProductDetailService ProductDetailServices;
+        private IVoucherServices VoucherServices;
 
         private readonly IUserServices userServices;
         private readonly ICartServices cartServices;
@@ -22,11 +25,17 @@ namespace AppView.Controllers
         public BillController()
         {
             allRepo = new AllRepo<Bill>();
-            billService = new BillService();
             userServices = new UserServices();
+
+            billService = new BillService();
+            billDetailServices = new BillDetailServices();
+            CartDetailServices = new CartDetailServices();
+            ProductDetailServices = new ProductDetailService();
+            VoucherServices = new VoucherServices();
+
             cartServices = new CartServices();
             roleServices = new RoleServices();
-            billDetailServices = new BillDetailServices();
+
         }
         public async Task<IActionResult> GetAllBill()
         {
@@ -34,7 +43,7 @@ namespace AppView.Controllers
             ViewBag.Bills = a;
             return View(a);
         }
-      
+
         public IActionResult Create()
         {
             return View();
@@ -47,8 +56,8 @@ namespace AppView.Controllers
         }
         public async Task<IActionResult> Details(Guid id)
         {
-            
-            var a = (await billService.GetAllBillsAsync()).FirstOrDefault(x=>x.Id==id);
+
+            var a = (await billService.GetAllBillsAsync()).FirstOrDefault(x => x.Id == id);
             return View(a);
         }
         [HttpGet]
@@ -64,15 +73,62 @@ namespace AppView.Controllers
             await billService.UpdateBillAsync(bill);
             return RedirectToAction("GetAllBill");
         }
-        
+
         public async Task<IActionResult> Delete(Guid id)
         {
             await billService.DeleteBillAsync(id);
             return RedirectToAction("GetAllBill");
         }
+
+        public async Task<IActionResult> Pay(string name, string phone, string address, string tongtien, string phiship, string voucher1)
+        {
+            decimal tien = Convert.ToDecimal(tongtien);
+            decimal ship = Convert.ToDecimal(phiship);
+            var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc").TaiKhoan;
+            var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc).Id;
+            var listcart = (await CartDetailServices.GetAllAsync()).Where(c => c.IdUser == UserID);
+            var IDvoucher = await VoucherServices.GetAllAsync(voucher1);
+
+            var bill = new Bill()
+            {
+                Id = Guid.NewGuid(),
+                IdUser = UserID,
+                IdVoucher = IDvoucher.Id,
+                NgayTao = DateTime.Now,
+                NgayShip = DateTime.Now.AddDays(2),
+                NgayNhan = DateTime.Now.AddDays(4),
+                NgayThanhToan = DateTime.Now.AddDays(4),
+                TenNguoiNhan = name,
+                DiaChi = address,
+                Sdt = phone,
+                TongTien = tien,
+                SoTienGiam = IDvoucher.MucUuDai,
+                TienShip = ship,
+                MoTa = "0",
+                TrangThai = 0
+            };
+            await billService.CreateBillAsync(bill);
+            foreach (var item in listcart)
+            {
+                await billDetailServices.AddItemAsync(new BillDetail()
+                {
+                    Id = new Guid(),
+                    IdBill = bill.Id,
+                    IdProductDetail = item.IdProduct,
+                    SoLuong = item.SoLuongCart,
+                    DonGia = item.GiaBan,
+                    TrangThai = 0
+                });
+                await CartDetailServices.RemoveItem(item.Id);
+                var product = await ProductDetailServices.GetById(item.IdProduct);
+                await ProductDetailServices.UpdateSoLuong(product.Id, item.SoLuongCart);
+            }
+            return RedirectToAction("ShowCart", "Cart");
+        }
+
         public async Task<IActionResult> SearchBill(DateTime startDate, DateTime endDate, string ma)
         {
-            if(startDate.Year!=1&& endDate.Year!=1)
+            if (startDate.Year != 1 && endDate.Year != 1)
             {
                 if (ma != null && ma != "")
                 {
@@ -96,17 +152,17 @@ namespace AppView.Controllers
         {
             var acc = SessionServices.GetObjFromSession(HttpContext.Session, "acc");
             var UserID = (await userServices.GetAllUser()).FirstOrDefault(c => c.TaiKhoan == acc.TaiKhoan).Id;
-            List<Bill> billList = (await billService.GetAllBillsAsync()).Where(c=>c.IdUser==UserID).OrderByDescending(c => c.NgayTao).ToList();
+            List<Bill> billList = (await billService.GetAllBillsAsync()).Where(c => c.IdUser == UserID).OrderByDescending(c => c.NgayTao).ToList();
             return View(billList);
         }
         public async Task<IActionResult> ShowBillDetails(Guid id)
         {
-            List<BillDetailView> bills =await billDetailServices.GetByBill(id);
+            List<BillDetailView> bills = await billDetailServices.GetByBill(id);
             return View(bills);
         }
         public async Task<IActionResult> FilterBills(DateTime startDate, DateTime endDate, string ma)
         {
-            
+
             if (startDate.Year != 1 && endDate.Year != 1)
             {
                 if (ma != null && ma != "")

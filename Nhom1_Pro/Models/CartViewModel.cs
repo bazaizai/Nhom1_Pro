@@ -16,9 +16,17 @@ namespace AppData.Models
         public string? Size { get; set; }
         public string? TypeProduct { get; set; }
         public string? Material { get; set; }
-        public int? SoLuongCart { get; set; }
+        public int SoLuongCart { get; set; }
         public decimal? GiaBan { get; set; }
         public int? TrangThai { get; set; }
         public string? LinkImage { get; set; }
+
+        public DateTime? NgayKetThuc { get; set; }
+        public int? TrangThaiSale { get; set; }
+        public string? LoaiHinhKm { get; set; }
+        public decimal? MucGiam { get; set; }
+        public string? TenSale { get; set; }
+        public Guid? IdSale { get; set; }
+        public Guid? IdSaleDetai { get; set; }
     }
 }

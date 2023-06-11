@@ -191,3 +191,13 @@ a {
     letter-spacing: 2px;
 
 }
+
+tr {
+    transition: transform 0.3s ease-in-out; /* Thời gian và hiệu ứng chuyển đổi */
+}
+
+    tr:hover {
+        transform: scale(1.1); /* Tăng kích thước lên 1.2 lần */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Đổ bóng */
+        border-radius: 10px; /* Bo góc */
+    }

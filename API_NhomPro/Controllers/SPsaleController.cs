@@ -17,7 +17,8 @@ namespace AppAPI.Controllers
 
         [HttpGet]
         public IEnumerable<productSale> GetProductsale()
-        {          
+        {        
+            
             var result = from p in context.ProductDetails
                          join sp in context.Products on p.IdProduct equals sp.Id
                          join ps in context.DetailSales on p.Id equals ps.IdChiTietSp into psJoin

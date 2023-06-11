@@ -11,11 +11,11 @@
 @{
     IUserServices userServices = new UserServices();
     IRoleServices roleServices = new RoleServices();
-
+    ICartDetailServices cartDetailServices = new CartDetailServices();
     //    var login = SessionServices.GetObjFromUser(Context.Session, "user");
     //    IRoleServices roleServices = new RoleServices();
     //    ICartDetailServices cartDetailServices = new CartsDetailservices();
-    var acc = SessionServices.GetObjFromSession(Context.Session,"acc");
+    var acc = SessionServices.GetObjFromSession(Context.Session, "acc");
     // tính tổng số lượng sản phẩm trong giỏ hàng
 }
 <!DOCTYPE html>
@@ -34,7 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-   
+
 </head>
 <body>
 
@@ -54,8 +54,8 @@
             <div class="row align-items-center">
                 <div class="container col-md-5" style="font-size:12px; font-weight: bolder; ">
                     <ul class="nav">
-                        <li class="nav-item hod">
-                            <a class="nav-link" href="#"> <strong class="color">MEN</strong></a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item hod">
                             <a class="nav-link" href="#"> <strong class="color">WOMEN</strong></a>
@@ -106,56 +106,55 @@
                             </div>
 
                             <ul class="nav">
-                                @{if (acc == null)
-                                {
-                                    <li class="nav-item">
-                                        <img src="~/image/login.png" class="img" alt="..." width="20px">
-                                        <a class="nav-link" href="#" id="Login"> <strong class="color">LOGIN</strong></a>
-                                    </li>
-                                }
-                               else
-                                {
-                                  
-                                        
-                                    <li class="nav-item">
+                                @{
+                                    if (acc == null)
+                                    {
+                                        <li class="nav-item">
+                                            <img src="~/image/login.png" class="img" alt="..." width="20px">
+                                            <a class="nav-link" href="#" id="Login"> <strong class="color">LOGIN</strong></a>
+                                        </li>
+                                    }
+                                    else
+                                    {
 
-                                        <img src="~/image/login.png" class="img" alt="..." width="20px">                             
-                                        <a class="nav-link" href="#" id="Feature"> <strong class="color">@acc.Ten</strong></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
 
-                                        <a class="nav-link" href="#Cart" id="Cart">
-                                            @*{
-                                        aria-controls="offcanvasRight">
-                                        @*{
+                                        <li class="nav-item">
 
-                                        if (login == null)
-                                        {*@
-                                            <strong class="color">
-                                                BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
-                                                    @{
-                                                        //var carts = SessionServices.GetObjFromCart(Context.Session, "ListCartSession");
+                                            <img src="~/image/login.png" class="img" alt="..." width="20px">
+                                            <a class="nav-link" href="#" id="Feature"> <strong class="color">@acc.Ten</strong></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <img src="~/image/shopping_bag.png" class="img" alt="..." width="20px">
+
+                                            <a class="nav-link" asp-action="ShowCart" asp-controller="Cart">
+
+                                                @{
+                                                    if (acc == null)
+                                                    {
+                                                        <strong class="color">
+                                                            BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
+                                                                0
+                                                            </span>
+                                                        </strong>
                                                     }
-                                                </span>
-                                            </strong>
-                                            @*}
-                                        else
-                                        {
-                                        <strong class="color">
-                                        BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
-                                        @cartDetailServices.GetCartDetailById(login.Id).Count()
-                                        </span>
-                                        </strong>
-                                        }*@
-                                        </a>
-                                    </li>
-                                }}
+                                                    else
+                                                    {
+                                                        <strong class="color">
+                                                            BAG<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
+                                                                @((await cartDetailServices.GetById(acc.Id)).Count())
+                                                            </span>
+                                                        </strong>
+                                                    }
+                                                }
+                                            </a>
+                                        </li>
+                                    }
+                                }
                                 <li class="nav-item">
-                                            <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
+                                    <img src="~/image/heart_outline.png" class="img" alt="..." width="20px">
                                     <a class="nav-link" href="#" id="#"> <strong class="color">TEAMS</strong></a>
                                 </li>
-                               
+
                             </ul>
                         </div>
 
@@ -185,7 +184,7 @@
                                         <button class="btn" type="submit" style="color: white; font-size:12px; font-weight: bold;">Submit</button>
                                     </form>
                                 </div>
-                                </div>
+                            </div>
                         </nav>
                     </div>
                     <div class="col">
@@ -325,6 +324,7 @@
             <h6 class="text-start container" style="line-height: 30px; font-size: 12PX;">BOSTON, MA | © 2023 '47 | ALL RIGHTS RESERVED</h6>
         </div>
     </footer>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="~/assets/js/pages/form-elements.js" defer></script>
     <script src="~/assets/vendors/select2/select2.min.js" defer></script>
     <script src="~/js/slideshow.js"></script>

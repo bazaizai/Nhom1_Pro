@@ -26,6 +26,8 @@ namespace AppAPI.Controllers
         private readonly IAllRepo<TypeProduct> _reposTypeProduct;
         private readonly IAllRepo<Material> _reposMaterial;
         private readonly IAllRepo<Image> _reposImage;
+        private readonly IAllRepo<Sale> _reposSale;
+        private readonly IAllRepo<SaleDetail> _reposSaleDetail;
         public SanPhamCTController()
         {
             _reposCTSP = new AllRepo<ProductDetail>();
@@ -35,13 +37,35 @@ namespace AppAPI.Controllers
             _reposTypeProduct = new AllRepo<TypeProduct>();
             _reposMaterial = new AllRepo<Material>();
             _reposImage = new AllRepo<Image>();
+            _reposSale = new AllRepo<Sale>();
+            _reposSaleDetail = new AllRepo<SaleDetail>();
         }
 
         [HttpGet("list-SanPhamCT")]
         public IEnumerable<ProductDetailDTO> GetAllProductDetail()
         {
+            DBContextModel context = new DBContextModel();
             var productDetails = _reposCTSP.GetAll();
-
+            var result = from p in context.ProductDetails
+                         join sp in context.Products on p.IdProduct equals sp.Id
+                         join ps in context.DetailSales on p.Id equals ps.IdChiTietSp into psJoin
+                         from ps in psJoin.DefaultIfEmpty()
+                         join s in context.Sales on (ps != null ? ps.IdSale : Guid.Empty) equals s.Id into sJoin
+                         from s in sJoin.DefaultIfEmpty()
+                         select new productSale
+                         {
+                             TenSP = sp.Ten,
+                             TenSale = (s != null ? s.MucGiam + " " + s.LoaiHinhKm : null),
+                             Id = p.Id,
+                             GiaBan = p.GiaBan,
+                             LoaiHinhKm = (s != null ? s.LoaiHinhKm : null),
+                             MucGiam = (s != null ? s.MucGiam : null),
+                             TrangThaiSale = ps.TrangThai,
+                             IdSale = s.Id,
+                             MoTa = s.MoTa,
+                             NgayKetThuc = s.NgayKetThuc,
+                             IdSaleDetai = ps != null ? ps.Id : Guid.Empty,
+                         };
             var productDetailDTOs = productDetails.Select(pd => new ProductDetailDTO
             {
                 Id = pd.Id,
@@ -57,7 +81,16 @@ namespace AppAPI.Controllers
                 SoLuongTon = pd.SoLuongTon,
                 TrangThai = pd.TrangThai,
                 LinkImage = _reposImage.GetAll().FirstOrDefault(x => x.IdProductDetail == pd.Id)?.TenAnh,
+                //           
+                TrangThaiSale = _reposSaleDetail.GetAll().FirstOrDefault(x => x.IdChiTietSp == pd.Id)?.TrangThai,
+                IdSaleDetai = _reposSaleDetail.GetAll().FirstOrDefault(x => x.IdChiTietSp == pd.Id)?.Id,
+                IdSale = result.FirstOrDefault(x => x.Id == pd.Id)?.IdSale,
+                NgayKetThuc = result.FirstOrDefault(x => x.Id == pd.Id)?.NgayKetThuc,
+                TenSale = result.FirstOrDefault(x => x.Id == pd.Id)?.TenSale,
+                LoaiHinhKm = result.FirstOrDefault(x => x.Id == pd.Id)?.LoaiHinhKm,
+                MucGiam = result.FirstOrDefault(x => x.Id == pd.Id)?.MucGiam,
             });
+
             return productDetailDTOs;
         }
 
@@ -134,11 +167,11 @@ namespace AppAPI.Controllers
         {
             var selectList = new
             {
-                colors = new SelectList(_reposColor.GetAll().Where(cl => cl.TrangThai == 1).ToList(), "Id", "Ten"),
-                sizes = new SelectList(_reposSize.GetAll().Where(si => si.TrangThai == 1).ToList(), "Id", "Size1"),
-                sanphams = new SelectList(_reposSP.GetAll().Where(sp => sp.TrangThai == 1).ToList(), "Id", "Ten"),
-                materials = new SelectList(_reposMaterial.GetAll().Where(ma => ma.TrangThai == 1).ToList(), "Id", "Ten"),
-                typeProducts = new SelectList(_reposTypeProduct.GetAll().Where(ty => ty.TrangThai == 1).ToList(), "Id", "Ten")
+                colors = new SelectList(_reposColor.GetAll().Where(cl => cl.TrangThai == 0).ToList(), "Id", "Ten"),
+                sizes = new SelectList(_reposSize.GetAll().Where(si => si.TrangThai == 0).ToList(), "Id", "Size1"),
+                sanphams = new SelectList(_reposSP.GetAll().Where(sp => sp.TrangThai == 0).ToList(), "Id", "Ten"),
+                materials = new SelectList(_reposMaterial.GetAll().Where(ma => ma.TrangThai == 0).ToList(), "Id", "Ten"),
+                typeProducts = new SelectList(_reposTypeProduct.GetAll().Where(ty => ty.TrangThai == 0).ToList(), "Id", "Ten")
             };
             return new OkObjectResult(selectList);
         }
@@ -244,6 +277,7 @@ namespace AppAPI.Controllers
                 _reposCTSP.EditItem(productUpdate);
             }
         }
+
 
         [HttpPut("Update-Image")]
         public async Task<bool> UpdateImage(Guid idProduct, [FromForm] IFormFile? fileImage)

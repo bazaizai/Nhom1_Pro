@@ -1,0 +1,389 @@
+﻿@model AppData.Models.ProductDetailDTO
+@using AppView.Services;
+@{
+    ViewData["Title"] = "Details";
+    
+    var acc = SessionServices.GetObjFromSession(Context.Session, "acc");
+}
+@if (TempData["quantityCartUser"] != null)
+{
+    <script>
+        Swal.fire({
+            title: '@TempData["quantityCartUser"]',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    </script>
+}
+<div class="container text-center">
+    <div class="row align-items-start">
+        <div class="col-6">
+            <div class="z" style="position: relative;">
+                <div class="hot2">
+                    @*<img src="~/Image/bookmark5.png" alt="">*@
+                    @*@if (@Model.SalePrice > 0)
+                    {
+                        <p class="la" style="top: 0; margin-top: 35px; margin-left: -110px;font-size: 30px; color: white;">SALE</p>
+                    }
+                    else
+                    {*@
+                        <p class="la" style="top: 0; margin-top: 35px; margin-left: -110px;font-size: 30px; color: white;">NEW</p>
+                    @*}*@
+                </div>
+                <img src="/Image/@Model.LinkImage" alt="" style="width:484px;height:732px">
+            </div>
+            <div class="thumbnail_images">
+                <ul id="thumbnail">
+                    <li>
+                        <img src="/Image/@Model.LinkImage" width="70">
+                    </li>
+                    <li>
+                        <img src="/Image/@Model.LinkImage" width="70">
+                    </li>
+                    <li>
+                        <img src="/Image/@Model.LinkImage" width="70">
+                    </li>
+                    <li>
+                        <img src="/Image/@Model.LinkImage" width="70">
+                    </li>
+                    <li>
+                        <img src="/Image/@Model.LinkImage" width="70">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6" style="text-align: left;">
+            <h2 style="font-weight: bold;">
+                <div>
+                    @Html.DisplayFor(model => model.Name) @Html.DisplayFor(model => model.Color) @Html.DisplayFor(model => model.Size)
+                </div>
+            </h2>
+            <hr width="50px">
+            <img src="~/Image/stars4.png" alt="" width="15%" style="padding-bottom: 10px;"><br>
+            <a style="text-decoration: none; color: rgb(3, 182, 242);">
+                (8 đánh giá của khách
+                hàng)
+            </a><br>
+            <h5 style="padding-top: 10px; font-weight: bold; font-size: 30px;">
+                                @*@if (Model.SalePrice > 0)
+                                {
+                    <del style="color:gray">@string.Format("{0:N0}đ", Model.Price)</del>
+
+                                    @string.Format("{0:N0}đ", Model.Price-Model.SalePrice)
+                                    ;
+                                }
+                                else
+                                {*@
+                                    @string.Format("{0:N0}đ", Model.GiaBan)
+                                    
+                                @*}*@
+            </h5>
+            <a style="text-decoration: none; color:gray">
+                BẢNG SIZE CHI TIẾT:
+            </a><br>
+            <img src="~/Image/size.jpg" alt="" width="100%" style="padding-bottom: 10px;"><br>
+            <p style="font-weight: bold; color: rgb(29, 255, 90); font-size: 15px;">Còn hàng</p>
+                                        @*@if (acc == null)
+                                        {
+                <form method="post" asp-action="AddToCart" asp-controller="Cart">
+                    <input type="hidden" name="ProductID" value="@Model.ProductID" />
+                    <div class="d-flex flex-row" style="display:inline-flex">
+                        <p style="height:36.8px">Số lượng </p>
+                        <button class="btn btn-link px-2"
+                                onclick="decreaseQuantity()">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input id="quantity-input" min="0" max="@Model.AvailableQuantity" name="quantity" value="1" type="number"
+                               class="form-control form-control-sm" style="width: 60px; height:10px" />
+                        <button class="btn btn-link px-2"
+                                onclick="increaseQuantity()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div>
+                            <p>@Html.DisplayFor(model => model.AvailableQuantity) Sản phẩm có sẵn</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-dark" style="margin-right: 20px;">Mua ngay</button>
+                        <button class="btn btn-dark" style="background-color: rgb(3, 182, 242);">Thêm vào giỏ hàng</button>
+                    </div>
+                </form>
+                                        }*@
+                                        @if (acc != null)
+                                        {
+            <form method="post" asp-action="AddToCartUser" asp-controller="Cart">
+                    <input type="hidden" name="ProductID" value="@Model.Id" />
+                    <div class="d-flex flex-row" style="display:inline-flex">
+                        <p style="height:36.8px">Số lượng </p>
+                        <button class="btn btn-link px-2"
+                                onclick="decreaseQuantity()">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input id="quantity-input" min="0" max="@Model.SoLuongTon" name="quantity" value="1" type="number"
+                               class="form-control form-control-sm" style="width: 60px; height:10px" />
+                        <button class="btn btn-link px-2"
+                                onclick="increaseQuantity()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div>
+                            <p>@Html.DisplayFor(model => model.SoLuongTon) Sản phẩm có sẵn</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-dark" style="margin-right: 20px;">Mua ngay</button>
+                        <button class="btn btn-dark" style="background-color: rgb(3, 182, 242);">Thêm vào giỏ hàng</button>
+                    </div>
+                </form>
+                                        }
+            @*<p style="font-size: 15px; margin-top:10px">
+                Danh mục:<a style="text-decoration: none; color: rgb(3, 182, 242);">@Html.ActionLink(Model.Category.Name,"ShowProductByCategory",new{id=Model.CategoryID })</a>*@
+                <hr>
+        </div>
+    </div>
+    <div class="container mt-2">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#mota">Mô tả</a>
+            </li>
+            <li class="nav-item" id="danh">
+                <a class="nav-link" data-bs-toggle="tab" href="#danhgia">Đánh giá</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="mota">
+                <div class="row">
+                    <div class="col" style="text-align: left; padding-top: 30px;">
+                        <h2 style="font-weight: bold; font-size: 25px;">Bộ Ghép Hình Mixi - Mixi Block SS7</h2>
+                        <h4 style="font-size: 20px;">
+                            Bộ Ghép Hình Mixi với thiết kế MixiGaming trong trang phục ông
+                            già Noel.Bộ gồm: 1417 chi tiết,phù hợp 14+ <br>
+                        </h4>
+                        <br>
+                        <h2 style="font-weight: bold; font-size: 25px;">LƯU Ý :</h2>
+                        <h4 style="color: red; font-size: 20px;">
+                            Note : - Đơn hàng đã đến trang order complete và có hiển thị " đơn hàng của bạn đã được
+                            nhận” sẽ được tính là đơn hàng thành công và được cập nhật lên hệ thống. <br>
+                            <br>
+                            - Mỗi đơn hàng thành công có xác nhận gửi về mail mà bạn đã đăng kí. Trong trường hợp hệ
+                            thống quá tải sẽ không có mail gửi về. <br>
+                            <br>
+                            - Nhân viên bên shop sẽ gọi điện check lại đơn theo dữ liệu trên hệ thống nên bạn không
+                            cần lo lắng kể cả khi không nhận được mail xác nhận. <br>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="danhgia">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="card-body" style="text-align: left;">
+                            <h2 style="font-weight: bold; font-size: 25px; padding-top: 30px;">
+                                8 đánh giá của Bộ Ghép Hình Mixi - Mixi Block SS7
+                            </h2>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>
+                                            Nguyễn Khắc Vang -
+                                        </strong> 04 Tháng Một, 2023
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">tuyệt</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>
+                                            Dương Đức Hiếu -
+                                        </strong> 28 Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">ngon</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>
+                                            Đoàn Danh Trọng -
+                                        </strong> 26 Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">
+                                        Đã nhận hàng và lắp hoàn
+                                        thiện.Đẹp lắm ❤️
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>
+                                            Hoàng Trung Mạnh -
+                                        </strong> 25 Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">quá đẹp</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>Trung Hiếu - </strong> 20
+                                        Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">Quá đỉnh cao quá xịn</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>Phương Chang - </strong>
+                                        20 Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">❤️❤️❤️</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>Trung Kiên - </strong> 12
+                                        Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">Quá đẹp ạ</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="padding-top: 20px;">
+                                <div class="col-lg-4">
+                                    <img src="image/user1.png" />
+                                </div>
+                                <div class="col-lg-8"
+                                     style="text-align: left; margin-top: -30px; margin-left: -130px;">
+                                    <img src="image/stars3.png" alt="" style="width:100px">
+                                    <p style="margin-top: -30px; font-size: 15px;">
+                                        <strong>
+                                            Nguyễn Khắc Tiệp -
+                                        </strong> 10 Tháng Mười Hai, 2022
+                                    </p>
+                                    <p style="margin-top: -20px; font-size: 15px;">10 điểm</p>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="col-5">
+                        <div class="card"
+                             style="border: 2px solid rgb(3, 182, 242); margin-top: 20px; margin-bottom: 20px; text-align: left; padding: 20px;">
+                            <h2 style="font-weight: bold; font-size: 25px;">Thêm đánh giá</h2>
+                            <h3 style="font-weight: bold; font-size: 15px;">Đánh giá của bạn *</h3>
+                            <img src="image/stars3.png" alt=""
+                                 style="margin-top: -50px;margin-bottom: -40px;width:30%">
+                            <h3 style="font-weight: bold; font-size: 15px;">nhận xét của bạn *</h3>
+                            <textarea id="typeText" class="form-control form-control-lg" rows="4"> </textarea><br>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h3 style="font-weight: bold; font-size: 15px;">
+                                        Tên *<br><input type="text"
+                                                        id="typeExp" class="form-control form-control-lg" />
+                                    </h3>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h3 style="font-weight: bold; font-size: 15px;">
+                                        Email *<br><input type="email"
+                                                          id="typeExp" class="form-control form-control-lg" />
+                                    </h3>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary">Đánh giá</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 style="padding-top: 50px; font-weight: bold; text-align: left;">SẢN PHẨM TƯƠNG TỰ</h3>
+        <div class="row align-items-start" style="padding-bottom: 40px;">
+            <div class="col-3">
+                <img src="image/sp6.png" class="img-thumbnail" alt="...">
+                <p>ĐỒ LƯU NIỆM MIXI</p>
+                <a class="text" href="#">Bộ Ghép Hình Mixi - Mixi Block SS6</a>
+                <img src="image/stars4.png" alt="" style="width:100px">
+                <h5>370,000₫</h5>
+            </div>
+            <div class="col-3">
+                <div class="anh" style="position: relative;">
+                    <div class="saleoff1">
+                        <img src="image/bookmark3.png" alt="">
+                        <p class="label">SALE </p>
+                    </div>
+                    <img src="image/sp15.png" class="img-thumbnail" alt="...">
+                </div>
+                <p>ĐỒ LƯU NIỆM MIXI</p>
+                <a class="text" href="#">Cốc Giữ Nhiệt Mixi <br></a>
+                <img src="image/stars4.png" alt="" style="width:100px">
+                <h5>199,000₫</h5>
+            </div>
+            <div class="col-3">
+                <img src="image/sp9.png" class="img-thumbnail" alt="...">
+                <p>ĐỒ LƯU NIỆM MIXI</p>
+                <a class="text" href="#">Bộ Ghép Hình Mixi - Mixi Block SS2 <br></a>
+                <img src="image/stars4.png" alt="" style="width:100px">
+                <h5>300,000₫</h5>
+            </div>
+            <div class="col-3">
+                <div class="anh" style="position: relative;">
+                    <div class="saleoff1">
+                        <img src="image/bookmark3.png" alt="">
+                        <p class="label">SALE </p>
+                    </div>
+                    <img src="image/sp12.png" class="img-thumbnail" alt="...">
+                </div>
+                <p>ĐỒ LƯU NIỆM MIXI</p>
+                <a class="text" href="#">Ví Handmade Mixi Hàng Limited Edition <br></a>
+                <img src="image/stars4.png" alt="" style="width:100px">
+                <h5><del>1,500,000₫</del> 830,000₫</h5>
+            </div>
+        </div>
+    </div>
+</div>
+

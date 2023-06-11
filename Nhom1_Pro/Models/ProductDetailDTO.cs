@@ -26,5 +26,13 @@ namespace AppData.Models
         public decimal? GiaBan { get; set; }
         public int? TrangThai { get; set; }
         public string? LinkImage { get; set; }
+        //sale
+        public DateTime? NgayKetThuc { get; set; }
+        public int? TrangThaiSale { get; set; }
+        public string? LoaiHinhKm { get; set; }
+        public decimal? MucGiam { get; set; }
+        public string? TenSale { get; set; }
+        public Guid? IdSale { get; set; }
+        public Guid? IdSaleDetai { get; set; }
     }
 }

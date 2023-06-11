@@ -19,7 +19,7 @@ namespace AppView.Services
         {
             string apiUrl = $"https://localhost:7280/api/CartDetails/{item.Id}?idUser={item.UserID}&idProduct={item.DetailProductID}&sl={item.Soluong}&trangthai={item.TrangThai}";
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.PostAsync(apiUrl, null);
+            var response = await httpClient.PutAsync(apiUrl, null);
             return true;
         }
 
@@ -43,11 +43,11 @@ namespace AppView.Services
             return lstBill;
         }
 
-        public async Task<bool> RemoveItem(CartDetail item)
+        public async Task<bool> RemoveItem(Guid id)
         {
-            string apiUrl = $"https://localhost:7280/api/CartDetails/{item.Id}";
+            string apiUrl = $"https://localhost:7280/api/CartDetails/{id}";
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.PostAsync(apiUrl, null);
+            var response = await httpClient.DeleteAsync(apiUrl);
             return true;
         }
     }

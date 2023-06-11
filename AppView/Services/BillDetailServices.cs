@@ -35,7 +35,7 @@ namespace AppView.Services
 
         public async Task<List<BillDetailView>> GetByBill(Guid id)
         {
-            string apiUrl = $" https://localhost:7280/api/BillDetails/idBill?id={id}";
+            string apiUrl = $"https://localhost:7280/api/BillDetails/idBill?id={id}";
             HttpClient client = new HttpClient();
             var response = await client.GetAsync(apiUrl);
             var apidata = await response.Content.ReadAsStringAsync();

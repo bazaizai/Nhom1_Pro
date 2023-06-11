@@ -1,4 +1,10 @@
-﻿
+﻿@using AppView.IServices
+@using AppView.Services
+
+@{
+    IProductDetailService productDetailService = new ProductDetailService();
+    var lstsp = await productDetailService.GetAll();
+}
 @{
     ViewData["Title"] = "Index";
 }
@@ -33,25 +39,43 @@
     <div class="row align-items-center">
 
         <div class="row row-cols-2 row-cols-lg-3 g-2 g-lg-3">
-            @*@foreach (var item in Model)
+            @foreach (var item in lstsp.Take(6))
             {
+                decimal? x;
+                if (@item.LoaiHinhKm == "%")
+                {
+                    x = @item.GiaBan - (@item.GiaBan * @item.MucGiam) / 100;
+
+                }
+                else
+                {
+                    x = @item.GiaBan - @item.MucGiam;
+                }
                 <div class="col ctsp">
                     <div class="p-4 ">
-                        <div style="background-color: rgb(243, 246, 251);">
-                            @{
-                                if (item.DuongDan.Count() > 0)
-                                {
-                                    <img src="@item.DuongDan[0]" class="card-img-top" alt="/.image/sp1.webp" style="height:370px">
-                                }
-                                else
-                                {
-                                    <img src="https://cdn.shopify.com/s/files/1/0817/3919/products/F-CARGW09GWS-CM-HR-F.jpg?v=1622125697" class="card-img-top" alt="/.image/sp1.webp" style="height:370px">
-                                }
+                        <div style="background-color: rgb(243, 246, 251); overflow: hidden;position: relative;">
+                            @if (item.TrangThaiSale == 0)
+                            {
+                                <span class="badge badge-danger" style="float: right;">-@item.TenSale </span>
                             }
+                            else
+                            {
+                                <span class="badge badge-danger " style="background-color:white"> &ensp;</span>
+                            }
+                            <img src="~/assets/images/others/@item.LinkImage" class="card-img-top" style="height:370px">
+
                         </div>
                         <div class="card-body">
                             <p><strong> @item.Name</strong></p>
-                            <p>$@item.GiaBan</p>
+                            @if (item.TrangThaiSale == 0)
+                            {
+                                <p>@string.Format("{0:N0}đ", @x)</p>
+                            }
+                            else
+                            {
+                                <p>@string.Format("{0:N0}đ", item.GiaBan)</p>
+                            }                       
+                            
                             <div>
                                 <img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px"><img src="image\starv.png" alt="" width="20px">(@item.SoLuongTon)
                             </div>
@@ -59,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-            }*@
+            }
         </div>
     </div>
 </div>
@@ -86,22 +110,22 @@
         </div>
     </div>
 </div>
-    @if (TempData["MessageForCreate"] != null)
-    {
-            <script>
-            Swal.fire({
-                title: '@TempData["MessageForCreate"]',
-                timer: 2000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
+@if (TempData["MessageForCreate"] != null)
+{
+    <script>
+        Swal.fire({
+            title: '@TempData["MessageForCreate"]',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
         setTimeout(() => {
             Swal.close();
         }, 2000);
     </script>
-    }
-    @if (TempData["MessageForLogin"] != null)
-    {
+}
+@if (TempData["MessageForLogin"] != null)
+{
     <script>
         Swal.fire({
             title: '@TempData["MessageForLogin"]',
@@ -113,9 +137,9 @@
             Swal.close();
         }, 2000);
     </script>
-    }
-    @if (TempData["MessageForLogout"] != null)
-    {
+}
+@if (TempData["MessageForLogout"] != null)
+{
     <script>
         Swal.fire({
             title: '@TempData["MessageForLogout"]',
@@ -127,5 +151,5 @@
             Swal.close();
         }, 2000);
     </script>
-    }
+}
 
