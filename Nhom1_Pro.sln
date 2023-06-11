@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppAPI", "API_NhomPro\AppAP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppView", "AppView\AppView.csproj", "{AACD9CD5-B32A-4BE6-BFD2-F5D60FC4987F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppData", "Nhom1_Pro\AppData.csproj", "{1029E584-8788-4D10-AA60-7741572E6087}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{AACD9CD5-B32A-4BE6-BFD2-F5D60FC4987F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{AACD9CD5-B32A-4BE6-BFD2-F5D60FC4987F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AACD9CD5-B32A-4BE6-BFD2-F5D60FC4987F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1029E584-8788-4D10-AA60-7741572E6087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1029E584-8788-4D10-AA60-7741572E6087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1029E584-8788-4D10-AA60-7741572E6087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1029E584-8788-4D10-AA60-7741572E6087}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
