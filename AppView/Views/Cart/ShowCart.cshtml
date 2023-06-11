@@ -233,13 +233,6 @@
         $(document).ready(function () {
             const apiUrl = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province';
             const token = '1194852d-fde8-11ed-8a8c-6e4795e6d902';
-            var totalAmountElement = document.getElementById("totalAmount");
-            totalAmountElement.innerText = "0".toLocaleString("vi-VN") + "đ";
-            totalAmountElement.value = "0".toString();
-            var totalAmountElement1 = document.getElementById("totalAmount1");
-            totalAmountElement1.innerText = "0".toLocaleString("vi-VN") + "đ";
-            var paymentAmountElement = document.getElementById("paymentAmount");
-            paymentAmountElement.innerText = "0".toLocaleString("vi-VN") + "đ";
 
             axios.get(apiUrl, {
                 headers: {
@@ -247,7 +240,6 @@
                 }
             })
                 .then(response => {
-
                     var selectElement = $('#tinh');
                     selectElement.empty();
 
@@ -265,6 +257,7 @@
         });
 
     </script>
+
     @*huyện*@
     <script>
         $(document).ready(function () {
@@ -297,6 +290,7 @@
             });
         });
     </script>
+    
     @*xã*@
     <script>
         $(document).ready(function () {
@@ -335,6 +329,7 @@
             });
         });
     </script>
+
     @*dịch vụ*@
     <script>
         $(document).ready(function () {
@@ -377,6 +372,7 @@
             });
         });
     </script>
+
     @*phí ship*@
     <script>
 
@@ -428,14 +424,12 @@
                             giahang = parseInt(giahang);
                             var totalAmountElement = document.getElementById("totalAmount");
                             var tongTien = giahang + response.data.data.service_fee;
-                            ship=response.data.data.service_fee;
-                            tongtien=tongTien;
+                            ship = response.data.data.service_fee;
+                            tongtien = tongTien;
                             // Hiển thị tổng tiền
                             totalAmountElement.innerText = tongTien.toLocaleString("vi-VN") + "đ";
-                            totalAmountElement.value=tongTien.toString();
+                            totalAmountElement.value = tongTien.toString();
                             // Hiển thị giá trị tổng trong phần "Thanh toán"
-                            var paymentAmountElement = document.getElementById("paymentAmount");
-                            paymentAmountElement.innerText = tongTien.toLocaleString("vi-VN") + "đ";
                             var totalAmountElement1 = document.getElementById("totalAmount1");
                             totalAmountElement1.innerText = tongTien.toLocaleString("vi-VN") + "đ";
                         })
@@ -446,6 +440,7 @@
             });
         });
     </script>
+
     @*tiền*@
     <script>
         function voucher(value){
