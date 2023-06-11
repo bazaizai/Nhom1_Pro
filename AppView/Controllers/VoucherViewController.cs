@@ -62,19 +62,19 @@ namespace AppView.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: VoucherController1/Delete/5
-        public async Task<ActionResult> DeleteAsync(Guid id)
+        //GET: VoucherController1/Delete/5
+        public async Task<ActionResult> DetailAsync(Guid id)
         {
             var a = (await voucherServices.GetAllAsync()).FirstOrDefault(c => c.Id == id);
             return View(a);
         }
 
         // POST: VoucherController1/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteAsync(Voucher a)
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
-            await voucherServices.RemoveItem(a);
+            await voucherServices.RemoveItem((await voucherServices.GetAllAsync()).FirstOrDefault(x=>x.Id==id));
             return RedirectToAction("Index");
         }
     }

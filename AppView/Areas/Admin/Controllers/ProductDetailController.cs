@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Xml.Linq;
 
 namespace AppView.Areas.Admin.Controllers
 {
@@ -96,7 +97,7 @@ namespace AppView.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePro([FromBody] ProductDetailViewModel obj)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 var errors = new List<string> { "Số lượng không được để trống.", "Giá nhập không được để trống.", "Giá bán không được để trống." };
                 return Json(new { success = false, error = errors });
@@ -117,9 +118,32 @@ namespace AppView.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                return BadRequest();                
+                return BadRequest();
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveRange(string guids)
+        {
+            try
+            {
+                await _productDetailService.DeleteRange(guids);
+                return PartialView("_PartialViewPrductList", await _productDetailService.GetAll());
+            }
+            catch (HttpRequestException)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> _PartialViewPrductList([FromBody] IEnumerable<ProductDetailDTO> model)
+        {
+            return  PartialView("_PartialViewPrductList", model);
+        }
+
+
 
 
         [HttpGet]
