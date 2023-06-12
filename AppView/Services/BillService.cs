@@ -15,7 +15,7 @@ namespace AppView.Services
             try
             {
                 var httpClient = new HttpClient();
-                string apiUrl = $"https://localhost:7280/api/Bill?idUser={obj.IdUser}&idVoucher={obj.IdVoucher}&ngayTao={obj.NgayTao}&ngayThanhToan={obj.NgayThanhToan}&ngayShip={obj.NgayShip}&ngayNhan={obj.NgayNhan}" +
+                string apiUrl = $"https://localhost:7280/api/Bill?id={obj.Id}&idUser={obj.IdUser}&idVoucher={obj.IdVoucher}&ngayTao={obj.NgayTao}&ngayThanhToan={obj.NgayThanhToan}&ngayShip={obj.NgayShip}&ngayNhan={obj.NgayNhan}" +
                     $"&tenNguoiNhan={obj.TenNguoiNhan}&diaChi={obj.DiaChi}&sdt={obj.Sdt}&tongTien={obj.TongTien}&soTienGiam={obj.SoTienGiam}&tienShip={obj.TienShip}&moTa={obj.MoTa}&trangThai={obj.TrangThai}";
                 var response = await httpClient.PostAsync(apiUrl, null);
                 return true;

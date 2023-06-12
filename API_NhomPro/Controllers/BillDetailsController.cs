@@ -74,7 +74,7 @@ namespace AppAPI.Controllers
         public string Post(Guid idBill, Guid idProduct, int sl, int trangthai)
         {
             var b = BillRepo.GetAll().FirstOrDefault(c => c.IdBill == idBill && c.IdProductDetail == idProduct); 
-            var c = ProductDetailRepo.GetAll().FirstOrDefault(a => a.IdProduct == a.IdProduct);
+            var c = ProductDetailRepo.GetAll().FirstOrDefault(a => a.Id == idProduct);
             if (b != null)
             {
                 b.SoLuong = b.SoLuong + sl;
