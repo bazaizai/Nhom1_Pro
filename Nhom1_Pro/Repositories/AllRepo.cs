@@ -12,9 +12,9 @@ namespace AppData.Repositories
 {
     public class AllRepo<T> : IAllRepo<T> where T : class
     {
-        private  DBContextModel context;
+        private DBContextModel context;
 
-        private  DbSet<T> dbset;
+        private DbSet<T> dbset;
 
         public AllRepo()
         {
@@ -42,7 +42,7 @@ namespace AppData.Repositories
             catch (Exception)
             {
 
-               return false;
+                return false;
             }
         }
 
@@ -63,14 +63,14 @@ namespace AppData.Repositories
 
         public IEnumerable<T> GetAll()
         {
-           return dbset.ToList();
+            return dbset.ToList();
         }
 
         public bool RemoveItem(T item)
         {
             try
             {
-                
+
                 dbset.Remove(item);
                 context.SaveChanges();
                 return true;

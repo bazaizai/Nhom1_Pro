@@ -39,12 +39,13 @@ namespace AppAPI.Controllers
             string tenNguoiNhan, string diaChi, string sdt, int tongTien, int soTienGiam, int tienShip, string moTa, int trangThai)
         {
             string ma;
-            if(allRepo.GetAll().Count()==null)
+            if (allRepo.GetAll().Count() == null)
             {
                 ma = "Bill1";
             }
-            else {
-                ma = "Bill"+ (allRepo.GetAll().Count()+1);
+            else
+            {
+                ma = "Bill" + (allRepo.GetAll().Count() + 1);
             }
             Bill bill = new Bill()
             {
