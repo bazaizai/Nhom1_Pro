@@ -35,8 +35,10 @@ namespace AppView.Controllers
             if (sreach != null)
             {
                 var role = a.Where(c => c.Ten.ToUpper().Contains(sreach.ToUpper()));
+
                 return View(role);
             }
+
             else
             {
                 return View(a);

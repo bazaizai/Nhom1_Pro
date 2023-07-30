@@ -40,7 +40,7 @@ namespace AppAPI.Controllers
         {
             return repos.GetAll();
         }
- 
+
         //[HttpGet("code")]
         //public ActionResult GetAllBienThe()
         //{
