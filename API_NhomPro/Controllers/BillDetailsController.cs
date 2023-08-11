@@ -35,7 +35,7 @@ namespace AppAPI.Controllers
         public IEnumerable<BillDetail> Get()
         {
             return BillRepo.GetAll().ToList();
-        } 
+        }
         [HttpGet("idBill")]
         public IEnumerable<BillDetailView> GetByBill(Guid id)
         {
@@ -48,46 +48,46 @@ namespace AppAPI.Controllers
                                       Name = b1.Ten
                                   }
                                   ).ToList() on a.IdProductDetail equals b.Id
-                        select new BillDetailView()
-                        {
-                            Id = a.Id,
-                            DonGia = a.DonGia,
-                            IdProductDetail = a.IdProductDetail,
-                            IdBill = a.IdBill,
-                            Ten = b.Name,
-                            SoLuong = a.SoLuong,
-                            TrangThai = a.TrangThai
-                        }
+                       select new BillDetailView()
+                       {
+                           Id = a.Id,
+                           DonGia = a.DonGia,
+                           IdProductDetail = a.IdProductDetail,
+                           IdBill = a.IdBill,
+                           Ten = b.Name,
+                           SoLuong = a.SoLuong,
+                           TrangThai = a.TrangThai
+                       }
                        ).ToList();
-            return lst.Where(c=>c.IdBill==id);
+            return lst.Where(c => c.IdBill == id);
         }
 
         // GET api/<BillDetailsController>/5
         [HttpGet("{id}")]
         public IEnumerable<BillDetail> Get(Guid id)
         {
-            return BillRepo.GetAll().Where(c=>c.IdBill==id).ToList();
+            return BillRepo.GetAll().Where(c => c.IdBill == id).ToList();
         }
 
         // POST api/<BillDetailsController>
         [HttpPost]
         public string Post(Guid idBill, Guid idProduct, int sl, int trangthai)
         {
-            var b = BillRepo.GetAll().FirstOrDefault(c => c.IdBill == idBill && c.IdProductDetail == idProduct); 
+            var b = BillRepo.GetAll().FirstOrDefault(c => c.IdBill == idBill && c.IdProductDetail == idProduct);
             var c = ProductDetailRepo.GetAll().FirstOrDefault(a => a.Id == idProduct);
             if (b != null)
             {
                 b.SoLuong = b.SoLuong + sl;
-                if(b.SoLuong >c.SoLuongTon)
+                if (b.SoLuong > c.SoLuongTon)
                 {
                     return "khum du so luong";
                 }
-                if(BillRepo.EditItem(b))
-                return "san pham nay da co tron bill va da duoc cap nhap";
+                if (BillRepo.EditItem(b))
+                    return "san pham nay da co tron bill va da duoc cap nhap";
                 return "khong thanh cong";
 
             }
-            var d = new BillDetail() {Id = Guid.NewGuid(), IdBill = idBill, IdProductDetail = idProduct, DonGia = c.GiaBan, SoLuong = sl, TrangThai = trangthai };
+            var d = new BillDetail() { Id = Guid.NewGuid(), IdBill = idBill, IdProductDetail = idProduct, DonGia = c.GiaBan, SoLuong = sl, TrangThai = trangthai };
             if (BillRepo.AddItem(d)) return "Them thanh cong";
             return "them khong thanh cong";
         }
